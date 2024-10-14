@@ -1,0 +1,207 @@
+<section class="pt-[24px]">
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+        <div class="container mx-auto  flex justify-between pb-[16px]">
+            <app-breadcrumb></app-breadcrumb>
+            <div class="flex gap-[8px]">
+                <img class="" src="./assets/icons/share.svg" alt="">
+                <img class="" src="./assets/icons/heart.svg" alt="">
+            </div>
+        </div>
+    </div>
+
+    @if(carFromBackend){
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+        <div class="w-full container mx-auto flex flex-col 2xl:gap-[32px] xl:gap-[32px] lg:gap-[32px] md:gap-0 sm:gap-0 mobile:gap-0
+                2xl:pb-[80px] xl:pb-[80px] lg:pb-[80px] md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
+            <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
+                  md:gap-[8px] sm:gap-[8px] mobile:gap-[8px] justify-between
+                  2xl:pb-0 xl:pb-0 lg:pb-0 md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
+                <h2 class="h2-detail">{{carFromBackend.name}}</h2>
+                <h2 class="h2-detail">{{carFromBackend.price.amount}} <span class="h4 text-[#262626]">UZS</span></h2>
+            </div>
+            <div class="w-full flex
+                    2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
+                    2xl:gap-[60px] xl:gap-[60px] lg:gap-[60px] md:gap-[24px] sm:gap-[24px] mobile:gap-[24px]">
+
+                <div class="2xl:w-[60%] xl:w-[60%] lg:w-[60%]
+                    2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden
+                    flex-col gap-[8px]">
+                    <img class="w-full selected-image" [src]="selectedImage" loading="lazy" alt="selected image">
+
+                    <div class="grid grid-cols-5 gap-[8px] relative">
+                        <ng-container *ngIf="carFromBackend?.images; else noImages">
+                            <ng-container *ngFor="let image of displayImages; let i = index">
+
+                                <!-- Display Plus Icon above the last default image -->
+                                <ng-container *ngIf="!showAll && i === displayImages.length - 1">
+                                    <div class="b1 absolute top-[130px] right-[30px] cursor-pointer text-[#fff]" (click)="showAllImages()">
+                                        + {{ displayImages.length - 4 }} photo
+                                    </div>
+                                </ng-container>
+
+                                <!-- Image Thumbnails -->
+                                <img class="h-[86px] w-[100%] cursor-pointer" [src]="image || 'assets/images/fallback-image.jpg'" loading="lazy" alt="Car image" (click)="selectImage(i)">
+                            </ng-container>
+                        </ng-container>
+
+                        <!-- No Images Available -->
+                        <ng-template #noImages>
+                            <p>No images available</p>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex mobile:flex w-full overflow-x-scroll scrollbar-none">
+                    <div class="flex flex-nowrap gap-[5px]">
+                        <img *ngFor="let img of displayImages" [src]="img" alt="">
+                    </div>
+                </div>
+
+                <div class="2xl:w-[40%] xl:w-[40%] lg:w-[40%] md:w-full sm:w-full mobile:w-full flex flex-col gap-[36px]">
+                    <div class="p-[32px] flex flex-col 2xl:gap-[24px] xl:gap-[20px] lg:gap-[15px] bg-[#F7F7F7] rounded-[12px] ">
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Статус</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Год выпуска</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.productionYear }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Пробег</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.mileage }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Двигатель</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.engine }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">КПП</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.kpp }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Привод</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.privod }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Поколение</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.generation }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Комплектация</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.kits }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Руль</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.steeringWheel }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Кузов</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.body }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Цвет</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">ПТС</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Владельцев по ПТС</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">Состояние</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
+                        </div>
+                        <div class="w-full flex gap-[12px]">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">VIN или номер кузова</p>
+                            <p class="w-[50%] flex lg:flex-wrap b3 text-[#262626] truncate">{{ carDetails?.cardCardDetails?.vinNumber }}</p>
+                        </div>
+                    </div>
+                    <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden justify-between 2xl:flex-nowrap xl:flex-nowrap lg:flex-wrap">
+                        <div class="flex gap-[8px]">
+                            <p class="b5 text-[#C8C8C8]">Объявление</p>
+                            <p class="b5 text-[#C8C8C8]">1124105141</p>
+                            <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
+                        </div>
+                        <div class="flex justify-center items-center gap-[6px]">
+                            <img class="" src="./assets/icons/eye-silver.svg" alt="">
+                            <p class="b5 text-[#C8C8C8]">7 025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full container mx-auto flex
+                2xl:flex-row xl:flex-row lg:flex-row
+                md:flex-col-reverse sm:flex-col-reverse mobile:flex-col-reverse
+                gap-[60px] pb-[100px]">
+            <div class="2xl:w-[60%] xl:w-[60%] lg:w-[60%]
+                    md:w-full sm:w-full mobile:w-full
+                    flex flex-col gap-[24px]">
+                <h3 class="h3 text-[#262626]">{{carDetails?.cardCardDetails?.description?.title}}</h3>
+                <div class="w-[100%] flex flex-col gap-[24px]">
+                    <p class="b2 text-[#000]">
+                        Куплена новой у официального дилера в РФ в конце декабря 2020 года. По причине отъезда владельца заграницу сразу после покупки, с тех пор стояла в теплом, сухом и охраняемом паркинге, лишь изредка использовалась и обслуживалась у ОД родственниками пенсионного
+                        возраста.
+                    </p>
+                    <p class="b2 text-[#000]">
+                        Ни разу не использовали Launch Control, никакого тюнинга, эксплуатация только в пределах скоростного лимита. В салоне поставили оригинальную ковку M Performance (самые легкие диски для данного кузова) на шинах Michelin Pilot Sport 4S, так же есть зимняя
+                        липучка Continental Winter Contact TS860S SSR для этих же дисков.
+                    </p>
+                    <p class="b2 text-[#000]">
+                        Богатая комплектация: Адаптивный круиз-контроль, люк, пакет M Technology, проекция, двойное остекление (в салоне тише, чем во многих премиальных внедорожниках), лазерные фары, покрашенные.
+                    </p>
+                </div>
+            </div>
+            <div class="2xl:w-[40%] xl:w-[40%] lg:w-[40%] md:w-full sm:w-full mobile:w-full
+                  flex 2xl:flex-col xl:flex-col lg:flex-col md:flex-row-reverse sm:flex-row-reverse mobile:flex-col
+                  2xl:gap-[40px] xl:gap-[40px] lg:gap-[40px] md:gap-[16px] sm:gap-[16px] mobile:gap-[16px]">
+                <div class="2xl:w-[100%] xl:w-[100%] lg:w-[100%] md:w-[40%] sm:w-[40%] mobile:w-full
+                    flex flex-col justify-center gap-[12px]">
+                    <div class="p-[24px] flex justify-center items-center gap-[16px] bg-[#27C5D0] rounded-[24px]">
+                        <img src="./assets/icons/chat.svg" alt="">
+                        <p class="b3 text-[#fff]">Написать продавцу</p>
+                    </div>
+                    <div class="p-[24px] flex justify-center items-center gap-[16px] border border-solid border-[#27C5D0] rounded-[24px]">
+                        <img src="./assets/icons/phone.svg" alt="">
+                        <p class="b3 text-[#000]">Показать телефон</p>
+                    </div>
+                    <!--======= ads-date should be here =======-->
+                    <div [ngClass]="{'flex': isFlexVisible(), 'hidden': isHidden()}" class="flex flex-col justify-between">
+                        <div class="flex gap-[8px]">
+                            <p class="b5 text-[#C8C8C8]">Объявление</p>
+                            <p class="b5 text-[#C8C8C8]">1124105141</p>
+                        </div>
+                        <div class="flex justify-start gap-[25px]">
+                            <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
+                            <div class="flex gap-[5px]">
+                                <img class="" src="./assets/icons/eye-silver.svg" alt="">
+                                <p class="b5 text-[#C8C8C8]">7 025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-[12px] p-[32px] bg-[#F7F7F7] rounded-[24px]">
+                    <h4 class="h4 text-[#262626]">{{carFromBackend.user.fullName}}</h4>
+                    <div class="flex items-center gap-[8px]">
+                        <img src="./assets/icons/location.svg" alt="">
+                        <p class="b3 text-[#000]"> {{carFromBackend.user.address}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px] py-[60px] rounded-[60px] bg-[#F3F3F3]">
+        <app-card-detail-calculator></app-card-detail-calculator>
+    </div>
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px] w-full  pt-[100px]">
+        <app-recommendation-cards (cardSelected)="onCardSelected($event)"></app-recommendation-cards>
+    </div>
+</section>

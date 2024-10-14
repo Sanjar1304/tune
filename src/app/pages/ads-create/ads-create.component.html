@@ -1,0 +1,254 @@
+<section class="pt-[24px]">
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+        <nav class="container mx-auto flex justify-between pb-[16px]">
+            <app-breadcrumb></app-breadcrumb>
+            <div class="flex gap-[8px]">
+                <img class="" src="./assets/icons/share.svg" alt="">
+                <img class="" src="./assets/icons/heart.svg" alt="">
+            </div>
+        </nav>
+    </div>
+
+    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+        <div class="w-full container mx-auto flex flex-col 2xl:gap-[32px] xl:gap-[32px] lg:gap-[32px] md:gap-0 sm:gap-0 mobile:gap-0
+                2xl:pb-[80px] xl:pb-[80px] lg:pb-[80px] md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
+            <div class="flex justify-between">
+                <h1 class="h1 text-[#262626]">Разместить объявление</h1>
+                <div class="flex items-center gap-[8px]">
+                    <label>выбрать машину</label>
+                    <mat-form-field class="relative">
+                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                        <mat-select>
+                            <mat-option *ngFor="let food of foods" [value]="food.value">{{ food.viewValue }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex flex-col gap-[24px]">
+                <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]">
+                    <h3>Об автомобиле</h3>
+                    <div class=" grid grid-cols-3 gap-[16px]">
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Марка </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Модель </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Тип кузова </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Тип топлива </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Привод </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Коробка передач</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Год</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Пробег </label>
+                            <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" placeholder="км">
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Цвет</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label class="">Объем двигателя, см3</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Мощность, л.с. </label>
+                            <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" placeholder="Мощность">
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Цена </label>
+                            <div class="w-full flex gap-[10px] px-[8px] py-[8px] rounded-[10px] bg-[#fff]">
+                                <input class="w-5/6 focus:outline-none" placeholder="0.00 uzs">
+                                <mat-form-field class="relative custom-sena-form">
+                                    <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[8px]"></app-ui-svg-icon>
+                                    <mat-select class="custom-sena" placeholder="UZS">
+                                        @for (food of foods; track food) {
+                                        <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Какой вы владелец?</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Позиция</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Состояние</label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]">
+                    <h3>Дополнительный</h3>
+                    <div class="flex gap-[16px]">
+                        <mat-checkbox class="" [(ngModel)]="checked">Они могут договориться</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="indeterminate">Продажа наличными</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="carCredit">Автокредит</mat-checkbox>
+                    </div>
+                </div>
+                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]">
+                    <h3>Опции</h3>
+                    <div class="grid grid-cols-5">
+                        <mat-checkbox class="" [(ngModel)]="checkbox1">Литые диски</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox2">Кожаный салон</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox3">ABS</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox4">Люк</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox5">Датчик дождя</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox6">Кондиционер</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox7">Подогрев сидений</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox8">Парктроник</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox9">Камера заднего вида</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox10">Боковые шторки</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox11">Центральный замок</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox12">Вентиляция сидений</mat-checkbox>
+                        <mat-checkbox class="" [(ngModel)]="checkbox13">Ксенон</mat-checkbox>
+                    </div>
+                </div>
+                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] flex flex-col gap-[20px]">
+                    <h3>Фотографии</h3>
+                    <div class="w-[200px] h-[160px] p-[10px] flex justify-center items-center bg-[#fff] rounded-[16px]">
+                        <img src="./assets/icons/gallery-add.svg" alt="">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]">
+                    <h3>Контакты</h3>
+                    <div class=" grid grid-cols-3 gap-[16px]">
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Имя</label>
+                            <input class="px-[8px] py-[12px] rounded-[10px]" placeholder="Имя">
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Город </label>
+                            <mat-form-field class="relative">
+                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                <mat-select placeholder="Выберите">
+                                    @for (food of foods; track food) {
+                                    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex flex-col gap-[8px]">
+                            <label>Телефон </label>
+                            <input class="px-[8px] py-[12px] rounded-[10px]" placeholder="(00) 000 00 00">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-[8px]">
+                        <label>Оставить краткий комментарий</label>
+                        <textarea class="h-[90px] py-[12px] px-[8px] rounded-[10px]" placeholder="Оставить краткий комментарий"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-[10px]">
+                <button class="text-[#27C5D0] px-[24px] py-[10px] rounded-[14px] border border-[#27C5D0]">Очистить</button>
+                <button class="text-[#B0B8C1] px-[24px] py-[10px] rounded-[14px] bg-[#E5E7EA]">Предпросмотр</button>
+            </div>
+        </div>
+    </div>
+</section>

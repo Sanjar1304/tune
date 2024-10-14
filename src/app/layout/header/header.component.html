@@ -1,0 +1,113 @@
+<header class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px] relative" [ngClass]="{ 'header-shadow': !(isScreenSmall() && burgerMenuOpen) }">
+    <div class="container mx-auto flex justify-between bg-white py-[14px]">
+        <div class="flex items-center gap-[40px]">
+            <img class="logo" src="./assets/icons/header-logo.svg" alt="" (click)="navigateToMain()" />
+            <ul class="xl:flex gap-[24px] hidden">
+                @for(routes of navbarMenus; track routes.id){
+                <li class="">
+                    <a class="b4 text-[#262626]" [routerLink]="routes.path">{{routes.label | transloco}}</a>
+                </li>
+                }
+            </ul>
+        </div>
+        <div class="flex items-center lg:gap-[21px] gap-[12px]">
+            <div class="lg:flex md:flex items-center gap-[10px] hidden">
+                <div class="h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px] xl:hidden">
+                    <img class="w-[18px] h-[18px]" src="./assets/icons/lupe.svg" alt="lupe icon">
+                    <input class="h-[18px] focus:outline-none" placeholder="Поиск">
+                </div>
+                <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px] hidden xl:block" src="./assets/icons/lupe.svg" alt="" />
+                <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]" src="./assets/icons/eye.svg" alt="" />
+                <div class="">
+                    <button class="b4 text-[#262626]
+                         border border-solid border-[#E8E8E8]
+                         h-[38px] w-[38px] px-[10px] rounded-[10px]
+                         flex items-center justify-center" (click)="toggleDropdown()">
+            {{ currentLocale | transloco }}
+          </button> @if(dropdownOpen){
+                    <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
+                        @for(lang of locales; track lang){
+                        <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
+                            {{ lang | transloco }}
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+            <button *ngIf="!isLoggedIn" class="nav-menu text-[#fff] bg-[#27C5D0] h-[38px] px-[24px] rounded-[12px] flex items-center" (click)="navigateToLoginPage()">{{"buttonTexts.enter" | transloco}}</button>
+            <app-ui-svg-icon *ngIf="isLoggedIn" path="./assets/icons/icons.svg#user" svgClass="w-[24px] h-[24px]"></app-ui-svg-icon>
+            <button class="nav-menu h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff]" (click)="navigateToAdsCreatePage()">Подать объявление</button>
+            <button class="h-[38px] w-[38px] flex justify-center items-center p-[5px !important]
+                     border border-1 border-[#C8C8C8] rounded-[12px] xl:hidden" [ngClass]="{ 'bg-[#FF553D]': burgerMenuOpen, 'bg-white': !burgerMenuOpen, 'border': !burgerMenuOpen, 'border-0':burgerMenuOpen }" (click)="toggleBurgerMenu()">
+        <img class="burger-menu" [src]="burgerMenuOpen ? './assets/icons/exit-icon.svg' : './assets/icons/hamburger.svg'" alt="menu icon"/>
+      </button>
+        </div>
+    </div>
+
+    <div *ngIf="burgerMenuOpen" class="container mx-auto lg:w-[89%] md:w-[95%] sm:w-[95.5%] mobile:w-[92%] absolute right-0 left-0
+              lg:p-[60px] md:p-[60px] sm:p-0 mobile:p-0
+              flex items-start lg:flex-row md:flex-row sm:flex-col mobile:flex-col gap-0 sm:gap-[30px] mobile:gap-[30px]
+              z-[9999999] bg-white rounded-[30px] mt-2 2xl:hidden xl:hidden" [ngClass]="{ 'bottom-header-shadow': !isScreenSmall() }">
+        <ul class="w-full">
+            <li class="w-full lg:flex md:flex sm:hidden mobile:hidden flex-col gap-[30px] justify-between ">
+                @for(routes of navbarMenus; track routes.id){
+                <a class="b4 text-[#262626]" [routerLink]="routes.path">{{ routes.label | transloco }}</a> }
+            </li>
+
+            <mat-accordion class="lg:hidden md:hidden sm:flex mobile:flex flex-col">
+                <div class="sm:flex mobile:flex items-center gap-[10px] hidden">
+                    <div class="w-[100%] h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px]">
+                        <img class="w-[18px] h-[18px]" src="./assets/icons/lupe.svg" alt="lupe icon">
+                        <input class="h-[18px] focus:outline-none" placeholder="Поиск">
+                    </div>
+                    <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]" src="./assets/icons/eye.svg" alt="" />
+                    <div class="">
+                        <button class="b4 text-[#262626]
+                         border border-solid border-[#E8E8E8]
+                         h-[38px] w-[38px] px-[10px] rounded-[10px]
+                         flex items-center justify-center" (click)="toggleDropdown()">
+              {{ currentLocale | transloco }}
+            </button> @if(dropdownOpen){
+                        <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
+                            @for(lang of locales; track lang){
+                            <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
+                                {{ lang | transloco }}
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <hr class="border solid border-[#E8E8E8] sm:mb-[12px] mobile:my-[12px]"> @for(route of navbarMenus; track route.id){
+                <mat-expansion-panel class="" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="h3 text-[#262626]">
+                            <a [routerLink]="route.path">{{route.label | transloco}}</a>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="sm:w-full mobile:w-full flex flex-col gap-[16px]">
+                        <ul class="custom-bullets flex flex-col gap-[16px]">
+                            <li class="b3 text-[#5C5C5C]"> <a class="pt-[27px]" href="">{{"footerPage.menuItems.aboutCompany" | transloco}}</a></li>
+                            <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.news" | transloco}}</a></li>
+                            <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.vacancy" | transloco}}</a></li>
+                            <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.contacts" | transloco}}</a></li>
+                        </ul>
+                    </div>
+                </mat-expansion-panel>
+                <hr class="border solid border-[#E8E8E8] sm:my-[12px] mobile:my-[12px]"> }
+            </mat-accordion>
+        </ul>
+        <div class="flex lg:flex-col md:flex-col sm:flex-row mobile:flex-col rounded-[30px] bg-header-ads-gradient ">
+            <div class="flex flex-col lg:items-center md:items-center sm:items-start mobile:items-start justify-center mobile:justify-between
+                  gap-[24px] lg:pt-[30px] md:pt-[30px] sm:pb-[30px] lg:px-[48px] md:px-[48px] mobile:p-[24px]">
+                <h2 class="h3 text-[#fff] lg:text-center md:text-center sm:text-start mobile:text-start mobile:z-[1111]">Каталог проверенных автомобилей mybank</h2>
+                <button class="lg:w-auto md:w-auto sm:w-auto mobile:w-[85%]
+                       lg:static md:static sm:static mobile:absolute mobile:bottom-[24px]
+                       px-[28px] py-[16px] bg-[#FFFFFF] rounded-[14px] mobile:z-[1111]">Подробнее</button>
+            </div>
+            <img class="lg:w-full md:w-[88%] sm:w-[50%] mobile:w-full mobile:z-[1]" src="./assets/icons/car-in-red.svg" alt="">
+        </div>
+    </div>
+</header>

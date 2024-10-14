@@ -1,0 +1,39 @@
+<section class="container mx-auto lg:pb-[40px]">
+    <div class="flex flex-col lg:gap-[24px] sm:gap-[12px] mobile:gap-[8px]">
+        <div class="flex justify-between rounded-[30px] bg-custom-gradient relative mobile:h-[430px] mobile:relative overflow-hidden">
+            <div class="
+          lg:pt-[50px] lg:pb-[50px] lg:pl-[50px]
+          md:pt-[40px] md:pb-[40px] md:pl-[40px]
+          mobile:w-full mobile:p-[24px]
+          flex flex-col mobile:justify-between lg:gap-[94px]">
+                <div class="flex flex-col lg:gap-[24px] sm:gap-[20px] mobile:gap-[16px] z-[9999]">
+                    @if(banners && banners.items){
+                    <h1 class="h1 w-[50%] text-left text-[#fff]">{{banners.items[currentIndex].title}}</h1>
+                    <h3 class="b2 w-[40%] text-left text-[#fff]">{{banners.items[currentIndex].content}}</h3>
+                    }
+                </div>
+                <button class="lg:w-[147px] mobile:w-full px-[28px] py-[18px] bg-[#fff] rounded-[14px] link text-[#262626] mobile:z-[999]">{{"buttonTexts.read_more" | transloco}}</button>
+            </div>
+            @if(banners?.items){
+            <img class="absolute mobile:absolute lg:right-[0px] md:right-[-320px] md:bottom-0 mobile:bottom-0 mobile:z-[1]" [src]="banners.items[currentIndex].images[0]" alt="Slide"> }
+        </div>
+        <div class="w-[100%] flex lg:gap-[24px] md:gap-[16px]">
+            @if(banners && banners.items){ @for(slide of banners.items | slice:0:3; track slide){
+            <div class="w-[648px] flex justify-center lg:hidden">
+                <div class="w-[95%] h-[6px] rounded-[100px] bg-[#EEEEEE]"></div>
+            </div>
+            <div class="lg:w-1/3 lg:flex p-[2px] border-2 border-solid rounded-[20px] md:hidden sm:hidden mobile:hidden outer" [ngClass]="{'active-card': currentIndex === $index, 'inactive-card': currentIndex !== $index}" (click)="setCurrentIndex($index)">
+                <div class="w-[100%] rounded-[16px] flex relative overflow-hidden inner">
+                    <div class="flex flex-col gap-[8px] pt-[13px] pb-[16px] pl-[16px]">
+                        <h3 class="b1">{{slide.title}}</h3>
+                        <h3 class="b5 w-2/3">{{slide.content}}</h3>
+                    </div>
+                    <img class="w-[172px] absolute bottom-[-7px] right-[-20px]" [src]="slide.images[0]" alt="Slide">
+                </div>
+            </div>
+            }@empty {
+            <div>There is no data</div>
+            } }
+        </div>
+    </div>
+</section>

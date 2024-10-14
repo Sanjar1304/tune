@@ -1,0 +1,55 @@
+<section class=" container mx-auto
+                lg:pt-[60px] lg:pb-[100px] mobile:py-[60px]
+                flex flex-col justify-left gap-[40px]">
+  <h1 class="h1 text-[#262626]">{{"sortingModelsPage.title" | transloco}}</h1>
+  <div class="w-full flex flex-col justify-start gap-[32px]">
+    <div class="w-[320px] p-[8px] rounded-[20px] bg-[#EEEEEE] flex gap-[2px]">
+      <button class="b3 px-[18px] py-[10px] bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]">{{"buttonTexts.all" | transloco}}</button>
+      <button class="b3 px-[18px] py-[10px] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]">{{"buttonTexts.new" | transloco}}</button>
+      <button class="b3 px-[18px] py-[10px] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]">{{"buttonTexts.with_mileage" | transloco}}</button>
+    </div>
+
+    <div class="flex flex-col gap-[24px]">
+      <div class="lg:gap-[10px] flex justify-between gap-[24px] overflow-x-scroll scrollbar-none">
+        <img class="lg:block" src="./assets/icons/subaru.svg" alt="">
+        <img class="lg:block" src="./assets/icons/nissan.svg" alt="">
+        <img class="lg:block" src="./assets/icons/chery.svg" alt="">
+        <img class="lg:block" src="./assets/icons/jeep.svg" alt="">
+        <img class="lg:block" src="./assets/icons/chevrolet.svg" alt="">
+        <img class="lg:block" src="./assets/icons/fiat.svg" alt="">
+        <img class="lg:block" src="./assets/icons/acura.svg" alt="">
+        <img class="lg:block" src="./assets/icons/man.svg" alt="">
+        <img class="lg:block" src="./assets/icons/daewoo.svg" alt="">
+        <img class="lg:block" src="./assets/icons/suzuki.svg" alt="">
+        <img class="lg:block" src="./assets/icons/opel.svg" alt="">
+        <img class="lg:block" src="./assets/icons/kia.svg" alt="">
+      </div>
+      <div class="grid
+                  lg:grid-cols-6 md:grid-cols-4
+                  sm:grid-cols-3 mobile:grid-cols-2
+                  gap-x-[24px] gap-y-[10px]">
+        <div class="w-full lg:w-[180px]  px-[12px] py-[4px] flex gap-[8px]">
+          @if(carModels && carModels.facets){
+            @for(model of carModels.facets; track model){
+              <p class="b4 text-[#000]">{{model.id}}</p>
+              <p class="b4 text-[#B1B1B1]">{{model.value}}</p>
+            } @empty {
+              <div>there is no value</div>
+            }
+          }
+        </div>
+        <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">
+          <p class="b4 text-[#27C5D0]">{{"sortingModelsPage.sorting_down.top" | transloco}}</p>
+          <p class="b4 text-[#B1B1B1]">{{"sortingModelsPage.sorting_down.bottom" | transloco}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center lg:justify-center xl:justify-center 2xl:justify-center">
+      <button class="b3 mx-auto text-[#fff] bg-[#27C5D0] rounded-[14px]
+      lg:py-[10px] lg:px-[16px]
+      lg:w-[277px] md:w-full sm:w-full mobile:w-full
+      md:py-[18px] md:px-[28px] sm:py-[28px] mobile:py-[18px]
+      md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px]">{{"buttonTexts.sorting_btn" | transloco}}</button>
+    </div>
+  </div>
+</section>

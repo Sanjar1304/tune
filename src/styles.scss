@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "styles/@styles";
+$main-content-height: calc(99.5vh - 70px - 615px);
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    min-height: 100vh;
+    min-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+.main-content-height {
+    min-height: $main-content-height;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
+    /* Ensure no horizontal overflow within .app */
+}
+
+
+/* Ensure all child components also respect the width */
+
+.router-outlet,
+app-header,
+app-footer {
+    width: 100%;
+}

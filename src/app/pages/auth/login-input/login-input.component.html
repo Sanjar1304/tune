@@ -1,0 +1,34 @@
+<div class="flex flex-col gap-[40px] px-[130px]">
+    <div class="w-full flex gap-[8px] p-[8px] bg-[#ECECEC] rounded-[20px]">
+        <button class="w-1/2 py-[10px] px-[18px] bg-[#fff] rounded-[12px]">Войти</button>
+        <button class="w-1/2 py-[10px] px-[18px]">QR-код</button>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-[40px]">
+        <div class="flex flex-col gap-[40px]">
+            <p class="text-[#626262]">Для полноценного использования сайта вам необходимо войти в свой профиль</p>
+            <div class="flex flex-col gap-[24px]">
+                <div class="flex flex-col gap-[8px] ">
+                    <label>Тип продажи</label>
+                    <mat-form-field class="relative">
+                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                        <mat-select formControlName="userType">
+                            <mat-option *ngFor="let food of foods" [value]="food.value">{{ food.viewValue }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col gap-[8px] ">
+                    <label>Hомер телефона</label>
+                    <input class="py-[12px] px-[8px] border border-[#E5E7EB] rounded-[10px] focus:outline-none " placeholder="998 00 000 00 00 " formControlName="phone">
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-[16px] ">
+            <button type="submit " class="py-[10px] px-[24px] rounded-[10px] " [ngClass]="{ 'text-[#fff] bg-[#27C5D0]': loginForm.valid && isPasswordValid(), 'text-[#B0B8C1] bg-[#F3F3F3] cursor-not-allowed': !loginForm.valid || !isPasswordValid() }
+                                " [disabled]="!loginForm.valid || !isPasswordValid() ">Продолжить</button>
+            <button class=" py-[10px] px-[24px] rounded-[10px] border border-[#27C5D0] flex justify-center gap-[16px] " (click)="navigateToHomePage() ">
+            <span>Вернуться на главную</span>
+            <img src="../../../assets/icons/back-square.svg " alt>
+      </button>
+        </div>
+    </form>
+</div>

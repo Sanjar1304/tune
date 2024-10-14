@@ -1,0 +1,16 @@
+<div class="app w-full min-h-screen flex flex-col">
+    @if (!isAuth) {
+    <app-header class=""></app-header>
+    }
+
+    <router-outlet class=""></router-outlet>
+
+    @if (!isAuth) {
+    <app-footer class=""></app-footer>
+    }
+</div>
+@if(utilService.spinnerState$ | async){
+<div class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1001]" style="background: rgb(255 255 255 / 76%);">
+    <app-spinner></app-spinner>
+</div>
+}
