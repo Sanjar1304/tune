@@ -1,0 +1,221 @@
+{
+  "path": {
+    "initial": "Home"
+  },
+  "headerMenu": {
+    "menuTab": {
+      "myAvto": "MyAuto",
+      "catalog": "Catalog",
+      "carCredit": "Car loan",
+      "carInsurance": "Car insurance",
+      "applyDocs": "Registration of documents"
+    }
+  },
+  "sliderHomePage": {
+    "title": "Car loan at 25% per year",
+    "subtitle": "New cars and verified used cars with mileage"
+  },
+  "sortingModelsPage": {
+    "title": "Buy a car in Tashkent",
+    "sorting_down": {
+      "top": "All brands",
+      "bottom": "down"
+    }
+  },
+  "recommendationPage": {
+    "title": "We recommend",
+    "withMileage": "With mileage",
+    "inStock": "In stock",
+    "monthlyPay": {
+      "from": "from",
+      "monthly": "monthly"
+    },
+    "year": "y",
+    "km": "km",
+    "fuelType": "gasoline",
+    "gearBox": "four-wheel drive"
+  },
+  "gettingCreditPage": {
+    "title": "Getting a car loan",
+    "buttons": {
+      "description": "Description",
+      "take": "Conditions of receipt",
+      "docs": "Required Documents",
+      "repayment": "Loan repayment",
+      "tariffs": "Tariffs and documents of the bank"
+    },
+    "cardTexts":{
+      "from": "from",
+      "interest": "Annual rate",
+      "title": "Stages of getting a loan",
+      "list": {
+        "first": "Choose the right car directly on our website",
+        "second": "Leave an application for a car loan for it - online or at bank branches",
+        "third": "Once approved, sign the contract and make the payment.",
+        "fourth": "Get keys and documents"
+      }
+    }
+  },
+  "questionFormPage": {
+    "title": "Any questions left?",
+    "subtitle": "Leave your contact details and our operator will call you back",
+    "input1": "First and last name",
+    "input2": "Phone number",
+    "condition": "I accept the terms of information transfer and give my consent to receive information about the products and services of the Bank and partners"
+  },
+  "calculateCreditPage": {
+    "title1": "Calculate the terms of a car loan",
+    "title2": "Calculator",
+    "cards": {
+      "card1": "Leave a request online",
+      "card2": "Wait for bank approval",
+      "card3": "Receive money at a bank office",
+      "card4": "Manage your money in the bank app"
+    },
+    "slider1": {
+      "title": "Car price",
+      "sum": "Sum"
+    },
+    "slider2": {
+      "title": "Credit duration",
+      "year": "year",
+      "smallYear": {
+        "month": "month",
+        "year": "year"
+      }
+    },
+    "slider3": {
+      "title": "An initial fee"
+    },
+    "sideCard": {
+      "cards": {
+        "title1": "Monthly payment",
+        "title2": "Amount of credit",
+        "title3": "Interest rate (calculated individually)"
+      },
+      "condition": "Preliminary calculation is not a real offer"
+    }
+  },
+  "prosCardsPage": {
+    "title": "Simple and reliable for the buyer",
+    "cards": {
+      "card1": {
+        "title": "Credit for all cars",
+        "text": "Credit for both new and used cars. Passenger cars, trucks, watercraft and motorcycles."
+      }
+    }
+  },
+  "faqPage": {
+    "title": "Frequently asked questions",
+    "card1": {
+      "title": "What documents are needed to apply for a loan?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    },
+    "card2": {
+      "title": "Can I choose a car after the loan is approved?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    },
+    "card3": {
+      "title": "Is it possible to get a car loan in cash?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    },
+    "card4": {
+      "title": "Is it possible to include payment for insurance, equipment and other services in the car loan amount?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    },
+    "card5": {
+      "title": "Is it possible to pay off a car loan early?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    },
+    "card6": {
+      "title": "What kind of car can you get on credit?",
+      "text": "Cash loan from VTB is a favorable interest rate, comfortable repayment terms and the ability to spend funds for any purpose. You can get a cash loan without collateral, certificates and on excellent terms.",
+      "list": {
+        "title": "Documents can be provided:",
+        "first": "At the ATM",
+        "second": "At the bank office",
+        "third": "In the application"
+      }
+    }
+  },
+  "footerPage": {
+    "callCenter": "Contact center",
+    "menuItems": {
+      "aboutCompany": "About the bank",
+      "news": "News",
+      "vacancy": "Vacancies",
+      "contacts": "Contacts",
+      "bankOffices": "Bank offices and ATMs",
+      "physics": {
+        "title": "For individuals",
+        "swift": "SWIFT transfers",
+        "bankCards": "Bank cards",
+        "microLoan": "Microloans",
+        "carLoans": "Car loans",
+        "deposits": "Deposits",
+        "exchange": "Currency exchange",
+        "oneTimePayment": "One-time payments",
+        "communalServices": "Public utilities"
+      },
+      "business": {
+        "title": "For business",
+        "collaboration": "Cooperation",
+        "credits": "Credits",
+        "grants": "Guarantees"
+      },
+      "supportClients": {
+        "title": "Customer assistance",
+        "support": "Support",
+        "siteMap": "Site Map",
+        "securityRules": "Safety regulations",
+        "personalData": "Personal Information"
+      },
+      "installApp": {
+        "text1": "Install our mobile app for",
+        "text2": "or"
+      },
+      "copyRights": "© 2006-2024, JSC MyBank, official website, universal license of the Central Bank of the Russian Federation No. 2673 (fish text)"
+    }
+  },
+  "buttonTexts": {
+    "enter": "Enter",
+    "read_more": "Read more",
+    "all": "All",
+    "new": "New",
+    "with_mileage": "With mileage",
+    "sorting_btn": "Show 50,679 offers",
+    "recommendationBtn": "Go to the catalog",
+    "orderPhoneBtn": "Request a call",
+    "calculateCreditBtn": "Proceed to checkout"
+  }
+}

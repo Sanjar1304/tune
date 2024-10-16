@@ -1,0 +1,223 @@
+{
+  "path": {
+    "initial": "Asosiy"
+  },
+  "headerMenu" : {
+    "menuTab": {
+      "myAvto": "MyAuto",
+      "catalog": "Katalog",
+      "carCredit": "Avtomobil krediti",
+      "carInsurance": "Avtomobil sug'urtasi",
+      "applyDocs": "Hujjatlarni rasmiylashtirish"
+    }
+  },
+  "sliderHomePage": {
+    "title": "Yiliga 25% avtokredit",
+    "subtitle": "Yangi avtomobillar va ishonchli yurgan mashinalar"
+  },
+  "sortingModelsPage": {
+    "title": "Toshkentda mashina sotib oling",
+    "sorting_down": {
+      "top": "Barchasi",
+      "bottom": "pastga"
+    }
+  },
+  "recommendationPage": {
+    "title": "Tavsiya qilamiz",
+    "withMileage": "Yurgan",
+    "inStock": "Mavjud",
+    "monthlyPay": {
+      "from": "dan",
+      "monthly": "oyiga"
+    },
+    "year": "y",
+    "km": "km",
+    "fuelType": "benzin",
+    "gearBox": "to'rt g'ildirak tortuvchi"
+  },
+  "gettingCreditPage": {
+    "title": "Avtomobil kreditini olish",
+    "buttons": {
+      "description": "Tavsif",
+      "take": "Qabul qilish shartlari",
+      "docs": "Kerakli hujjatlar",
+      "repayment": "Kreditni to'lash",
+      "tariffs": "Bank tariflari va hujjatlar"
+    },
+    "cardTexts":{
+      "from": "dan",
+      "interest": "Yillik stavka",
+      "title": "Kredit olish bosqichlari",
+      "list": {
+        "first": "To'g'ri mashinani bizning veb-saytimizda tanlang",
+        "second": "Avtomobil krediti uchun ariza qoldiring - onlayn yoki bank filiallarida",
+        "third": "Tasdiqlangandan so'ng, shartnomani imzolang va to'lovni amalga oshiring",
+        "fourth": "Kalitlar va hujjatlarni oling"
+      }
+    }
+  },
+  "questionFormPage": {
+    "title": "Hali ham savollaringiz bormi?",
+    "subtitle": "Kontaktlaringizni qoldiring va operatorimiz sizga qo'ng'iroq qiladi",
+    "input1": "Ism va familiya",
+    "input2": "Telefon raqami",
+    "condition": "Men ma'lumot uzatish shartlarini qabul qilaman va Bank va hamkorlarning mahsulotlari va xizmatlari haqida ma'lumot olishga roziman"
+  },
+  "calculateCreditPage": {
+    "title1": "Avtomobil kreditini hisoblang",
+    "title2": "Kalkulyator",
+    "cards": {
+      "card1": "So'rovingizni onlayn qoldiring",
+      "card2": "Bankning roziligini kuting",
+      "card3": "Bank ofisida pul oling",
+      "card4": "Pulingizni bank ilovasida boshqaring"
+    },
+    "slider1": {
+      "title": "Avtomobil narxi",
+      "sum": "Soʻm"
+    },
+    "slider2": {
+      "title": "Kredit muddati",
+      "year": "yil",
+      "smallYear": {
+        "month": "oy",
+        "year": "yil"
+      }
+    },
+    "slider3": {
+      "title": "Dastlabki to'lov"
+    },
+    "sideCard": {
+      "cards": {
+        "title1": "Oylik to'lov",
+        "title2": "Kredit miqdori",
+        "title3": "Foiz stavkasi (individual hisoblangan)"
+      },
+      "condition": "Dastlabki hisob haqiqiy taklif emas"
+    }
+  },
+  "prosCardsPage": {
+    "title": "Xaridor uchun oddiy va ishonchli",
+    "cards": {
+      "card1": {
+        "title": "Barcha avtomobillar uchun kredit",
+        "text": "Yangi va eski mashinalar uchun kreditlar. Yo'lovchi, yuk, suv va mototsikl transporti."
+      }
+    }
+  },
+  "faqPage": {
+    "title": "Ko'p so'raladigan savollar",
+
+    "card1": {
+      "title": "Kredit olish uchun qanday hujjatlar kerak?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    },
+    "card2": {
+      "title": "Kredit tasdiqlanganidan keyin mashina tanlashim mumkinmi?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    },
+    "card3": {
+      "title": "Avtomobil kreditini naqd pulda olish mumkinmi?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    },
+    "card4": {
+      "title": "Avtomobil krediti miqdoriga sug'urta, uskunalar va boshqa xizmatlar uchun to'lovni kiritish mumkinmi?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    },
+    "card5": {
+      "title": "Avtomobil kreditini muddatidan oldin to'lash mumkinmi?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    },
+    "card6": {
+      "title": "Kreditga qanday mashina olsam bo'ladi?",
+      "text": "VTB-dan naqd kredit - bu qulay foiz stavkasi, qulay to'lov shartlari va mablag'larni har qanday maqsadda sarflash imkoniyati. Siz garovsiz, sertifikatsiz va mukammal shartlarda naqd pul kreditini olishingiz mumkin.",
+      "list": {
+        "title": "Hujjatlar taqdim etilishi mumkin:",
+        "first": "Bankomatda",
+        "second": "Bank ofisida",
+        "third": "Ilovada"
+      }
+    }
+  },
+  "footerPage": {
+    "callCenter": "Aloqa markazi",
+    "menuItems": {
+      "aboutCompany": "Bank haqida",
+      "news": "Yangiliklar",
+      "vacancy": "Bo'sh ish o'rinlari",
+      "contacts": "Kontaktlar",
+      "bankOffices": "Bank ofislari va bankomatlar",
+
+      "physics": {
+        "title": "Jismoniy shaxslar uchun",
+        "swift": "SWIFT o'tkazmalari",
+        "bankCards": "Bank kartalari",
+        "microLoan": "Mikrokreditlar",
+        "carLoans": "Avtomobil kreditlari",
+        "deposits": "Depozitlar",
+        "exchange": "Valyuta ayirboshlash",
+        "oneTimePayment": "Bir martalik to'lovlar",
+        "communalServices": "Kommunal xizmatlar"
+      },
+      "business": {
+        "title": "Biznes uchun",
+        "collaboration": "Hamkorlik",
+        "credits": "Kreditlar",
+        "grants": "Kafolatlar"
+      },
+      "supportClients": {
+        "title": "Mijozlarga yordam",
+        "support": "Qo'llab-quvvatlash",
+        "siteMap": "Sayt xaritasi",
+        "securityRules": "Xavfsizlik qoidalari",
+        "personalData": "Shaxsiy ma'lumot"
+      },
+      "installApp": {
+        "text1": "mobil ilovamizni o'rnating",
+        "text2": "yoki"
+      },
+      "copyRights": "© 2006—2024, OAJ MyBank, rasmiy veb-sayt, Markaziy bankining 2673-sonli universal litsenziyasi (baliq matni)"
+    }
+  },
+  "buttonTexts": {
+    "enter": "Kirish",
+    "read_more": "Batafsil",
+    "all": "Hammasi",
+    "new": "Yangi",
+    "with_mileage": "Yurgan",
+    "sorting_btn": "50 679 taklifni ko'rsatish",
+    "recommendationBtn": "Katalogga o'ting",
+    "orderPhoneBtn": "Qo'ng'iroqni qiling",
+    "calculateCreditBtn": "To'lovga o'ting"
+  }
+}

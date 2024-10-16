@@ -1,0 +1,9 @@
+<div class="toast p-2 pl-11 pr-4 flex justify-between items-center relative">
+  <span class="icon h-[73px] w-[36px] rounded-r-full absolute left-[-2px] top-1/2 translate-y-[-50%] flex items-center pr-1"></span>
+  <div class="w-full">
+    <p class="title text-base font-semibold leading-5 relative mb-1.5 text-black" [innerHTML]="title"></p>
+    <div class="text-sm text-secondary leading-4" [innerHtml]="message"></div>
+  </div>
+  <span class="w-[1px] block h-12 bg-[#DBDBDB] mx-2"></span>
+  <app-ui-svg-icon path="./assets/icons/input-icons.svg#close-square" svgClass="w-6 h-6 ml-auto" (click)="remove()"></app-ui-svg-icon>
+</div>
