@@ -1,0 +1,9 @@
+<nav class="container mx-auto" *ngIf="(breadcrumbService.breadcrumbs$ | async)?.length">
+    <ul class="flex">
+        <li *ngFor="let breadcrumb of breadcrumbService.breadcrumbs$ | async; let last = last">
+            <a [routerLink]="breadcrumb.url" *ngIf="!last">{{ breadcrumb.label }}</a>
+            <span *ngIf="last">{{ breadcrumb.label }}</span>
+            <span *ngIf="!last" class=""> / </span>
+        </li>
+    </ul>
+</nav>

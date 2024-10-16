@@ -1,0 +1,205 @@
+@font-face {
+  font-family: Geologica-light;
+  font-style: normal;
+  src: url("../assets/fonts/geologica/static/Geologica-Light.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Geologica-regular;
+  font-style: normal;
+  src: url("../assets/fonts/geologica/static/Geologica-Regular.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Geologica-medium;
+  font-style: normal;
+  src: url("../assets/fonts/geologica/static/Geologica-Medium.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Geologica-semi;
+  font-style: normal;
+  src: url("../assets/fonts/geologica/static/Geologica-SemiBold.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Geologica-bold;
+  font-style: normal;
+  src: url("../assets/fonts/geologica/static/Geologica-Bold.ttf") format('truetype');
+}
+
+
+.h1 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 50px !important;
+  font-weight: 400;
+  line-height: 55px;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 639px) {
+  .h1 {
+    font-size: 32px !important;
+    line-height: 120% !important;
+    font-weight: 500 !important;
+  }
+}
+
+.h2 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 48.4px;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 639px) {
+  .h2 {
+    font-size: 32px !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .h2 {
+    font-size: 40px !important;
+    font-weight: 400 !important;
+    line-height: 120% !important;
+  }
+}
+
+
+.h2-detail {
+  font-family: Geologica-regular, serif !important;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 48.4px;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 1023px) {
+  .h2-detail {
+    font-size: 26px !important;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+  }
+}
+
+.static-h3 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 26px !important;
+  font-weight: 500 !important;
+  line-height: 31.2px !important;
+  margin: 0 !important;
+}
+
+.h3 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 26px !important;
+  font-weight: 500 !important;
+  line-height: 31.2px !important;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 639px) {
+  .h3 {
+    font-size: 20px !important;
+    line-height: 130% !important;
+    font-weight: 500;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .h3 {
+    font-size: 26px !important;
+    line-height: 120% !important;
+    font-weight: 500;
+  }
+}
+
+.h4 {
+  font-family: Geologica-semi, serif !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  line-height: 26px !important;
+  margin: 0 !important;
+}
+
+.b1 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  line-height: 23.4px !important;
+  margin: 0 !important;
+}
+
+.b2 {
+  font-family: Geologica-light, serif !important;
+  font-size: 18px !important;
+  font-weight: 300 !important;
+  line-height: 25.2px !important;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 639px) {
+  .b2 {
+    font-size: 14px !important;
+    line-height: 160% !important;
+    font-weight: 400 !important;
+  }
+}
+
+.b3 {
+  font-family: Geologica-light, serif !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  line-height: 22.4px !important;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 639px) {
+  .b3 {
+    font-size: 14px !important;
+    line-height: 160% !important;
+    font-weight: 400;
+  }
+}
+
+.b4 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 14px !important;
+  margin: 0 !important;
+}
+
+.b5 {
+  font-family: Geologica-light, serif !important;
+  font-size: 14px !important;
+  font-weight: 300 !important;
+  line-height: 19.6px !important;
+  margin: 0 !important;
+}
+
+.b6 {
+  font-family: Geologica-regular, serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 16.8px !important;
+  margin: 0 !important;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .b6 {
+    font-weight: 300 !important;
+  }
+}
+
+.link {
+  font-family: Geologica-regular, serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 140% !important;
+  margin: 0 !important;
+}
