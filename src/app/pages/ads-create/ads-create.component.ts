@@ -1,8 +1,8 @@
 import {AsyncPipe, JsonPipe, NgFor, NgIf} from "@angular/common";
-import {CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, model} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, OnInit, SimpleChanges, ViewChild, inject,} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {Router, RouterLink} from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 import { AddsService } from './services/ads.service';
 import { BreadcrumbComponent } from "../../core/components/breadcrumb/breadcrumb.component";
@@ -10,8 +10,10 @@ import { CarSelectInfoResponse } from "./models/car-select-Info.model";
 import { ICarModelList } from './models/cars.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatFormField} from "@angular/material/form-field";
+import { Observable } from "rxjs";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {UiSvgIconComponent} from "../../core/components/ui-svg-icon/ui-svg-icon.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 interface Food {
   value: string;
@@ -140,65 +142,262 @@ export class AdsCreateComponent implements OnInit {
 
   carForm!: FormGroup;
   carInfos!: ICarModelList;
-  carSelectData!: CarSelectInfoResponse;
-  carSelectName!: string[]
+  carSelectData: null | CarSelectInfoResponse = null;
+  carSelectName!: string[];
+  carImageUrls: string[] = [];
 
-  currentPath: {label: string, url: string}[] = [];
-  readonly checked = model(false);
-  readonly indeterminate = model(false);
-  readonly carCredit = model(false);
-  readonly checkbox1 = model(false);
-  readonly checkbox2 = model(false);
-  readonly checkbox3 = model(false);
-  readonly checkbox4 = model(false);
-  readonly checkbox5 = model(false);
-  readonly checkbox6 = model(false);
-  readonly checkbox7 = model(false);
-  readonly checkbox8 = model(false);
-  readonly checkbox9 = model(false);
-  readonly checkbox10 = model(false);
-  readonly checkbox11 = model(false);
-  readonly checkbox12 = model(false);
-  readonly checkbox13 = model(false);
+  byAssetSelected = false;
+  carId!: string;
 
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
+  @ViewChild('carForm') form!: NgForm;
+  @Input() mainPanel: null | CarSelectInfoResponse = null;
+  @Input() extraPanel: null | CarSelectInfoResponse = null;
+  @Input() optionalPanel: null | CarSelectInfoResponse = null;
+  @Input() contactsPanel: null | CarSelectInfoResponse = null;
 
+  selectedFiles?: FileList;
+  message: string[] = [];
+
+  previews: string[] = [];
+  imageInfos?: Observable<any>;
+
+  name: string = '';
+  city: string = '';
+  phone: string = '';
+  comment: string = '';
+  mainPanelSelects: any[] = [];
+  extraOptions: any[] = [];
+  optionalOptions: any[] = [];
+  contactOptions: any[] = []
 
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private fb = inject(FormBuilder);
-  private adsService = inject(AddsService)
+  private adsService = inject(AddsService);
+  private destroy$ = inject(DestroyRef);
 
-
-  public ngOnInit(): void {
-      this.adsService.getCarInfos({ page: 0, size: 1}).subscribe((res) => {
-        this.carInfos = res as ICarModelList
-      })
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["mainPanel"] && this.mainPanel) {
+      this.updateMainPanelControls();
+    }
+    if (changes["extraPanel"] && this.extraPanel) {
+      this.updateExtraPanelControls();
+    }
+    if (changes["optionalPanel"] && this.optionalPanel) {
+      this.updateOptionalPanelControls();
+    }
+    if (changes["contactsPanel"] && this.contactsPanel) {
+      this.updateOptionalPanelControls();
+    }
   }
 
-  public carFormValidation(){
-    this.carForm = this.fb.group({
-      carId: new FormControl('', [Validators.required])
+  public ngOnInit(): void {
+    this.getCarData();
+    this.sendCarId(this.carSelectData);
+  }
+
+  public updateMainPanelControls() {
+    this.mainPanelSelects = this.mainPanel?.items.map(item => item.currentValue || '') || [];
+    this.cdr.detectChanges();
+  }
+
+  public updateExtraPanelControls() {
+    this.extraOptions = this.extraPanel?.items.map(() => false) || [];
+    this.cdr.detectChanges();
+  }
+
+  public updateOptionalPanelControls() {
+    this.optionalOptions = this.optionalPanel?.items.map(() => false) || [];
+    this.cdr.detectChanges();
+  }
+
+  public updateContactsPanelControls() {
+    this.contactOptions = this.contactsPanel?.items.map(() => false) || [];
+    this.cdr.detectChanges();
+  }
+
+
+  public sendCarId(id: any){
+      if(id){
+        console.log(id)
+        this.byAssetSelected = true;
+        this.carId = id;
+        console.log(this.byAssetSelected)
+      }
+      this.adsService.getSelectOption(id)
+        .pipe(takeUntilDestroyed(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.carSelectData = res as CarSelectInfoResponse;
+              this.mainPanel = { items: res.items.filter(val => val.position === 'MAIN') };
+
+              this.extraPanel = { items: res.items.filter(val => val.position === 'EXTRA') };
+              this.optionalPanel = { items: res.items.filter(val => val.position === 'OPTIONS') };
+              this.contactsPanel = { items: res.items.filter(val => val.position === 'CONTACTS')}
+              this.cdr.detectChanges();
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching car select data:', err);
+          }
+        })
+
+  }
+
+
+  public getCarData(){
+    this.adsService.getCarInfos({ page: 0, size: 1})
+    .pipe(takeUntilDestroyed(this.destroy$))
+    .subscribe({
+      next: res => {
+        this.carInfos = res as ICarModelList;
+        this.cdr.detectChanges();
+      },
+      error: err => console.log(err)
     })
   }
 
-  sendCarId(id: any){
-    console.log(id)
-    this.adsService.getSelectOption(id).subscribe({
-      next: (res) => {
-        if (res) {
-          this.carSelectData = res;
-        }
-        console.log(res)
+
+  public selectFile(event: Event): void{
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      this.selectedFiles = input.files;
+      this.previews = [];
+      const length = this.selectedFiles.length;
+
+      for (let i = 0; i < length; i++) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previews.push(e.target.result);
+          this.cdr.detectChanges();
+        };
+        reader.readAsDataURL(this.selectedFiles[i]);
+      }
+      this.uploadFiles();
+    } else {
+      this.selectedFiles = undefined;
+    }
+  }
+
+  public uploadFiles(): void{
+    if(this.selectedFiles){
+      for(let i = 0; i < this.selectedFiles.length; i++){
+        this.sendImage(this.selectedFiles[i]);
+        this.cdr.detectChanges()
+      }
+      this.selectedFiles = undefined;
+    } else {
+      this.message.push('No files selected for upload')
+    }
+  }
+
+  public sendImage(file: File){
+    const formData = new FormData();
+    formData.append('file', file)
+    this.adsService.uploadImage(formData).pipe(takeUntilDestroyed(this.destroy$)).subscribe({
+      next: res => {
+        this.carImageUrls.push(res?.url as unknown as string);
+        this.cdr.markForCheck()
       },
-      error: (err) => {
-        console.error('Error fetching car select data:', err);
+      error: err => {
+        console.log(err);
+        this.cdr.markForCheck()
       }
     })
   }
 
+  public onSubmit() {
+
+    const mainPanelID = this.mainPanel?.items.map(val => val.id) || [];
+    const extraPanelID = this.extraPanel?.items.map(val => val.id) || [];
+    const optionalPanelID = this.optionalPanel?.items.map(val => val.id) || [];
+    const contactsPanelID = this.contactsPanel?.items.map(val => val.id) || [];
+
+    // Map all panel values
+    const mainPanelValue = this.mainPanelSelects.map(val => val) || [];
+    const extraPanelValue = this.extraOptions.map(val => val) || [];
+    const optionalPanelValue = this.optionalOptions.map(val => val) || [];
+    const contactsPanelValue = this.contactOptions.map(val => val) || [];
+
+    if (this.mainPanel && this.mainPanel.items) {
+      this.mainPanel.items.forEach((select, index) => {
+          if (select.currentValue) {
+              mainPanelValue[index] = select.currentValue;
+              if (!mainPanelID.includes(select.id)) {
+                  mainPanelID.push(select.id);
+              }
+          }
+      });
+  }
+
+    const properties = [
+      ...mainPanelID.map((id, index) => ({
+          propertyId: id,
+          value: mainPanelValue[index] || ''
+      })),
+      ...extraPanelID.map((id, index) => ({
+          propertyId: id,
+          value: extraPanelValue[index] || ''
+      })),
+      ...optionalPanelID.map((id, index) => ({
+          propertyId: id,
+          value: optionalPanelValue[index] || ''
+      })),
+      ...contactsPanelID.map((id, index) => ({
+          propertyId: id,
+          value: contactsPanelValue[index] || ''
+      }))
+  ];
+
+
+    const formData = {
+      categoryId: 1,
+      price: {
+        amount: 15000,
+        scale: 1,
+        currency: 'USD'
+      },
+      translates: [
+        {
+          lang: 'RUS',
+          name: '',
+          description: this.comment
+        }
+      ],
+      properties,
+      images: this.carImageUrls
+    };
+
+    const formDataWithAssetID = {
+      assetId: this.carId,
+      categoryId: 1,
+      price: {
+        amount: 15000,
+        scale: 1,
+        currency: 'USD'
+      },
+      translates: [
+        {
+          lang: 'RUS',
+          name: '',
+          description: this.comment
+        }
+      ],
+      properties,
+      images: this.carImageUrls
+    };
+
+    console.log(this.carId);
+    if(!this.byAssetSelected){
+      this.adsService.createProduct(formData).subscribe(res => {
+        console.log(res)
+      })
+    } else {
+      this.adsService.createProductByAsset(formDataWithAssetID).subscribe(res => {
+        console.log(res)
+      })
+    }
+  }
 }

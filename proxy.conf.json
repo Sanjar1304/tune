@@ -1,0 +1,8 @@
+{
+    "/file": {
+        "target": "https://store-api.madadinvestbank.uz",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

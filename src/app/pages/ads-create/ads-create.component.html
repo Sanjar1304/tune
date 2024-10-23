@@ -13,7 +13,6 @@
         <div class="w-full container mx-auto flex flex-col 2xl:gap-[32px] xl:gap-[32px] lg:gap-[32px] md:gap-0 sm:gap-0 mobile:gap-0
                 2xl:pb-[80px] xl:pb-[80px] lg:pb-[80px] md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
             <div class="flex justify-between">
-
                 <h1 class="h1 text-[#262626]">Разместить объявление</h1>
                 <div class="flex items-center gap-[8px]">
                     <label>выбрать машину</label>
@@ -25,90 +24,76 @@
                     </mat-form-field>
                 </div>
             </div>
+            <form #carForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="flex flex-col gap-[24px]">
+                    <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="mainPanel">
+                        <h3>Об автомобиле</h3>
+                        <div class="grid grid-cols-3 gap-x-4 gap-y-8">
+                            <div class="" *ngFor="let select of mainPanel?.items; let i = index">
+                                <div class="flex flex-col gap-[8px]">
+                                    <label>{{select.name}}</label>
 
-            <div *ngIf="carSelectData && carSelectData?.items" class="flex flex-col gap-[24px] ">
-                <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]">
-                    <h3>Об автомобиле</h3>
-                    <div class="grid grid-cols-3 gap-x-4 gap-y-8">
-                        <div class="" *ngFor="let select of carSelectData?.items">
-                            <div class="flex flex-col gap-[8px]">
-                                <label>{{select.name}}</label>
-                                <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" *ngIf="!select.hasValues" [placeholder]="select.currentValue">
+                                    <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}" *ngIf="!select.hasValues" [placeholder]="select.currentValue ? select.currentValue : 'введите значение'" [readonly]="select.currentValue ? true : false">
+                                    <mat-form-field class="relative" *ngIf="select.hasValues">
+                                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
+                                        <mat-select placeholder="Выберите" [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}">
+                                            <mat-option *ngFor="let item of select.values;" [value]="item.id">{{item.value}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="extraPanel">
+                        <h3>Дополнительный</h3>
+                        <div class="flex gap-[16px]" *ngFor="let check of extraPanel?.items; let i = index">
+                            <mat-checkbox class="flex" [(ngModel)]="extraOptions[i]" name="extraOption{{i}}">{{check.name}}</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="optionalPanel">
+                        <h3>Опции</h3>
+                        <div class="flex gap-[16px]" *ngFor="let optionChek of optionalPanel?.items; let i = index">
+                            <mat-checkbox class="" [(ngModel)]="optionalOptions[i]" name="optionalOption{{i}}">{{optionChek.name}}</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] flex flex-col gap-[20px] ">
+                        <h3>Фотографии</h3>
+                        <div class="flex gap-[10px]">
+                            <div class="w-[200px] h-[160px] p-[10px] flex justify-center items-center bg-[#fff] rounded-[16px] hover:cursor-pointer">
+                                <input class="w-[50px]" type="file" accept="image/*" multiple (change)="selectFile($event)">
+                                <img class=" block " src="./assets/icons/gallery-add.svg " alt=" ">
+                            </div>
+                            <div class="flex gap-[10px]">
+                                <img *ngFor="let preview of previews" [src]="preview" class="preview w-[200px] h-[160px] object-cover rounded-[16px]" alt="Image preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]">
+                        <h3>Контакты</h3>
+                        <div class="grid grid-cols-3 gap-[16px]">
+                            <div class="flex flex-col gap-[8px]" *ngFor="let select of contactsPanel?.items; let i = index">
+                                <label class="">{{select.name}}</label>
+                                <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" [(ngModel)]="contactOptions[i]" name="contactOptions{{i}}" *ngIf="!select.hasValues" [placeholder]="select.currentValue ? select.currentValue : 'введите значение'" [readonly]="select.currentValue ? true : false">
                                 <mat-form-field class="relative" *ngIf="select.hasValues">
-                                    <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                                    <mat-select placeholder="Выберите">
-                                        <mat-option *ngFor=" let item of select.values" [value]="item.value">{{item.value}}</mat-option>
+                                    <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                                    <mat-select placeholder="Выберите" [(ngModel)]="contactOptions[i]" name="contactOptions{{i}} ">
+                                        <mat-option *ngFor="let city of select.values" [value]="city.id">{{city.value}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] ">
-                    <h3>Дополнительный</h3>
-                    <div class="flex gap-[16px] ">
-                        <mat-checkbox class=" " [(ngModel)]="checked ">Они могут договориться</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="indeterminate ">Продажа наличными</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="carCredit ">Автокредит</mat-checkbox>
-                    </div>
-                </div>
-                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] ">
-                    <h3>Опции</h3>
-                    <div class="grid grid-cols-5 ">
-                        <mat-checkbox class=" " [(ngModel)]="checkbox1 ">Литые диски</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox2 ">Кожаный салон</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox3 ">ABS</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox4 ">Люк</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox5 ">Датчик дождя</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox6 ">Кондиционер</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox7 ">Подогрев сидений</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox8 ">Парктроник</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox9 ">Камера заднего вида</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox10 ">Боковые шторки</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox11 ">Центральный замок</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox12 ">Вентиляция сидений</mat-checkbox>
-                        <mat-checkbox class=" " [(ngModel)]="checkbox13 ">Ксенон</mat-checkbox>
-                    </div>
-                </div>
-                <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] flex flex-col gap-[20px] ">
-                    <h3>Фотографии</h3>
-                    <div class="w-[200px] h-[160px] p-[10px] flex justify-center items-center bg-[#fff] rounded-[16px] ">
-                        <img src="./assets/icons/gallery-add.svg " alt=" ">
-                    </div>
-                </div>
-                <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3] ">
-                    <h3>Контакты</h3>
-                    <div class=" grid grid-cols-3 gap-[16px] ">
                         <div class="flex flex-col gap-[8px] ">
-                            <label>Имя</label>
-                            <input class="px-[8px] py-[12px] rounded-[10px] " placeholder="Имя ">
-                        </div>
-                        <div class="flex flex-col gap-[8px] ">
-                            <label>Город </label>
-                            <mat-form-field class="relative ">
-                                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down " svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                                <mat-select placeholder="Выберите ">
-                                    @for (food of foods; track food) {
-                                    <mat-option [value]="food.value ">{{food.viewValue}}</mat-option>
-                                    }
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex flex-col gap-[8px] ">
-                            <label>Телефон </label>
-                            <input class="px-[8px] py-[12px] rounded-[10px] " placeholder="(00) 000 00 00 ">
+                            <label>Оставить краткий комментарий</label>
+                            <textarea class="h-[90px] py-[12px] px-[8px] rounded-[10px] focus:outline-none" placeholder="Оставить краткий комментарий" [(ngModel)]="comment" name="comment"></textarea>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-[8px] ">
-                        <label>Оставить краткий комментарий</label>
-                        <textarea class="h-[90px] py-[12px] px-[8px] rounded-[10px] " placeholder="Оставить краткий комментарий "></textarea>
+                    <div class="flex gap-[10px]">
+                        <button class="text-[#27C5D0] px-[24px] py-[10px] rounded-[14px] border border-[#27C5D0]">Очистить</button>
+                        <button type="submit " class="text-[#B0B8C1] px-[24px] py-[10px] rounded-[14px] bg-[#E5E7EA] ">Предпросмотр</button>
                     </div>
                 </div>
-            </div>
-            <div class="flex gap-[10px] ">
-                <button class="text-[#27C5D0] px-[24px] py-[10px] rounded-[14px] border border-[#27C5D0] ">Очистить</button>
-                <button class="text-[#B0B8C1] px-[24px] py-[10px] rounded-[14px] bg-[#E5E7EA] ">Предпросмотр</button>
-            </div>
-            </ div>
+            </form>
         </div>
+    </div>
 </section>

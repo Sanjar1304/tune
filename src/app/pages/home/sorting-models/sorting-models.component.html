@@ -10,17 +10,20 @@
         </div>
 
         <div class="flex flex-col gap-[24px]">
-            @for(model of carModels; track model){
-            <div class="lg:gap-[10px] flex justify-between gap-[24px] overflow-x-scroll scrollbar-none">
-                <img class="w-[50px] h-[50px]" [src]="model.imageLink" alt="">
+
+            <div class="lg:gap-[10px] flex gap-[24px] overflow-x-scroll scrollbar-none">
+                @for(model of CarModelsPhotos; track model){
+                <img class="w-[50px] h-[50px] hover:cursor-pointer" [src]="model" alt="car icon image"> }
             </div>
             <div class="grid
                   lg:grid-cols-6 md:grid-cols-4
                   sm:grid-cols-3 mobile:grid-cols-2
                   gap-x-[24px] gap-y-[10px]">
                 <div class="w-full lg:w-[180px]  px-[12px] py-[4px] flex gap-[8px]">
-                    <p class="b4 text-[#000]">{{model.id}}</p>
-                    <p class="b4 text-[#B1B1B1]">{{model.value}}</p>
+                    <!-- @for(info of carModelsInfo.facets; track info){
+                    <p class="b4 text-[#000]">{{info.id}}</p>
+                    <p class="b4 text-[#B1B1B1]">{{info.value}}</p>
+                    } -->
                     <div>there is no value</div>
                 </div>
                 <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">
@@ -28,7 +31,7 @@
                     <p class="b4 text-[#B1B1B1]">{{"sortingModelsPage.sorting_down.bottom" | transloco}}</p>
                 </div>
             </div>
-            }
+
         </div>
         <div class="flex justify-center lg:justify-center xl:justify-center 2xl:justify-center">
             <button class="b3 mx-auto text-[#fff] bg-[#27C5D0] rounded-[14px]

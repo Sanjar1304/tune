@@ -23,7 +23,7 @@ export const routes: Routes = [
       },
       {
         path: ':id',
-        data: { breadcrumb: '' }, 
+        data: { breadcrumb: '' },
         loadComponent: () => import('./pages/catalog/catalog-cards/card-detail-page/card-detail-page.component').then(m => m.CardDetailPageComponent)
       }
     ]

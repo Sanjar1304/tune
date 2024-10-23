@@ -14,7 +14,7 @@ export const requestInterceptor: HttpInterceptorFn = (req, next) => {
     .set('X-App-Build', '1.0')
     .set('X-Device-Model', 'samsung s 24')
     .set('X-Lang', 'RUS')
-    .set('X-Auth-Token', String(token.getToken()));
+    .set('X-Auth-Token', String(token.getToken()) );
 
     const clonedReq = req.clone({headers: header});
     return next(clonedReq);
@@ -35,3 +35,38 @@ export const authRequestCheckInterceptor: HttpInterceptorFn = (req, next) => {
   }
   return next(req);
 };
+
+
+export const fileUploadInterceptor: HttpInterceptorFn = (req, next) => {
+  const isFileUploadRequest = req.url.includes('/file/upload/general/car');
+
+  if(isFileUploadRequest){
+    let headers = req.headers.set(
+      'Authorization',
+      'Basic bWFya2V0LWZyb250OjcwYXVLeE10UzZOSHhRQTQ='
+    )
+
+    if (headers.has('X-App-Build') &&
+        headers.has('X-Device-Id') &&
+        headers.has('X-Device-Type') &&
+        headers.has('X-App-Build') &&
+        headers.has('X-Device-Model') &&
+        headers.has('X-App-Version') &&
+        headers.has('X-OS') &&
+        headers.has('Content-Type')) {
+      headers = headers
+      .delete('X-App-Build')
+      .delete('X-Device-Id')
+      .delete('X-Device-Type')
+      .delete('X-App-Build')
+      .delete('X-Device-Model')
+      .delete('X-App-Version')
+      .delete('X-OS')
+      .delete('Content-Type')
+    }
+
+    const clonedReq = req.clone({headers});
+    return next(clonedReq);
+  }
+  return next(req);
+}

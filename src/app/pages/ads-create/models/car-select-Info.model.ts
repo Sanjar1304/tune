@@ -10,6 +10,7 @@ export interface CarSelectInfoResponse {
     isFilterable: boolean,
     createType: string,
     currentValue: string,
+    position: string,
     values: Array<{id: string, value: string}>
   }>
 }
