@@ -6,11 +6,12 @@ import {SortingModelService} from "./sorting-model.service";
 import {TranslocoPipe} from "@jsverse/transloco";
 import { subscribe } from 'diagnostics_channel';
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-sorting-models',
   standalone: true,
-  imports: [TranslocoPipe],
+  imports: [TranslocoPipe, NgForOf],
   templateUrl: './sorting-models.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,7 +27,7 @@ export class SortingModelsComponent implements OnInit{
 
   public ngOnInit() {
     this.getModelsSubscription();
-    // this.getCarModelNamesSubscription();
+    this.getCarModelNamesSubscription();
   }
 
   public getModelsSubscription(){
@@ -41,17 +42,18 @@ export class SortingModelsComponent implements OnInit{
     });
   }
 
-  // public getCarModelNamesSubscription(){
-  //   this.sortingService.getModelsName({query: ''}, {page: 0, size: 10})
-  //   .pipe(takeUntilDestroyed(this.destroy$))
-  //   .subscribe({
-  //     next: res => {
-  //       this.carModelsInfo = res as CarCatalogRes;
-  //       this.cdr.detectChanges();
-  //     },
-  //     error: err => console.log(err)
-  //   })
-  // }
+  public getCarModelNamesSubscription(){
+    this.sortingService.getModelsName({query: ''}, {page: 0, size: 10})
+    .pipe(takeUntilDestroyed(this.destroy$))
+    .subscribe({
+      next: res => {
+        this.carModelsInfo = res as CarCatalogRes;
+        console.log(this.carModelsInfo)
+        this.cdr.detectChanges();
+      },
+      error: err => console.log(err)
+    })
+  }
 
 
   public get CarModelsPhotos(){

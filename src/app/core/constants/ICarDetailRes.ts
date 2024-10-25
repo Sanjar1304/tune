@@ -12,7 +12,9 @@ export interface ICarDetailRes {
   resProperties: Array<{
     id: number;
     name: string;
+    slug: string;
     value: string;
+    valueTranslate: string;
   }>,
   description: string;
   user: {

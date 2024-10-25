@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatFormField, MatOption, MatSelect} from "@angular/material/select";
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import {NgClass, NgFor, NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -24,7 +24,8 @@ interface Food {
     NgIf,
     NgStyle,
     NgClass,
-    NgFor
+    NgFor,
+    NgOptimizedImage
   ],
   templateUrl: './login-input.component.html',
   styles: `

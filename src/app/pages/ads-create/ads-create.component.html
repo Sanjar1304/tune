@@ -1,99 +1,112 @@
-<section class="pt-[24px]">
-    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
-        <nav class="container mx-auto flex justify-between pb-[16px]">
-            <app-breadcrumb></app-breadcrumb>
-            <div class="flex gap-[8px]">
-                <img class="" src="./assets/icons/share.svg" alt="">
-                <img class="" src="./assets/icons/heart.svg" alt="">
-            </div>
-        </nav>
-    </div>
+<section class="pt-6">
+  <div class="container mx-auto lg:px-15 md:px-7 sm:px-4 mobile:px-4">
+    <nav class="flex justify-between pb-4">
+      <app-breadcrumb></app-breadcrumb>
+      <div class="flex gap-2">
+        <img ngSrc="./assets/icons/share.svg" alt="" height="44" width="44">
+        <img ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44">
+      </div>
+    </nav>
+  </div>
 
-    <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
-        <div class="w-full container mx-auto flex flex-col 2xl:gap-[32px] xl:gap-[32px] lg:gap-[32px] md:gap-0 sm:gap-0 mobile:gap-0
-                2xl:pb-[80px] xl:pb-[80px] lg:pb-[80px] md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
-            <div class="flex justify-between">
-                <h1 class="h1 text-[#262626]">Разместить объявление</h1>
-                <div class="flex items-center gap-[8px]">
-                    <label>выбрать машину</label>
-                    <mat-form-field class="relative">
-                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
-                        <mat-select (selectionChange)="sendCarId($event.value)">
-                            <mat-option *ngFor="let car of carInfos?.items" [value]="car.id">{{ car.transportId }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-            <form #carForm="ngForm" (ngSubmit)="onSubmit()">
-                <div class="flex flex-col gap-[24px]">
-                    <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="mainPanel">
-                        <h3>Об автомобиле</h3>
-                        <div class="grid grid-cols-3 gap-x-4 gap-y-8">
-                            <div class="" *ngFor="let select of mainPanel?.items; let i = index">
-                                <div class="flex flex-col gap-[8px]">
-                                    <label>{{select.name}}</label>
-
-                                    <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}" *ngIf="!select.hasValues" [placeholder]="select.currentValue ? select.currentValue : 'введите значение'" [readonly]="select.currentValue ? true : false">
-                                    <mat-form-field class="relative" *ngIf="select.hasValues">
-                                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                                        <mat-select placeholder="Выберите" [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}">
-                                            <mat-option *ngFor="let item of select.values;" [value]="item.id">{{item.value}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="extraPanel">
-                        <h3>Дополнительный</h3>
-                        <div class="flex gap-[16px]" *ngFor="let check of extraPanel?.items; let i = index">
-                            <mat-checkbox class="flex" [(ngModel)]="extraOptions[i]" name="extraOption{{i}}">{{check.name}}</mat-checkbox>
-                        </div>
-                    </div>
-                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3]" *ngIf="optionalPanel">
-                        <h3>Опции</h3>
-                        <div class="flex gap-[16px]" *ngFor="let optionChek of optionalPanel?.items; let i = index">
-                            <mat-checkbox class="" [(ngModel)]="optionalOptions[i]" name="optionalOption{{i}}">{{optionChek.name}}</mat-checkbox>
-                        </div>
-                    </div>
-                    <div class="p-[24px] rounded-[16px] bg-[#F3F3F3] flex flex-col gap-[20px] ">
-                        <h3>Фотографии</h3>
-                        <div class="flex gap-[10px]">
-                            <div class="w-[200px] h-[160px] p-[10px] flex justify-center items-center bg-[#fff] rounded-[16px] hover:cursor-pointer">
-                                <input class="w-[50px]" type="file" accept="image/*" multiple (change)="selectFile($event)">
-                                <img class=" block " src="./assets/icons/gallery-add.svg " alt=" ">
-                            </div>
-                            <div class="flex gap-[10px]">
-                                <img *ngFor="let preview of previews" [src]="preview" class="preview w-[200px] h-[160px] object-cover rounded-[16px]" alt="Image preview">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-[20px] p-[24px] rounded-[16px] bg-[#F3F3F3]">
-                        <h3>Контакты</h3>
-                        <div class="grid grid-cols-3 gap-[16px]">
-                            <div class="flex flex-col gap-[8px]" *ngFor="let select of contactsPanel?.items; let i = index">
-                                <label class="">{{select.name}}</label>
-                                <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" [(ngModel)]="contactOptions[i]" name="contactOptions{{i}}" *ngIf="!select.hasValues" [placeholder]="select.currentValue ? select.currentValue : 'введите значение'" [readonly]="select.currentValue ? true : false">
-                                <mat-form-field class="relative" *ngIf="select.hasValues">
-                                    <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
-                                    <mat-select placeholder="Выберите" [(ngModel)]="contactOptions[i]" name="contactOptions{{i}} ">
-                                        <mat-option *ngFor="let city of select.values" [value]="city.id">{{city.value}}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-[8px] ">
-                            <label>Оставить краткий комментарий</label>
-                            <textarea class="h-[90px] py-[12px] px-[8px] rounded-[10px] focus:outline-none" placeholder="Оставить краткий комментарий" [(ngModel)]="comment" name="comment"></textarea>
-                        </div>
-                    </div>
-                    <div class="flex gap-[10px]">
-                        <button class="text-[#27C5D0] px-[24px] py-[10px] rounded-[14px] border border-[#27C5D0]">Очистить</button>
-                        <button type="submit " class="text-[#B0B8C1] px-[24px] py-[10px] rounded-[14px] bg-[#E5E7EA] ">Предпросмотр</button>
-                    </div>
-                </div>
-            </form>
+  <div class="container mx-auto lg:px-15 md:px-7 sm:px-4 mobile:px-4">
+    <div class="w-full flex flex-col gap-8 pb-20">
+      <div class="flex justify-between">
+        <h1 class="text-gray-800 font-bold text-2xl">Разместить объявление</h1>
+        <div class="flex items-center gap-2">
+          <label>выбрать машину</label>
+          <mat-form-field class="relative first-mat-form-field">
+            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+            <mat-select (selectionChange)="sendCarId($event.value)">
+              <mat-option *ngFor="let car of carInfos?.items" [value]="car.id">{{ car.transportId }}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+      </div>
+
+      <form #carForm="ngForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-8">
+        <!-- Main Panel -->
+        <div *ngIf="mainPanel" class="bg-gray-100 p-6 rounded-lg flex flex-col gap-5">
+          <h3>Об автомобиле</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div *ngFor="let select of mainPanel?.items; let i = index">
+              <div class="flex flex-col gap-2">
+                <label>{{select.name}}</label>
+                <input *ngIf="!select.hasValues" [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}" [placeholder]="select.currentValue || 'введите значение'" [readonly]="!!select.currentValue" class="px-2 py-3 rounded-md focus:outline-none">
+                <mat-form-field *ngIf="select.hasValues" class="relative">
+                  <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                  <mat-select [(ngModel)]="mainPanelSelects[i]" name="mainPanelSelect{{i}}">
+                    <mat-option *ngFor="let item of select.values;" [value]="item.id">{{item.value}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extra Panel -->
+        <div *ngIf="extraPanel" class="bg-gray-100 p-6 rounded-lg">
+          <h3>Дополнительный</h3>
+          <div class="flex gap-4" >
+            <mat-checkbox *ngFor="let check of extraPanel?.items; let i = index" [(ngModel)]="extraOptions[i]" name="extraOption{{i}}">{{check.name}}</mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Optional Panel -->
+        <div *ngIf="optionalPanel" class="bg-gray-100 p-6 rounded-lg">
+          <h3>Опции</h3>
+          <div class="flex gap-[16px]" >
+            <mat-checkbox *ngFor="let optionCheck of optionalPanel?.items; let i = index" [(ngModel)]="optionalOptions[i]" name="optionalOption{{i}}">{{optionCheck.name}}</mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Photos -->
+        <div class="bg-gray-100 p-6 rounded-lg flex flex-col gap-5">
+          <h3>Фотографии</h3>
+          <div class="flex gap-2">
+            <div class="w-52 h-40 p-2 flex justify-center items-center bg-white rounded-lg hover:cursor-pointer relative">
+              <input type="file" accept="image/*" multiple (change)="selectFile($event)" class="opacity-0 absolute z-10 w-52 h-40">
+              <img class="" ngSrc="./assets/icons/gallery-add.svg" alt="" height="40" width="40">
+            </div>
+            <div class="flex flex-wrap justify-start gap-2">
+              <img *ngFor="let preview of previews" [src]="preview" class="w-52 h-40 object-cover rounded-lg" alt="Image preview">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contacts -->
+        <div class="bg-gray-100 p-6 rounded-lg flex flex-col gap-5">
+          <h3>Контакты</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div *ngFor="let select of contactsPanel?.items; let i = index" class="flex flex-col gap-2">
+              <label>{{select.name}}</label>
+              <input *ngIf="!select.hasValues" [(ngModel)]="contactOptions[i]" name="contactOptions{{i}}" [placeholder]="select.currentValue || 'введите значение'" [readonly]="!!select.currentValue" class="px-2 py-3 rounded-md focus:outline-none">
+              <mat-form-field *ngIf="select.hasValues" class="relative">
+                <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                <mat-select [(ngModel)]="contactOptions[i]" name="contactOptions{{i}}">
+                  <mat-option *ngFor="let city of select.values" [value]="city.id">{{city.value}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label>Оставить краткий комментарий</label>
+            <textarea [(ngModel)]="comment" name="comment" placeholder="Оставить краткий комментарий" class="h-24 px-2 py-3 rounded-md focus:outline-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-2">
+          <button type="button" class="text-[#27C5D0] px-[24px] py-[10px] rounded-[14px] border border-[#27C5D0]"
+                  (click)="resetForm()">Очистить</button>
+          <button type="submit"
+                  class="px-[24px] py-[10px] rounded-[14px]"
+                  [ngClass]="{'bg-[#27C5D0] text-[#fff]': carForm.valid,
+                              'bg-[#E5E7EA] text-[#B0B8C1]': !carForm.valid}">
+            Предпросмотр
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </section>

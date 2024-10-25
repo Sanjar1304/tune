@@ -32,7 +32,11 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 export class RecommendationCardsComponent implements OnInit{
 
   carCards!: CarCatalogRes;
+  brandName: string = '';
+  carName: string = '';
+
   @Output() cardSelected: EventEmitter<string> = new EventEmitter<string>();
+  carDetails: { name: string[]; valueTranslate: string[]; id: number[]; value: string[]; slug: string[] }[] = [];
 
   private destroy$ = inject(DestroyRef);
   private router = inject(Router);
@@ -49,6 +53,14 @@ export class RecommendationCardsComponent implements OnInit{
       .subscribe({
         next: res => {
           this.carCards = res as CarCatalogRes;
+
+          this.carDetails = this.carCards.items.map(prop => ({
+            id: prop.resProperties.map(val => val.id),
+            slug: prop.resProperties.map(val => val.slug),
+            name: prop.resProperties.map(val => val.name),
+            value: prop.resProperties.map(val => val.value),
+            valueTranslate: prop.resProperties.map(val => val.valueTranslate)
+          }));
           this.cdr.markForCheck();
         },
         error: err => console.log(err)

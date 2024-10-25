@@ -54,7 +54,6 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 })
 export class CardDetailPageComponent implements OnInit {
 
-
   carName: string = '';
   carDetails: ICard | undefined;
   selectedImage: string = '';
@@ -63,6 +62,12 @@ export class CardDetailPageComponent implements OnInit {
   showAll: boolean = false;
   innerWidth: number = window.innerWidth;
   carFromBackend!: ICarDetailRes;
+
+  carInfos: Array<{id: number, slug: string, name: string,  value: string}> = [];
+  sellerName: string = '';
+  sellerAddress: string = '';
+  brandName: string = '';
+  currency: string = ''
 
   private destroy$ = inject(DestroyRef);
   private route = inject(ActivatedRoute);
@@ -86,7 +91,6 @@ export class CardDetailPageComponent implements OnInit {
   }
 
   public ngOnInit() {
-
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -109,10 +113,23 @@ export class CardDetailPageComponent implements OnInit {
       .subscribe({
         next: (res) => {
             this.carFromBackend = res as ICarDetailRes;
+            this.brandName = this.carFromBackend.resProperties[0].valueTranslate;
+            this.carName = this.carFromBackend.resProperties[1].value;
+            this.currency = this.carFromBackend.resProperties[12].value
+            this.sellerName = this.carFromBackend.resProperties[19].value;
+            this.sellerAddress = this.carFromBackend.resProperties[21].value
             this.displayImages = this.carFromBackend.images.map(image => image.link);
             this.selectedImage = this.displayImages.length > 0 ? this.displayImages[0] : 'assets/images/missing-img.png';
             this.resProperties = this.carFromBackend.resProperties || [];
-            this.breadcrumbService.updateBreadCrumbLabel(this.carFromBackend.name);
+
+            this.carInfos = this.carFromBackend.resProperties.map(prop => ({
+              id: prop.id,
+              slug: prop.slug,
+              name: prop.name,
+              value: prop.value
+            }));
+
+            this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
             this.cdr.detectChanges();
             this.scrollToTop();
         },
@@ -120,6 +137,10 @@ export class CardDetailPageComponent implements OnInit {
           console.error('Error fetching car details:', err);
         }
       });
+  }
+
+  public get carData(){
+    return this.carInfos = this.carInfos.slice(2, this.carInfos.length-3)
   }
 
   private scrollToTop() {

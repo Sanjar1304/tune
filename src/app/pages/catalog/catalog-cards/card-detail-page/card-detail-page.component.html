@@ -16,8 +16,8 @@
             <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
                   md:gap-[8px] sm:gap-[8px] mobile:gap-[8px] justify-between
                   2xl:pb-0 xl:pb-0 lg:pb-0 md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
-                <h2 class="h2-detail">{{carFromBackend.name}}</h2>
-                <h2 class="h2-detail">{{carFromBackend.price.amount}} <span class="h4 text-[#262626]">UZS</span></h2>
+                <h2 class="h2-detail">{{ brandName }} {{ carName }}</h2>
+                <h2 class="h2-detail">{{carFromBackend.resProperties[11].value}} <span class="h4 text-[#262626]">{{currency}}</span></h2>
             </div>
             <div class="w-full flex
                     2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
@@ -58,66 +58,10 @@
                 </div>
 
                 <div class="2xl:w-[40%] xl:w-[40%] lg:w-[40%] md:w-full sm:w-full mobile:w-full flex flex-col gap-[36px]">
-                    <div class="p-[32px] flex flex-col 2xl:gap-[24px] xl:gap-[20px] lg:gap-[15px] bg-[#F7F7F7] rounded-[12px] ">
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Статус</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Год выпуска</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.productionYear }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Пробег</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.mileage }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Двигатель</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.engine }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">КПП</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.kpp }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Привод</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.privod }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Поколение</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.generation }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Комплектация</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.kits }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Руль</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.steeringWheel }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Кузов</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carDetails?.cardCardDetails?.body }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Цвет</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">ПТС</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Владельцев по ПТС</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">Состояние</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ carFromBackend.status }}</p>
-                        </div>
-                        <div class="w-full flex gap-[12px]">
-                            <p class="w-[50%] b3 text-[#B1B1B1]">VIN или номер кузова</p>
-                            <p class="w-[50%] flex lg:flex-wrap b3 text-[#262626] truncate">{{ carDetails?.cardCardDetails?.vinNumber }}</p>
+                    <div class="p-[32px] flex flex-col 2xl:gap-[24px] xl:gap-[20px] lg:gap-[15px] bg-[#F7F7F7] rounded-[12px]">
+                        <div class="w-full flex gap-[12px]" *ngFor="let item of carData">
+                            <p class="w-[50%] b3 text-[#B1B1B1]">{{item.name}}</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ item.value }}</p>
                         </div>
                     </div>
                     <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden justify-between 2xl:flex-nowrap xl:flex-nowrap lg:flex-wrap">
@@ -145,15 +89,7 @@
                 <h3 class="h3 text-[#262626]">{{carDetails?.cardCardDetails?.description?.title}}</h3>
                 <div class="w-[100%] flex flex-col gap-[24px]">
                     <p class="b2 text-[#000]">
-                        Куплена новой у официального дилера в РФ в конце декабря 2020 года. По причине отъезда владельца заграницу сразу после покупки, с тех пор стояла в теплом, сухом и охраняемом паркинге, лишь изредка использовалась и обслуживалась у ОД родственниками пенсионного
-                        возраста.
-                    </p>
-                    <p class="b2 text-[#000]">
-                        Ни разу не использовали Launch Control, никакого тюнинга, эксплуатация только в пределах скоростного лимита. В салоне поставили оригинальную ковку M Performance (самые легкие диски для данного кузова) на шинах Michelin Pilot Sport 4S, так же есть зимняя
-                        липучка Continental Winter Contact TS860S SSR для этих же дисков.
-                    </p>
-                    <p class="b2 text-[#000]">
-                        Богатая комплектация: Адаптивный круиз-контроль, люк, пакет M Technology, проекция, двойное остекление (в салоне тише, чем во многих премиальных внедорожниках), лазерные фары, покрашенные.
+                        {{carFromBackend.description}}
                     </p>
                 </div>
             </div>
@@ -186,10 +122,10 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-[12px] p-[32px] bg-[#F7F7F7] rounded-[24px]">
-                    <h4 class="h4 text-[#262626]">{{carFromBackend.user.fullName}}</h4>
+                    <h4 class="h4 text-[#262626]">{{sellerName}}</h4>
                     <div class="flex items-center gap-[8px]">
                         <img src="./assets/icons/location.svg" alt="">
-                        <p class="b3 text-[#000]"> {{carFromBackend.user.address}}</p>
+                        <p class="b3 text-[#000]">{{sellerAddress}}</p>
                     </div>
                 </div>
             </div>

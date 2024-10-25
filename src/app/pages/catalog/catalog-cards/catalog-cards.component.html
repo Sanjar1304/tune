@@ -11,14 +11,12 @@
     </div>
     <div class="w-full flex flex-col">
         <div class="grid lg:grid-cols-3 md:grid-cols-2 lg:gap-[24px] md:gap-[16px] sm:gap-[16px] mobile:gap-[16px] pb-[32px]">
-
-
             @if(catalogCardsRes && catalogCardsRes.items){ @for(car of catalogCardsRes.items; track car){
             <div class="rounded-[30px] bg-[#F7F7F7]" (click)="openCardContent(car.productId)">
                 <div class="relative z-[1]">
                     <img class="absolute top-[18px] right-[18px] z-[100]" src="./assets/icons/star.svg" alt="star icon" />
                     <div class="rounded-[30px] overflow-hidden">
-                        <img class="w-full image" [src]="car?.imageLink ? car?.imageLink : 'assets/images/missing-img.png'" alt="">
+                        <img class="w-[500px] h-[250px] image" [src]="car?.imageLink ? car?.imageLink : 'assets/images/missing-img.png'" alt="">
                     </div>
                     <div class="flex gap-[10px] absolute bottom-[20px] left-[20px] z-[9999]">
                         <p class="b6 px-[12px] py-[5px] bg-[#27C5D0] text-[#fff] rounded-[30px]">{{"recommendationPage.withMileage" | transloco}}</p>

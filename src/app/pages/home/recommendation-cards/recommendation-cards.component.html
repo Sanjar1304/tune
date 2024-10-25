@@ -7,7 +7,7 @@
                 <div class="relative z-[1]">
                     <img class="absolute top-[18px] right-[18px] z-[100]" src="./assets/icons/star.svg" alt="star icon" />
                     <div class="rounded-[30px] overflow-hidden">
-                        <img class="w-full image" [src]="car.imageLink ? car.imageLink : 'assets/images/missing-img.png'" alt="">
+                        <img class="w-[500px] h-[250px] image" [src]="car.imageLink ? car.imageLink : 'assets/images/missing-img.png'" alt="">
                     </div>
                     <div class="flex gap-[10px] absolute bottom-[20px] left-[20px] z-[9999]">
                         <p class="b6 px-[12px] py-[5px] bg-[#27C5D0] text-[#fff] rounded-[30px]">{{"recommendationPage.withMileage" | transloco}}</p>
@@ -15,16 +15,16 @@
                     </div>
                 </div>
                 <div class="lg:pt-[24px] lg:pb-[28px] lg:px-[28px] md:p-[20px] sm:p-[20px] mobile:p-[20px]">
-                    <h2 class="b1 pb-[8px] text[#262626]">{{car.name}}</h2>
-                    <h3 class="static-h3 pb-[4px] text-[#262626]">{{car.price.amount}} {{car.price.currency}}</h3>
+                    <h2 class="b1 pb-[8px] text[#262626]">{{car.resProperties[0].valueTranslate}} {{car.resProperties[1].value}}</h2>
+                    <h3 class="static-h3 pb-[4px] text-[#262626]">{{car.resProperties[11].value}} {{car.resProperties[12].valueTranslate}}</h3>
                     <h3 class="b4 pb-[12px] text-[#27C5D0]">
                         {{"recommendationPage.monthlyPay.from" | transloco}} 3 587 300 UZS/{{"recommendationPage.monthlyPay.monthly" | transloco}}
                     </h3>
                     <div class="w-full flex gap-[8px] sm:gap-[16px]">
-                        <p class="b6 text-[#262626]">2024 {{"recommendationPage.year" | transloco}},</p>
-                        <p class="b6 text-[#262626]">92 000 {{"recommendationPage.km" | transloco}},</p>
-                        <p class="b6 text-[#262626]">{{"recommendationPage.fuelType" | transloco}},</p>
-                        <p class="b6 text-[#262626]">{{"recommendationPage.gearBox" | transloco}}</p>
+                        <p class="b6 text-[#262626]">{{car.resProperties[6].value}} {{"recommendationPage.year" | transloco}},</p>
+                        <p class="b6 text-[#262626]">{{car.resProperties[7].value}} {{"recommendationPage.km" | transloco}},</p>
+                        <p class="b6 text-[#262626]">{{car.resProperties[3].valueTranslate}}</p>
+                        <p class="b6 text-[#262626]">{{car.resProperties[4].valueTranslate}}</p>
                     </div>
                 </div>
             </div>

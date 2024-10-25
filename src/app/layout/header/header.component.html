@@ -1,7 +1,7 @@
 <header class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px] relative" [ngClass]="{ 'header-shadow': !(isScreenSmall() && burgerMenuOpen) }">
     <div class="container mx-auto flex justify-between bg-white py-[14px]">
         <div class="flex items-center gap-[40px]">
-            <img class="logo" src="./assets/icons/header-logo.svg" alt="" (click)="navigateToMain()" />
+            <img class="logo h-[38px] hover:cursor-pointer" src="./assets/icons/header-logo.svg" alt="" (click)="navigateToMain()" />
             <ul class="xl:flex gap-[24px] hidden">
                 @for(routes of navbarMenus; track routes.id){
                 <li class="">
@@ -48,11 +48,11 @@
                 </div>
             </div>
             }
-            <button class="nav-menu h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff]" (click)="navigateToAdsCreatePage()">Подать объявление</button>
+            <button class="b4 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:block xl:block lg:block md:hidden sm:block mobile:hidden" (click)="navigateToAdsCreatePage()">Подать объявление</button>
             <button class="h-[38px] w-[38px] flex justify-center items-center p-[5px !important]
                      border border-1 border-[#C8C8C8] rounded-[12px] xl:hidden" [ngClass]="{ 'bg-[#FF553D]': burgerMenuOpen, 'bg-white': !burgerMenuOpen, 'border': !burgerMenuOpen, 'border-0':burgerMenuOpen }" (click)="toggleBurgerMenu()">
-        <img class="burger-menu" [src]="burgerMenuOpen ? './assets/icons/exit-icon.svg' : './assets/icons/hamburger.svg'" alt="menu icon"/>
-      </button>
+                <img class="burger-menu" [src]="burgerMenuOpen ? './assets/icons/exit-icon.svg' : './assets/icons/hamburger.svg'" alt="menu icon"/>
+            </button>
         </div>
     </div>
 
@@ -61,12 +61,13 @@
               flex items-start lg:flex-row md:flex-row sm:flex-col mobile:flex-col gap-0 sm:gap-[30px] mobile:gap-[30px]
               z-[9999999] bg-white rounded-[30px] mt-2 2xl:hidden xl:hidden" [ngClass]="{ 'bottom-header-shadow': !isScreenSmall() }">
         <ul class="w-full">
-            <li class="w-full lg:flex md:flex sm:hidden mobile:hidden flex-col gap-[30px] justify-between ">
+            <li class="w-full lg:flex md:flex sm:hidden mobile:hidden flex-col gap-[30px] justify-between pb-[30px]">
                 @for(routes of navbarMenus; track routes.id){
                 <a class="b4 text-[#262626]" [routerLink]="routes.path">{{ routes.label | transloco }}</a> }
             </li>
+            <button class="nav-menu h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:block sm:hidden mobile:hidden" (click)="navigateToAdsCreatePage()">Подать объявление</button>
 
-            <mat-accordion class="lg:hidden md:hidden sm:flex mobile:flex flex-col">
+            <mat-accordion class="lg:hidden md:hidden sm:flex mobile:flex flex-col pb-[15px]">
                 <div class="sm:flex mobile:flex items-center gap-[10px] hidden">
                     <div class="w-[100%] h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px]">
                         <img class="w-[18px] h-[18px]" src="./assets/icons/lupe.svg" alt="lupe icon">
@@ -78,8 +79,8 @@
                          border border-solid border-[#E8E8E8]
                          h-[38px] w-[38px] px-[10px] rounded-[10px]
                          flex items-center justify-center" (click)="toggleDropdown()">
-              {{ currentLocale | transloco }}
-            </button> @if(dropdownOpen){
+                              {{ currentLocale | transloco }}
+                        </button> @if(dropdownOpen){
                         <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
                             @for(lang of locales; track lang){
                             <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
@@ -109,6 +110,7 @@
                 </mat-expansion-panel>
                 <hr class="border solid border-[#E8E8E8] sm:my-[12px] mobile:my-[12px]"> }
             </mat-accordion>
+            <button class="nav-menu w-full h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:hidden sm:hiden mobile:block" (click)="navigateToAdsCreatePage()">Подать объявление</button>
         </ul>
         <div class="flex lg:flex-col md:flex-col sm:flex-row mobile:flex-col rounded-[30px] bg-header-ads-gradient ">
             <div class="flex flex-col lg:items-center md:items-center sm:items-start mobile:items-start justify-center mobile:justify-between

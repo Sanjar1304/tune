@@ -27,7 +27,7 @@ export class SortingModelService {
   public getModelsName(data:{query:string}, paging: { page: number, size: number }): Observable <CarCatalogRes | null>{
     const requestBody = {
       query: data.query,
-      facet: 'MODEL',
+      facet: 'MARK',
       filters: [],
       paging: {
         page: paging.page,
@@ -35,7 +35,7 @@ export class SortingModelService {
       }
     };
 
-    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}/product/search/basic`, JSON.stringify(requestBody)).pipe(
+    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}product/search/basic`, JSON.stringify(requestBody)).pipe(
       map(this.sessionService.handleResponse<CarCatalogRes>),
       catchError(this.sessionService.handleError)
     )

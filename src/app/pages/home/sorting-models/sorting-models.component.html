@@ -19,17 +19,18 @@
                   lg:grid-cols-6 md:grid-cols-4
                   sm:grid-cols-3 mobile:grid-cols-2
                   gap-x-[24px] gap-y-[10px]">
-                <div class="w-full lg:w-[180px]  px-[12px] py-[4px] flex gap-[8px]">
-                    <!-- @for(info of carModelsInfo.facets; track info){
-                    <p class="b4 text-[#000]">{{info.id}}</p>
-                    <p class="b4 text-[#B1B1B1]">{{info.value}}</p>
-                    } -->
-                    <div>there is no value</div>
-                </div>
                 <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">
-                    <p class="b4 text-[#27C5D0]">{{"sortingModelsPage.sorting_down.top" | transloco}}</p>
-                    <p class="b4 text-[#B1B1B1]">{{"sortingModelsPage.sorting_down.bottom" | transloco}}</p>
+                  @for(modelName of carModelsInfo.facets; track modelName.id){
+                    <p class="b4 text-[#000]">{{modelName.id}}</p>
+                    <p class="b4 text-[#B1B1B1]">{{modelName.value}}</p>
+                  } @empty {
+                    <div>there is no value</div>
+                  }
                 </div>
+<!--                <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">-->
+<!--                    <p class="b4 text-[#27C5D0]">{{"sortingModelsPage.sorting_down.top" | transloco}}</p>-->
+<!--                    <p class="b4 text-[#B1B1B1]">{{"sortingModelsPage.sorting_down.bottom" | transloco}}</p>-->
+<!--                </div>-->
             </div>
 
         </div>

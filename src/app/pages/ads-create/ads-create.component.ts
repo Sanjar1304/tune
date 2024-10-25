@@ -1,6 +1,16 @@
-import {AsyncPipe, JsonPipe, NgFor, NgIf} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgOptimizedImage} from "@angular/common";
 import {CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, OnInit, SimpleChanges, ViewChild, inject,} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators
+} from "@angular/forms";
 import {MatOption, MatSelect} from "@angular/material/select";
 import { Router, RouterLink } from "@angular/router";
 
@@ -10,7 +20,7 @@ import { CarSelectInfoResponse } from "./models/car-select-Info.model";
 import { ICarModelList } from './models/cars.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatFormField} from "@angular/material/form-field";
-import { Observable } from "rxjs";
+
 import {TranslocoPipe} from "@jsverse/transloco";
 import {UiSvgIconComponent} from "../../core/components/ui-svg-icon/ui-svg-icon.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -37,7 +47,9 @@ interface Food {
     BreadcrumbComponent,
     ReactiveFormsModule,
     AsyncPipe,
-    JsonPipe
+    JsonPipe,
+    NgOptimizedImage,
+    NgClass
   ],
   templateUrl: './ads-create.component.html',
   styles: `
@@ -50,9 +62,6 @@ interface Food {
 
         .mdc-checkbox:hover .mdc-checkbox__ripple {
           background-color: transparent !important;
-        }
-
-        .mdc-checkbox:hover .mdc-checkbox__native-control:not(:checked)~.mdc-checkbox__background, .mdc-checkbox:hover .mdc-checkbox__native-control:not(:indeterminate)~.mdc-checkbox__background{
         }
 
         .mdc-checkbox:active .mdc-checkbox__native-control~.mdc-checkbox__ripple {
@@ -103,6 +112,10 @@ interface Food {
           padding-bottom: 12px;
         }
 
+        .first-mat-form-field .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+          background-color: #F3F4F6;
+        }
+
         .custom-sena-form .mdc-text-field {
           border-radius: 6px;
         }
@@ -141,11 +154,9 @@ interface Food {
 export class AdsCreateComponent implements OnInit {
 
   carForm!: FormGroup;
-  carInfos!: ICarModelList;
+  carInfos: null| ICarModelList = null;
   carSelectData: null | CarSelectInfoResponse = null;
-  carSelectName!: string[];
   carImageUrls: string[] = [];
-
   byAssetSelected = false;
   carId!: string;
 
@@ -157,12 +168,9 @@ export class AdsCreateComponent implements OnInit {
 
   selectedFiles?: FileList;
   message: string[] = [];
-
   previews: string[] = [];
-  imageInfos?: Observable<any>;
 
   name: string = '';
-  city: string = '';
   phone: string = '';
   comment: string = '';
   mainPanelSelects: any[] = [];
@@ -176,75 +184,64 @@ export class AdsCreateComponent implements OnInit {
   private adsService = inject(AddsService);
   private destroy$ = inject(DestroyRef);
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes["mainPanel"] && this.mainPanel) {
-      this.updateMainPanelControls();
-    }
-    if (changes["extraPanel"] && this.extraPanel) {
-      this.updateExtraPanelControls();
-    }
-    if (changes["optionalPanel"] && this.optionalPanel) {
-      this.updateOptionalPanelControls();
-    }
-    if (changes["contactsPanel"] && this.contactsPanel) {
-      this.updateOptionalPanelControls();
-    }
-  }
 
   public ngOnInit(): void {
     this.getCarData();
     this.sendCarId(this.carSelectData);
   }
 
-  public updateMainPanelControls() {
-    this.mainPanelSelects = this.mainPanel?.items.map(item => item.currentValue || '') || [];
-    this.cdr.detectChanges();
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes["mainPanel"] && this.mainPanel) {
+      this.updatePanelControls('mainPanel', this.mainPanel);
+    }
+    if (changes["extraPanel"] && this.extraPanel) {
+      this.updatePanelControls('extraPanel', this.extraPanel);
+    }
+    if (changes["optionalPanel"] && this.optionalPanel) {
+      this.updatePanelControls('optionalPanel', this.optionalPanel);
+    }
+    if (changes["contactsPanel"] && this.contactsPanel) {
+      this.updatePanelControls('contactsPanel', this.contactsPanel);
+    }
   }
 
-  public updateExtraPanelControls() {
-    this.extraOptions = this.extraPanel?.items.map(() => false) || [];
+
+  private updatePanelControls(panelName: string, panelData: CarSelectInfoResponse) {
+    const panelArray = this.carForm.get(panelName) as FormArray;
+    panelArray.clear();
+    panelData.items.forEach(item => {
+      panelArray.push(
+        this.fb.group({
+          value: [item.currentValue || '', Validators.required]
+        })
+      );
+    });
     this.cdr.detectChanges();
   }
-
-  public updateOptionalPanelControls() {
-    this.optionalOptions = this.optionalPanel?.items.map(() => false) || [];
-    this.cdr.detectChanges();
-  }
-
-  public updateContactsPanelControls() {
-    this.contactOptions = this.contactsPanel?.items.map(() => false) || [];
-    this.cdr.detectChanges();
-  }
-
 
   public sendCarId(id: any){
-      if(id){
-        console.log(id)
-        this.byAssetSelected = true;
-        this.carId = id;
-        console.log(this.byAssetSelected)
-      }
-      this.adsService.getSelectOption(id)
-        .pipe(takeUntilDestroyed(this.destroy$))
-        .subscribe({
-          next: (res) => {
-            if (res) {
-              this.carSelectData = res as CarSelectInfoResponse;
-              this.mainPanel = { items: res.items.filter(val => val.position === 'MAIN') };
-
-              this.extraPanel = { items: res.items.filter(val => val.position === 'EXTRA') };
-              this.optionalPanel = { items: res.items.filter(val => val.position === 'OPTIONS') };
-              this.contactsPanel = { items: res.items.filter(val => val.position === 'CONTACTS')}
-              this.cdr.detectChanges();
-            }
-          },
-          error: (err) => {
-            console.error('Error fetching car select data:', err);
-          }
-        })
-
+    if(id){
+      this.byAssetSelected = true;
+      this.carId = id;
+    }
+    this.adsService.getSelectOption(id)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.carSelectData = res as CarSelectInfoResponse;
+            this.mainPanel = { items: res.items.filter(val => val.position === 'MAIN') };
+            this.extraPanel = { items: res.items.filter(val => val.position === 'EXTRA') };
+            this.optionalPanel = { items: res.items.filter(val => val.position === 'OPTIONS') };
+            this.contactsPanel = { items: res.items.filter(val => val.position === 'CONTACTS')}
+            this.cdr.detectChanges();
+          }},
+        error: (err) => {
+          console.error('Error fetching car select data:', err);
+        }
+      })
   }
-
 
   public getCarData(){
     this.adsService.getCarInfos({ page: 0, size: 1})
@@ -296,26 +293,45 @@ export class AdsCreateComponent implements OnInit {
   public sendImage(file: File){
     const formData = new FormData();
     formData.append('file', file)
-    this.adsService.uploadImage(formData).pipe(takeUntilDestroyed(this.destroy$)).subscribe({
-      next: res => {
-        this.carImageUrls.push(res?.url as unknown as string);
-        this.cdr.markForCheck()
-      },
-      error: err => {
-        console.log(err);
-        this.cdr.markForCheck()
-      }
+    this.adsService.uploadImage(formData)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.carImageUrls.push(res?.url as unknown as string);
+          this.cdr.markForCheck()
+        },
+        error: err => {
+          console.log(err);
+          this.cdr.markForCheck()
+        }
     })
   }
 
-  public onSubmit() {
 
+  public onSubmit() {
+    const properties = this.generateProperties();
+    const formData = this.generateFormData(properties);
+    const formDataWithAssetID = this.generateFormDataWithAssetID(properties);
+
+    if (!this.byAssetSelected) {
+      this.adsService.createProduct(formData).subscribe(res => {
+        console.log(res);
+        this.resetForm()
+      });
+    } else {
+      this.adsService.createProductByAsset(formDataWithAssetID).subscribe(res => {
+        console.log(res);
+        this.resetForm();
+      });
+    }
+  }
+
+  private generateProperties(): any[] {
     const mainPanelID = this.mainPanel?.items.map(val => val.id) || [];
     const extraPanelID = this.extraPanel?.items.map(val => val.id) || [];
     const optionalPanelID = this.optionalPanel?.items.map(val => val.id) || [];
     const contactsPanelID = this.contactsPanel?.items.map(val => val.id) || [];
 
-    // Map all panel values
     const mainPanelValue = this.mainPanelSelects.map(val => val) || [];
     const extraPanelValue = this.extraOptions.map(val => val) || [];
     const optionalPanelValue = this.optionalOptions.map(val => val) || [];
@@ -323,36 +339,37 @@ export class AdsCreateComponent implements OnInit {
 
     if (this.mainPanel && this.mainPanel.items) {
       this.mainPanel.items.forEach((select, index) => {
-          if (select.currentValue) {
-              mainPanelValue[index] = select.currentValue;
-              if (!mainPanelID.includes(select.id)) {
-                  mainPanelID.push(select.id);
-              }
+        if (select.currentValue) {
+          mainPanelValue[index] = select.currentValue;
+          if (!mainPanelID.includes(select.id)) {
+            mainPanelID.push(select.id);
           }
+        }
       });
-  }
+    }
 
-    const properties = [
+    return [
       ...mainPanelID.map((id, index) => ({
-          propertyId: id,
-          value: mainPanelValue[index] || ''
+        propertyId: id,
+        value: mainPanelValue[index] || ''
       })),
       ...extraPanelID.map((id, index) => ({
-          propertyId: id,
-          value: extraPanelValue[index] || ''
+        propertyId: id,
+        value: extraPanelValue[index] || ''
       })),
       ...optionalPanelID.map((id, index) => ({
-          propertyId: id,
-          value: optionalPanelValue[index] || ''
+        propertyId: id,
+        value: optionalPanelValue[index] || ''
       })),
       ...contactsPanelID.map((id, index) => ({
-          propertyId: id,
-          value: contactsPanelValue[index] || ''
+        propertyId: id,
+        value: contactsPanelValue[index] || ''
       }))
-  ];
+    ];
+  }
 
-
-    const formData = {
+  private generateFormData(properties: any[]): any {
+    return {
       categoryId: 1,
       price: {
         amount: 15000,
@@ -369,8 +386,11 @@ export class AdsCreateComponent implements OnInit {
       properties,
       images: this.carImageUrls
     };
+  }
 
-    const formDataWithAssetID = {
+
+  private generateFormDataWithAssetID(properties: any[]): any {
+    return {
       assetId: this.carId,
       categoryId: 1,
       price: {
@@ -388,16 +408,18 @@ export class AdsCreateComponent implements OnInit {
       properties,
       images: this.carImageUrls
     };
+  }
 
-    console.log(this.carId);
-    if(!this.byAssetSelected){
-      this.adsService.createProduct(formData).subscribe(res => {
-        console.log(res)
-      })
-    } else {
-      this.adsService.createProductByAsset(formDataWithAssetID).subscribe(res => {
-        console.log(res)
-      })
-    }
+
+  public resetForm(){
+    this.form.reset();
+    this.mainPanelSelects = [];
+    this.extraOptions = [];
+    this.optionalOptions = [];
+    this.contactOptions = [];
+    this.previews = [];
+    this.carImageUrls = [];
+    this.comment = '';
+    this.cdr.detectChanges();
   }
 }

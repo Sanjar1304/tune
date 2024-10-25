@@ -28,7 +28,14 @@ export interface CarCatalogRes {
       value: string,
       valueNumeric: null
     }>,
-    isFavorite: boolean
+    isFavorite: boolean,
+    resProperties: Array<{
+      id: number,
+      name: string,
+      slug: string,
+      value: string,
+      valueTranslate: string
+    }>
   }>,
   facets: Array<{
     id: string,
