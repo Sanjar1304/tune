@@ -95,11 +95,25 @@ export class SliderComponent implements OnInit, OnDestroy {
       .subscribe({
       next: res => {
         this.banners = res as BannerRes;
+        console.log(this.banners)
         this.cdr.detectChanges();
       },
       error: err => console.log('slider from backend: ', err)
     })
   }
+
+  public navigateToBanner(id?: string){
+    if(id){
+      this.bannerService.navigateToOne(id).subscribe(res => {
+        console.log(res);
+      })
+    } else {
+      this.bannerService.navigateToList({page: 0, size: 10}).subscribe(res => {
+        console.log(res);
+      })
+    }
+  }
+
 
   ngOnDestroy() {
     clearInterval(this.timer);

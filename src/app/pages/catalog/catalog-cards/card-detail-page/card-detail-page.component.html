@@ -3,8 +3,8 @@
         <div class="container mx-auto  flex justify-between pb-[16px]">
             <app-breadcrumb></app-breadcrumb>
             <div class="flex gap-[8px]">
-                <img class="" src="./assets/icons/share.svg" alt="">
-                <img class="" src="./assets/icons/heart.svg" alt="">
+                <img class="" ngSrc="./assets/icons/share.svg" alt="" height="44" width="44">
+                <img class="" ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44">
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
                   md:gap-[8px] sm:gap-[8px] mobile:gap-[8px] justify-between
                   2xl:pb-0 xl:pb-0 lg:pb-0 md:pb-[20px] sm:pb-[20px] mobile:pb-[20px]">
                 <h2 class="h2-detail">{{ brandName }} {{ carName }}</h2>
-                <h2 class="h2-detail">{{carFromBackend.resProperties[11].value}} <span class="h4 text-[#262626]">{{currency}}</span></h2>
+                <h2 class="h2-detail">{{ price | number: '1.0-0'}} <span class="h4 text-[#262626]">{{currency}}</span></h2>
             </div>
             <div class="w-full flex
                     2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
@@ -59,9 +59,9 @@
 
                 <div class="2xl:w-[40%] xl:w-[40%] lg:w-[40%] md:w-full sm:w-full mobile:w-full flex flex-col gap-[36px]">
                     <div class="p-[32px] flex flex-col 2xl:gap-[24px] xl:gap-[20px] lg:gap-[15px] bg-[#F7F7F7] rounded-[12px]">
-                        <div class="w-full flex gap-[12px]" *ngFor="let item of carData">
+                        <div class="w-full flex gap-[12px]" *ngFor="let item of carInfos">
                             <p class="w-[50%] b3 text-[#B1B1B1]">{{item.name}}</p>
-                            <p class="w-[50%] b3 text-[#262626]">{{ item.value }}</p>
+                            <p class="w-[50%] b3 text-[#262626]">{{ item.valueTranslate !== null ? item.valueTranslate : item.value }}</p>
                         </div>
                     </div>
                     <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden justify-between 2xl:flex-nowrap xl:flex-nowrap lg:flex-wrap">
@@ -71,7 +71,7 @@
                             <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
                         </div>
                         <div class="flex justify-center items-center gap-[6px]">
-                            <img class="" src="./assets/icons/eye-silver.svg" alt="">
+                            <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16">
                             <p class="b5 text-[#C8C8C8]">7 025</p>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                         <div class="flex justify-start gap-[25px]">
                             <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
                             <div class="flex gap-[5px]">
-                                <img class="" src="./assets/icons/eye-silver.svg" alt="">
+                                <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16">
                                 <p class="b5 text-[#C8C8C8]">7 025</p>
                             </div>
                         </div>

@@ -1,15 +1,23 @@
 export interface BannerRes {
   items: Array<{
     id: string,
-    title: string,
-    description: string,
-    content: string
-    lang: string,
-    previewImage: string,
-    images: string[],
-    urgent: boolean,
-    active: boolean,
-    order: number
+    banner: {
+      id: string,
+      title: string,
+      description: string,
+      redirectUrl: string,
+      generatedUrl: string,
+      btnText: string,
+      imageUrl: string,
+      textColour: string,
+      backgroundColors: [string],
+      btnColors: [string],
+      indicatorBorderColors: [string],
+      bannerProductType: string
+    },
+    orderNum: number,
+    productId: string,
+    carouselType: string
   }>,
   paging: {
     currentPage: number,
@@ -17,4 +25,5 @@ export interface BannerRes {
     totalItems: number
   }
 }
+
 

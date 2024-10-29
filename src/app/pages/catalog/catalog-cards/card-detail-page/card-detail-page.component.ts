@@ -8,7 +8,7 @@ import {
   OnInit,
   inject
 } from '@angular/core';
-import {CommonModule, NgFor, NgIf} from "@angular/common";
+import {DecimalPipe, NgClass, NgFor, NgIf, NgOptimizedImage} from "@angular/common";
 
 import { BreadcrumbComponent } from "../../../../core/components/breadcrumb/breadcrumb.component";
 import { BreadcrumbService } from "../../../../core/services/utils/breadcrumb.service";
@@ -29,15 +29,17 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
   imports: [
     RouterModule,
     TranslocoPipe,
-    CommonModule,
     CalculateCreditComponent,
     CardDetailCalculatorComponent,
     RecommendationCardsComponent,
     CustomCurrencyPipe,
     NgIf,
     NgFor,
-    BreadcrumbComponent
-],
+    BreadcrumbComponent,
+    DecimalPipe,
+    NgClass,
+    NgOptimizedImage
+  ],
   templateUrl: './card-detail-page.component.html',
   styles: `
     .ads-date {
@@ -63,10 +65,11 @@ export class CardDetailPageComponent implements OnInit {
   innerWidth: number = window.innerWidth;
   carFromBackend!: ICarDetailRes;
 
-  carInfos: Array<{id: number, slug: string, name: string,  value: string}> = [];
+  carInfos: Array<{id: number, slug: string, name: string,  value: string, valueTranslate: string}> = [];
   sellerName: string = '';
   sellerAddress: string = '';
   brandName: string = '';
+  price: number = 0;
   currency: string = ''
 
   private destroy$ = inject(DestroyRef);
@@ -113,11 +116,20 @@ export class CardDetailPageComponent implements OnInit {
       .subscribe({
         next: (res) => {
             this.carFromBackend = res as ICarDetailRes;
-            this.brandName = this.carFromBackend.resProperties[0].valueTranslate;
-            this.carName = this.carFromBackend.resProperties[1].value;
-            this.currency = this.carFromBackend.resProperties[12].value
-            this.sellerName = this.carFromBackend.resProperties[19].value;
-            this.sellerAddress = this.carFromBackend.resProperties[21].value
+            this.brandName = this.carFromBackend.resProperties
+              .filter(value => value.slug == 'MARK')
+              .map(val => val.valueTranslate) as unknown as string;
+            this.carName = this.carFromBackend.resProperties
+              .filter(value => value.slug == 'MARK_MODEL_CAR')
+              .map(val => val.value)  as unknown as string;
+            this.currency = this.carFromBackend.price.currency as unknown as string
+            this.price = this.carFromBackend.price.amount as unknown as number;
+            this.sellerName = this.carFromBackend.resProperties
+              .filter(value => value.slug == 'SELLER_NAME')
+              .map(val => val.value) as unknown as string;
+            this.sellerAddress = this.carFromBackend.resProperties
+              .filter(value => value.slug == 'REGION')
+              .map(val => val.valueTranslate) as unknown as string
             this.displayImages = this.carFromBackend.images.map(image => image.link);
             this.selectedImage = this.displayImages.length > 0 ? this.displayImages[0] : 'assets/images/missing-img.png';
             this.resProperties = this.carFromBackend.resProperties || [];
@@ -126,12 +138,14 @@ export class CardDetailPageComponent implements OnInit {
               id: prop.id,
               slug: prop.slug,
               name: prop.name,
-              value: prop.value
+              value: prop.value,
+              valueTranslate: prop.valueTranslate
             }));
 
             this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
-            this.cdr.detectChanges();
+
             this.scrollToTop();
+            this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error fetching car details:', err);
@@ -139,9 +153,9 @@ export class CardDetailPageComponent implements OnInit {
       });
   }
 
-  public get carData(){
-    return this.carInfos = this.carInfos.slice(2, this.carInfos.length-3)
-  }
+  // public get carData(){
+  //   return this.carInfos = this.carInfos.slice(2, this.carInfos.length-3)
+  // }
 
   private scrollToTop() {
     setTimeout(() => {

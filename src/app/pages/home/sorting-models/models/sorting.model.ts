@@ -3,7 +3,8 @@ export interface SortingModel {
   value: string,
   type: string,
   imageLink: string,
-  active: boolean
+  active: boolean,
+  valueTranslate: string
 }
 
 export interface SortingModelInfo {

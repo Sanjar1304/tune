@@ -170,9 +170,10 @@ export class AdsCreateComponent implements OnInit {
   message: string[] = [];
   previews: string[] = [];
 
-  name: string = '';
-  phone: string = '';
+
   comment: string = '';
+  price: number = 0;
+  currency: string = '';
   mainPanelSelects: any[] = [];
   extraOptions: any[] = [];
   optionalOptions: any[] = [];
@@ -312,6 +313,8 @@ export class AdsCreateComponent implements OnInit {
     const properties = this.generateProperties();
     const formData = this.generateFormData(properties);
     const formDataWithAssetID = this.generateFormDataWithAssetID(properties);
+    console.log(formData);
+    console.log(formDataWithAssetID)
 
     if (!this.byAssetSelected) {
       this.adsService.createProduct(formData).subscribe(res => {
@@ -372,9 +375,9 @@ export class AdsCreateComponent implements OnInit {
     return {
       categoryId: 1,
       price: {
-        amount: 15000,
+        amount: this.price,
         scale: 1,
-        currency: 'USD'
+        currency: this.currency
       },
       translates: [
         {
@@ -394,9 +397,9 @@ export class AdsCreateComponent implements OnInit {
       assetId: this.carId,
       categoryId: 1,
       price: {
-        amount: 15000,
+        amount: this.price,
         scale: 1,
-        currency: 'USD'
+        currency: this.currency
       },
       translates: [
         {

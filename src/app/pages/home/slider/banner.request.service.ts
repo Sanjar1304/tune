@@ -22,10 +22,23 @@ export class BannerRequestService {
       page: page,
       size: size
     };
-    return this.http.post<BackendResponseModel<BannerRes>>(`${this.API_URL}/banner/paging`, requestBody)
+    return this.http.post<BackendResponseModel<BannerRes>>(`${this.API_URL}/carousel/list`, requestBody)
       .pipe(
         map(this.sessionService.handleResponse<BannerRes>),
         catchError(this.sessionService.handleError)
       );
   }
+
+  public navigateToOne(id: string){
+    return this.http.post(`${environment.API_BASE}/web/v1/carousel/one`, {id})
+  }
+
+  public navigateToList(data: {page:number, size: number}){
+    const body = {
+      page: data.page,
+      size: data.size
+    }
+    return this.http.post(`${environment.API_BASE}/web/v1/carousel/list`, JSON.stringify(body))
+  }
+
 }

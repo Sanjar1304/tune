@@ -8,19 +8,18 @@ import {
   Output,
   inject
 } from '@angular/core';
-import {JsonPipe, NgFor, NgIf, SlicePipe} from "@angular/common";
+import {DecimalPipe, JsonPipe, NgFor, NgIf, SlicePipe} from "@angular/common";
 
 import { CarCatalogRes } from '../../../core/constants/carCatalogRes';
 import {CatalogCardsService} from "../../catalog/catalog-cards/services/catalog-cards.service";
 import {Router} from "@angular/router";
 import {TranslocoPipe} from "@jsverse/transloco";
-import { log } from 'console';
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-recommendation-cards',
   standalone: true,
-  imports: [TranslocoPipe, SlicePipe, NgIf, NgFor, JsonPipe],
+  imports: [TranslocoPipe, SlicePipe, NgIf, NgFor, JsonPipe, DecimalPipe],
   templateUrl: './recommendation-cards.component.html',
   styles: `
     .custom {
@@ -34,9 +33,18 @@ export class RecommendationCardsComponent implements OnInit{
   carCards!: CarCatalogRes;
   brandName: string = '';
   carName: string = '';
+  productionYear: string = ''
+  mileage: string = '';
+  fuelType: string = '';
+  transmission: string = '';
 
   @Output() cardSelected: EventEmitter<string> = new EventEmitter<string>();
-  carDetails: { name: string[]; valueTranslate: string[]; id: number[]; value: string[]; slug: string[] }[] = [];
+  carDetails: {
+    name: string[];
+    valueTranslate: string[];
+    id: number[];
+    value: string[];
+    slug: string[] }[] = [];
 
   private destroy$ = inject(DestroyRef);
   private router = inject(Router);
@@ -73,6 +81,20 @@ export class RecommendationCardsComponent implements OnInit{
 
   public navigateToCatalogPage(){
     this.router.navigate(['/catalog']);
+  }
+
+  public getCarDetail(properties: any[], slug: string): string {
+    const detail = properties.find(prop => prop.slug === slug);
+    if (detail) {
+      if (Array.isArray(detail.valueTranslate)) {
+        return detail.valueTranslate.join(', ');
+      } else if (detail.valueTranslate) {
+        return detail.valueTranslate;
+      } else if (detail.value) {
+        return detail.value;
+      }
+    }
+    return '';
   }
 
 }
