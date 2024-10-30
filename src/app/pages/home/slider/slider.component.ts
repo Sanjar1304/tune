@@ -5,7 +5,9 @@ import {TranslocoPipe} from "@jsverse/transloco";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 import {BannerRequestService} from "./banner.request.service";
-import {BannerRes} from "../../../core/constants/bannerRes";
+import {Banner, BannerRes} from "../../../core/constants/bannerRes";
+import {Router} from "@angular/router";
+import {environment} from "../../../../environments/environment";
 
 
 @Component({
@@ -79,8 +81,11 @@ export class SliderComponent implements OnInit, OnDestroy {
   timer: any;
   transitionDuration = 5000; // duration for each slide in milliseconds
   banners!: BannerRes;
+  bannerList: Banner[] = [];
+  API_URL = `${environment.API_BASE}`
 
   private destroy$ = inject(DestroyRef)
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private bannerService = inject(BannerRequestService);
 
@@ -93,25 +98,19 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.bannerService.getBanner(0, 10)
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
-      next: res => {
-        this.banners = res as BannerRes;
-        console.log(this.banners)
-        this.cdr.detectChanges();
-      },
-      error: err => console.log('slider from backend: ', err)
+        next: res => {
+          this.banners = res as BannerRes;
+          this.bannerList = this.banners.items.map(val => val.banner)
+          this.cdr.detectChanges();
+        },
+        error: err => console.log('slider from backend: ', err)
     })
   }
 
-  public navigateToBanner(id?: string){
-    if(id){
-      this.bannerService.navigateToOne(id).subscribe(res => {
-        console.log(res);
-      })
-    } else {
-      this.bannerService.navigateToList({page: 0, size: 10}).subscribe(res => {
-        console.log(res);
-      })
-    }
+  public navigateToBanner(url?: string) {
+    console.log(url);
+    console.log(`${this.API_URL}${url}`)
+    this.router.navigateByUrl(`${this.API_URL}${url}`);
   }
 
 
@@ -121,7 +120,7 @@ export class SliderComponent implements OnInit, OnDestroy {
 
   startAutoSlide() {
     this.timer = setInterval(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.banners.items.length;
+      this.currentIndex = (this.currentIndex + 1) % this.bannerList.length;
     }, this.transitionDuration);
   }
 

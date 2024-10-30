@@ -6,7 +6,8 @@ module.exports = {
       backgroundImage: {
         'text-gradient': 'linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, #5C5C5C, #5C5C5C)',
         'pros-card-bg': 'linear-gradient(180deg, #27C5D0 0%, rgba(39, 197, 208, 0.40) 48.05%, rgba(39, 197, 208, 0.01) 100%)',
-        'header-ads-gradient':'linear-gradient(102.35deg, #FF553D 0%, #FF7F6E 100%)'
+        'header-ads-gradient':'linear-gradient(102.35deg, #FF553D 0%, #FF7F6E 100%)',
+        'banner-gradient':'linear-gradient(105.88deg, #27C5D0 46.43%, #04AAB6 99.29%)'
       },
     },
     screens: {

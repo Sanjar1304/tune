@@ -13,7 +13,7 @@ export const requestInterceptor: HttpInterceptorFn = (req, next) => {
     .set('X-App-Version', '1.0')
     .set('X-App-Build', '1.0')
     .set('X-Device-Model', 'samsung s 24')
-    .set('X-Lang', 'RUS')
+    .set('X-Lang', 'UZB')
     .set('X-Auth-Token', String(token.getToken()) );
 
     const clonedReq = req.clone({headers: header});
