@@ -21,8 +21,8 @@ export class CatalogCardsService {
 
     const requestBody = {
       query: data.query,
-      facet: null,  // You can adjust this based on actual data
-      filters: [],  // Assuming an empty filters array for now
+      facet: null,
+      filters: [],
       paging: {
         page: paging.page,
         size: paging.size
