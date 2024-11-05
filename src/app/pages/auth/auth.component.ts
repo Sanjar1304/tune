@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, } from '@angular/core';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import {NgClass, NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 
 import { LoginInputComponent } from "./login-input/login-input.component";
 import { OtpInputComponent } from "./otp-input/otp-input.component";
@@ -16,8 +16,9 @@ import { UiSvgIconComponent } from '../../core/components/ui-svg-icon/ui-svg-ico
     NgClass,
     LoginInputComponent,
     OtpInputComponent,
-    PasswordInputComponent
-],
+    PasswordInputComponent,
+    NgOptimizedImage
+  ],
   templateUrl: './auth.component.html',
   styles: `
 

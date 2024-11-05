@@ -1,6 +1,6 @@
 <section class="container mx-auto flex flex-col gap-[48px]">
   <h2 class="w-2/3 h2 text-[#262626]">Рассчитайте условия и отправьте заявку по кредиту</h2>
-  <div class="lg:block md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
+  <div class="md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">1</p>
       <p class="b1 text-[#262626]">Оставьте заявку онлайн</p>
@@ -26,7 +26,7 @@
         <div class="p-[8px] rounded-[20px] bg-[#EEE]">
           <button class="w-full flex items-center gap-[8px] py-[10px] px-[14px] bg-[#fff] rounded-[12px]">
             Автокредит my car
-            <img class="" src="./assets/icons/arrow-down.svg" alt="">
+            <img class="" ngSrc="./assets/icons/arrow-down.svg" alt="" height="16" width="16">
           </button>
         </div>
       </div>
@@ -46,7 +46,7 @@
               <h3 class="b3">Сумма кредита</h3>
               <div class="h-auto flex items-center gap-[12px]">
                 <h3 class="h3"> {{ slider.value | customCurrency}} </h3>
-                <img src="./assets/icons/editing-icon.svg" alt="edit icon">
+                <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18">
               </div>
               <div class="">
                 <mat-slider

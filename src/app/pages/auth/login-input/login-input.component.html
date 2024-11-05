@@ -23,11 +23,12 @@
             </div>
         </div>
         <div class="flex flex-col gap-[16px] ">
-            <button type="submit" class="py-[10px] px-[24px] rounded-[10px] " [ngClass]="{ 'text-[#fff] bg-[#27C5D0]': loginForm.valid && isPasswordValid(), 'text-[#B0B8C1] bg-[#F3F3F3] cursor-not-allowed': !loginForm.valid || !isPasswordValid() }
-                                " [disabled]="!loginForm.valid || !isPasswordValid() ">Продолжить</button>
+            <button type="submit" class="py-[10px] px-[24px] rounded-[10px] "
+                    [ngClass]="{ 'text-[#fff] bg-[#27C5D0]': loginForm.valid && isPasswordValid(), 'text-[#B0B8C1] bg-[#F3F3F3] cursor-not-allowed': !loginForm.valid || !isPasswordValid() }
+                    "[disabled]="!loginForm.valid || !isPasswordValid() ">Продолжить</button>
             <button class=" py-[10px] px-[24px] rounded-[10px] border border-[#27C5D0] flex justify-center gap-[16px] " (click)="navigateToHomePage() ">
             <span>Вернуться на главную</span>
-            <img ngSrc="./assets/icons/back-square.svg" alt height="24" width="25">
+            <img ngSrc="./assets/icons/back-square.svg" alt height="24" width="25" loading="lazy">
       </button>
         </div>
     </form>

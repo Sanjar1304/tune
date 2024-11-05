@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-getting-credit',
   standalone: true,
-  imports: [TranslocoPipe],
+  imports: [NgOptimizedImage, TranslocoPipe],
   templateUrl: './getting-credit.component.html',
   styles: `
     .custom-bullets {

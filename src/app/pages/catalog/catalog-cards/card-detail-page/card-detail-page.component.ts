@@ -19,7 +19,6 @@ import {CustomCurrencyPipe} from "../../../../shared/pipes/custom-currency.pipe"
 import {ICarDetailRes} from "../../../../core/constants/ICarDetailRes";
 import {ICard} from "../../../../core/constants/cards";
 import {RecommendationCardsComponent} from "../../../home/recommendation-cards/recommendation-cards.component";
-import {TranslocoPipe} from "@jsverse/transloco";
 import {filter} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
@@ -28,7 +27,6 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
   standalone: true,
   imports: [
     RouterModule,
-    TranslocoPipe,
     CalculateCreditComponent,
     CardDetailCalculatorComponent,
     RecommendationCardsComponent,

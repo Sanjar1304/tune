@@ -1,7 +1,8 @@
 <header class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px] relative" [ngClass]="{ 'header-shadow': !(isScreenSmall() && burgerMenuOpen) }">
     <div class="container mx-auto flex justify-between bg-white py-[14px]">
         <div class="flex items-center gap-[40px]">
-            <img class="logo h-[38px] hover:cursor-pointer" src="./assets/icons/header-logo.svg" alt="" (click)="navigateToMain()" />
+            <img class="logo hover:cursor-pointer" ngSrc="./assets/icons/header-logo.svg" alt="" (click)="navigateToMain()"
+                 height="44" width="135" priority="priority"/>
             <ul class="xl:flex gap-[24px] hidden">
                 @for(routes of navbarMenus; track routes.id){
                 <li class="">
@@ -13,34 +14,40 @@
         <div class="flex items-center lg:gap-[21px] gap-[12px]">
             <div class="lg:flex md:flex items-center gap-[10px] hidden">
                 <div class="h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px] xl:hidden">
-                    <img class="w-[18px] h-[18px]" src="./assets/icons/lupe.svg" alt="lupe icon">
+                    <img class="" ngSrc="./assets/icons/lupe.svg" alt="lupe icon" height="18"
+                         width="18">
                     <input class="h-[18px] focus:outline-none" placeholder="Поиск">
                 </div>
-                <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px] hidden xl:block" src="./assets/icons/lupe.svg" alt="" />
-                <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]" src="./assets/icons/eye.svg" alt="" />
+                <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px] hidden xl:block">
+                  <img class="" ngSrc="./assets/icons/lupe.svg" alt="" height="18" width="18"/>
+                </button>
+                <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]">
+                  <img class="" ngSrc="./assets/icons/eye.svg" alt="" height="18" width="18"/>
+                </button>
                 <div class="">
-                    <button class="b4 text-[#262626]
-                         border border-solid border-[#E8E8E8]
-                         h-[38px] w-[38px] px-[10px] rounded-[10px]
-                         flex items-center justify-center" (click)="toggleDropdown()">
-            {{ currentLocale | transloco }}
-          </button> @if(dropdownOpen){
+                  <button class="b4 text-[#262626]
+                     border border-solid border-[#E8E8E8]
+                     h-[38px] w-[38px] px-[10px] rounded-[10px]
+                     flex items-center justify-center" (click)="toggleDropdown()">
+                    {{ currentLocale | uppercase | transloco }}
+                  </button>
+                  @if(dropdownOpen){
                     <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
-                        @for(lang of locales; track lang){
+                      @for(lang of locales; track lang){
                         <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
-                            {{ lang | transloco }}
+                          {{ lang | transloco }}
                         </div>
-                        }
+                      }
                     </div>
-                    }
+                  }
                 </div>
             </div>
             <button *ngIf="!isLoggedIn" class="nav-menu text-[#fff] bg-[#27C5D0] h-[38px] px-[24px] rounded-[12px] flex items-center" (click)="navigateToLoginPage()">{{"buttonTexts.enter" | transloco}}</button>
             <button *ngIf="isLoggedIn" class="pr-[8px] bg-[#EEEEEE] rounded-[10px] flex items-center gap-[4px]" (click)="toggleUserMenu()">
               <div class="h-[38px] p-[4px] bg-[#27C5D0] rounded-[10px] flex items-center justify-center">
-                <img src="./assets/icons/user-square.svg" class="custom-size " alt="user icon">
+                <img ngSrc="./assets/icons/user-square.svg" class="custom-size " alt="user icon" height="24" width="24">
               </div>
-              <img src="./assets/icons/arrow-down.svg" class="" alt="arrow down icon">
+              <img ngSrc="./assets/icons/arrow-down.svg" class="" alt="arrow down icon" height="16" width="16">
             </button> @if(logoutOpen){
             <div class="w-[80px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-[100px] ml-[152px] lang-shadow">
                 <div (click)="logoutUser()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
@@ -70,22 +77,26 @@
             <mat-accordion class="lg:hidden md:hidden sm:flex mobile:flex flex-col pb-[15px]">
                 <div class="sm:flex mobile:flex items-center gap-[10px] hidden">
                     <div class="w-[100%] h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px]">
-                        <img class="w-[18px] h-[18px]" src="./assets/icons/lupe.svg" alt="lupe icon">
+                        <img class="w-[18px] h-[18px]" ngSrc="./assets/icons/lupe.svg" alt="lupe icon" height="18"
+                             width="18">
                         <input class="h-[18px] focus:outline-none" placeholder="Поиск">
                     </div>
-                    <img class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]" src="./assets/icons/eye.svg" alt="" />
+                    <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]">
+                      <img class="" ngSrc="./assets/icons/eye.svg" alt="" height="18" width="18"/>
+                    </button>
                     <div class="">
                         <button class="b4 text-[#262626]
                          border border-solid border-[#E8E8E8]
                          h-[38px] w-[38px] px-[10px] rounded-[10px]
                          flex items-center justify-center" (click)="toggleDropdown()">
                               {{ currentLocale | transloco }}
-                        </button> @if(dropdownOpen){
+                        </button>
+                      @if(dropdownOpen){
                         <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
                             @for(lang of locales; track lang){
-                            <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
-                                {{ lang | transloco }}
-                            </div>
+                              <div (click)="localeSelect(lang)" class=" p-2 cursor-pointer hover:bg-gray-200 rounded-[10px] ">
+                                  {{ lang | transloco }}
+                              </div>
                             }
                         </div>
                         }
@@ -120,7 +131,9 @@
                        lg:static md:static sm:static mobile:absolute mobile:bottom-[24px]
                        px-[28px] py-[16px] bg-[#FFFFFF] rounded-[14px] mobile:z-[1111]">Подробнее</button>
             </div>
-            <img class="lg:w-full md:w-[88%] sm:w-[50%] mobile:w-full mobile:z-[1]" src="./assets/icons/car-in-red.svg" alt="">
+            <div class="lg:w-full md:w-[88%] sm:w-[50%] mobile:w-full mobile:z-[1]">
+              <img class="" ngSrc="./assets/icons/car-in-red.svg" alt="" height="430" width="748">
+            </div>
         </div>
     </div>
 </header>

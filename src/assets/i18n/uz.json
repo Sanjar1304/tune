@@ -6,8 +6,8 @@
     "menuTab": {
       "myAvto": "MyAuto",
       "catalog": "Katalog",
-      "carCredit": "Avtomobil krediti",
-      "carInsurance": "Avtomobil sug'urtasi",
+      "carCredit": "Avto kredit",
+      "carInsurance": "Avto sug'urta",
       "applyDocs": "Hujjatlarni rasmiylashtirish"
     }
   },
@@ -206,7 +206,7 @@
         "text1": "mobil ilovamizni o'rnating",
         "text2": "yoki"
       },
-      "copyRights": "© 2006—2024, OAJ MyBank, rasmiy veb-sayt, Markaziy bankining 2673-sonli universal litsenziyasi (baliq matni)"
+      "copyRights": "© 2006-2024, OAJ MyBank, rasmiy veb-sayt, O'zbekiston Respublikasi Markaziy bankining 2673-son universal litsenziyasi"
     }
   },
   "buttonTexts": {
@@ -215,7 +215,8 @@
     "all": "Hammasi",
     "new": "Yangi",
     "with_mileage": "Yurgan",
-    "sorting_btn": "50 679 taklifni ko'rsatish",
+    "sorting_btn_1": "Taklifni",
+    "sorting_btn_2": "ko'rsatish",
     "recommendationBtn": "Katalogga o'ting",
     "orderPhoneBtn": "Qo'ng'iroqni qiling",
     "calculateCreditBtn": "To'lovga o'ting"

@@ -1,14 +1,18 @@
-import { ApplicationConfig, isDevMode, provideZoneChangeDetection } from '@angular/core';
+import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, isDevMode} from '@angular/core';
 import {authRequestCheckInterceptor, fileUploadInterceptor, requestInterceptor} from "./core/interceptors/request.interceptor";
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 
 import {ToastConfig} from "./core/config/app.packages.config";
-import { TranslocoHttpLoader } from './transloco-loader';
+
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import {provideToastr} from "ngx-toastr";
-import { provideTransloco } from '@jsverse/transloco';
+
 import { routes } from './app.routes';
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@jsverse/transloco';
+
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,12 +23,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([requestInterceptor, authRequestCheckInterceptor, fileUploadInterceptor])),
     provideTransloco({
         config: {
-          availableLangs: ['en', 'ru', 'uz'],
-          defaultLang: 'uz',
+          availableLangs: ['en','uz','ru'],
+          defaultLang: 'en',
+          // Remove this option if your application doesn't support changing language in runtime.
           reRenderOnLangChange: true,
           prodMode: !isDevMode(),
         },
         loader: TranslocoHttpLoader
-      }),
+      })
   ]
 };

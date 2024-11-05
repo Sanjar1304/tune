@@ -1,24 +1,33 @@
-<section class=" container mx-auto
+<section class="container mx-auto
                 lg:pt-[60px] lg:pb-[100px] mobile:py-[60px]
                 flex flex-col justify-left gap-[40px]">
     <h1 class="h1 text-[#262626]">{{"sortingModelsPage.title" | transloco}}</h1>
     <div class="w-full flex flex-col justify-start gap-[32px]">
-        <div class="w-[320px] p-[8px] rounded-[20px] bg-[#EEEEEE] flex gap-[2px]" >
+        <div class="w-[320px] p-[8px] rounded-[20px] bg-[#EEEEEE] flex justify-between">
           @for(menu of carModelMenu; track menu){
-            <button class="b3 px-[18px] py-[10px] bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]" (click)="remainSelectedModel(menu.type, menu.value)">{{menu.valueTranslate}}</button>
+            <button
+              class="b3 px-[18px] py-[10px] btn_animation"
+              [ngClass]="{'bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]': menu === activeModel}"
+              (click)="remainSelectedModel(menu)">
+                {{ menu.valueTranslate | titlecase }}
+            </button>
           }
         </div>
 
         <div class="flex flex-col gap-[24px]">
-            <div class="lg:gap-[10px] flex gap-[24px] overflow-x-scroll scrollbar-none">
-                @for(model of carModelsImage; track model){
-                   <img class="w-[50px] h-[50px] hover:cursor-pointer" [src]="model.imageLink" alt="car icon image" (click)="getImageValue(model.type, model.value)">
-                }
+            <div class="h-[70px] px-[10px] flex items-center lg:gap-[10px] gap-[24px] overflow-x-scroll scrollbar-none">
+              @for(model of carModelsImage; track model){
+                <img class="w-[50px] h-[50px] object-cover brand_icons"
+                     [src]="model.imageLink" alt="car icon image"
+                     (click)="getImageValue(model.type, model.value)"
+                     loading="lazy">
+              }
             </div>
-            <div class="grid
-                  lg:grid-cols-6 md:grid-cols-4
-                  sm:grid-cols-3 mobile:grid-cols-2
-                  gap-x-[24px] gap-y-[10px]">
+
+
+            <div class="grid lg:grid-cols-6 md:grid-cols-4
+                        sm:grid-cols-3 mobile:grid-cols-2
+                        gap-x-[24px] gap-y-[10px]">
                 <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">
                   @if(!isSelectedPressed){
                     @for(modelName of carModelsInfo?.facets; track modelName.id){
@@ -44,21 +53,12 @@
 
         </div>
         <div class="flex justify-center lg:justify-center xl:justify-center 2xl:justify-center">
-          @if(!isSelectedPressed){
             <button class="b3 mx-auto text-[#fff] bg-[#27C5D0] rounded-[14px]
               lg:py-[10px] lg:px-[16px]
               lg:w-[277px] md:w-full sm:w-full mobile:w-full
               md:py-[18px] md:px-[28px] sm:py-[28px] mobile:py-[18px]
               md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px]"
-            >{{ 'xayr' }}</button>
-          } @else {
-            <button class="b3 mx-auto text-[#fff] bg-[#27C5D0] rounded-[14px]
-              lg:py-[10px] lg:px-[16px]
-              lg:w-[277px] md:w-full sm:w-full mobile:w-full
-              md:py-[18px] md:px-[28px] sm:py-[28px] mobile:py-[18px]
-              md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px]"
-            >{{ 'salom' }}</button>
-          }
+            >{{"buttonTexts.sorting_btn_1" | transloco}} {{ selectedModelsLength }} {{"buttonTexts.sorting_btn_2" | transloco}}</button>
         </div>
     </div>
 </section>

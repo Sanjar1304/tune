@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Pipe} from '@angular/core';
 import {MatSliderModule} from "@angular/material/slider";
 import {FormsModule} from "@angular/forms";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {CustomCurrencyPipe} from "../../../shared/pipes/custom-currency.pipe";
 import {TranslocoPipe} from "@jsverse/transloco";
 
@@ -13,6 +13,7 @@ import {TranslocoPipe} from "@jsverse/transloco";
     FormsModule,
     CommonModule,
     CustomCurrencyPipe,
+    NgOptimizedImage,
     TranslocoPipe
   ],
   templateUrl: './calculate-credit.component.html',

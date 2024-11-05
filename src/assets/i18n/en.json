@@ -213,7 +213,8 @@
     "all": "All",
     "new": "New",
     "with_mileage": "With mileage",
-    "sorting_btn": "Show 50,679 offers",
+    "sorting_btn_1": "Show",
+    "sorting_btn_2": "offers",
     "recommendationBtn": "Go to the catalog",
     "orderPhoneBtn": "Request a call",
     "calculateCreditBtn": "Proceed to checkout"

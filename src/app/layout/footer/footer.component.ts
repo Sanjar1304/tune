@@ -1,15 +1,20 @@
-import {ChangeDetectionStrategy, Component, signal, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, ViewEncapsulation} from '@angular/core';
 import {MatExpansionModule} from "@angular/material/expansion";
-import {TranslocoPipe} from "@jsverse/transloco";
 import {NgOptimizedImage} from "@angular/common";
+import {SocialService} from "./services/social.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {SocialModel} from "./models/social.model";
+import {RouterLink} from "@angular/router";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   imports: [
     MatExpansionModule,
+    NgOptimizedImage,
+    RouterLink,
     TranslocoPipe,
-    NgOptimizedImage
   ],
   templateUrl: './footer.component.html',
   styles: `
@@ -54,6 +59,26 @@ import {NgOptimizedImage} from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.Emulated
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit{
   readonly panelOpenState = signal(false);
+
+  socialList!: SocialModel;
+
+  private destroy$ = inject(DestroyRef);
+  private socialService = inject(SocialService);
+
+  public ngOnInit() {
+    this.socialsSubscription();
+  }
+
+  public socialsSubscription(){
+    this.socialService.getSocials({page: 0, size: 10})
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.socialList = res as SocialModel;
+        },
+        error: err => console.log(err)
+      })
+  }
 }

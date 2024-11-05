@@ -9,59 +9,73 @@
             </div>
 
             <!--===== DESKTOP SCREEN SIZE FORM 1024 and larger =====-->
+          <form #sortingForm="ngForm" (ngSubmit)="onSubmit()">
             <div class="2xl:block xl:block lg:hidden md:hidden sm:hidden mobile:block">
-                <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
-                    <div class="w-full flex flex-col gap-[12px] first-child">
-                        <div class="grid grid-cols-3 gap-x-4 gap-y-8">
-                            <div class="" *ngFor="let select of formModel">
-                                <div class="flex flex-col gap-[8px]">
-                                    @if (!select.values?.length) {
-                                    <input class="px-[8px] py-[12px] rounded-[10px] focus:outline-none" placeholder="введите значение"> } @else {
-                                    <mat-form-field class="relative">
-                                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                                        <mat-select placeholder="Выберите">
-                                            <mat-option *ngFor=" let item of select.values" [value]="item.value">{{item.value}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>}
-                                </div>
-                            </div>
-                        </div>
+              <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
+                <div class="w-full flex flex-col gap-[12px] first-child">
+                  <div class="grid grid-cols-3 gap-x-4 gap-y-8">
+                    <div class="" *ngFor="let select of sortingCategories; let i = index">
+                      <div class="flex flex-col gap-[8px]">
+                        @if (!select.values?.length) {
+                          <mat-form-field class="">
+                            <mat-label>{{select.title}}</mat-label>
+                            <input matInput type="text" [(ngModel)]="sortingFormSelections[i]" name="sortingFormSelections{{i}}">
+                          </mat-form-field>
+                        } @else {
+                          <mat-form-field class="relative">
+                            <mat-label class="">{{select.title}}</mat-label>
+                            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
+                            <mat-select [placeholder]="select.placeholder" [(ngModel)]="sortingFormSelections[i]" name="sortingFormSelections{{i}}">
+                              <mat-option *ngFor="let item of select.values" [value]="item.value">{{item.value}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
 
-                <div class="w-full flex flex-col gap-[32px] pt-[10px]">
-                    <div class="2xl:w-2/3 xl:w-2/3 mobile:w-full">
-                        <mat-radio-group class="w-full flex justify-between" [(ngModel)]="labelPosition">
-                            <mat-radio-button class="b4" value="after">Торг есть</mat-radio-button>
-                            <mat-radio-button class="b4" value="before">Автосалон</mat-radio-button>
-                            <mat-radio-button class="b4" value="before">C фото</mat-radio-button>
-                        </mat-radio-group>
-                    </div>
-                    <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col justify-between">
-                        <div class="flex items-center gap-[16px] py-[10px] px-[4px]">
-                            <span class="link text-[#A1A1A1]">Расширенный поиск</span>
-                            <img src="/assets/icons/arrow-down.svg" alt="">
-                        </div>
-
-                        <div class="flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
-                            <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]">Очистить</button>
-                            <button class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">Показать</button>
-                        </div>
-                    </div>
+              <div class="w-full flex flex-col gap-[32px] pt-[10px]">
+                <div class="2xl:w-2/3 xl:w-2/3 mobile:w-full">
+<!--                  <mat-radio-group class="w-full flex justify-between" [(ngModel)]="labelPosition">-->
+<!--                    <mat-radio-button class="b4" value="after">Торг есть</mat-radio-button>-->
+<!--                    <mat-radio-button class="b4" value="before">Автосалон</mat-radio-button>-->
+<!--                    <mat-radio-button class="b4" value="before">C фото</mat-radio-button>-->
+<!--                  </mat-radio-group>-->
                 </div>
+                <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col justify-between">
+                  <div class="flex items-center gap-[16px] py-[10px] px-[4px]">
+<!--                    <span class="link text-[#A1A1A1]">Расширенный поиск</span>-->
+<!--                    <img src="/assets/icons/arrow-down.svg" alt="">-->
+                  </div>
+
+                  <div class="flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
+                    <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]">Очистить</button>
+                    <button class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">Показать</button>
+                  </div>
+                </div>
+              </div>
             </div>
+          </form>
         </div>
 
 
         <div class="2xl:w-1/4 xl:w-1/4 lg:w-full md:w-full p-[24px] bg-[#E3FBFC] rounded-[16px]">
             <h4 class="h4 pb-[16px]">Узнайте, сколько стоит ваш автомобиль</h4>
-            <div class="flex flex-col gap-[12px] pb-[16px]">
+            <form [formGroup]="pricingFrom" class="flex flex-col gap-[12px] pb-[16px]" (ngSubmit)="pricingSubmit()">
                 <div class="w-full flex 2xl:flex-col xl:flex-col lg:flex-row md:flex-row mobile:flex-col gap-[12px]">
-                    <input class="2xl:w-full xl:w-full lg:w-1/2 md:w-1/2 border border-solid border-[#fff] bg-[#fff] text-[#fff] py-[8px] px-[12px] rounded-[10px] focus:outline-none" placeholder="VIN или гос.номер">
-                    <input class="2xl:w-full xl:w-full lg:w-1/2 md:w-1/2 border border-solid border-[#fff] bg-[#fff] text-[#fff] py-[8px] px-[12px] rounded-[10px] focus:outline-none" placeholder="Пробег, км">
+                    <input class="2xl:w-full xl:w-full lg:w-1/2 md:w-1/2
+                                  border border-solid border-[#fff] bg-[#fff] text-[#000]
+                                  py-[8px] px-[12px] rounded-[10px] focus:outline-none"
+                           placeholder="VIN или гос.номер" formControlName="vinNomer">
+                    <input class="2xl:w-full xl:w-full lg:w-1/2 md:w-1/2
+                                  border border-solid border-[#fff] bg-[#fff] text-[#000]
+                                  py-[8px] px-[12px] rounded-[10px] focus:outline-none"
+                           placeholder="Пробег, км" formControlName="probeg">
                 </div>
-                <button class="px-[24px] py-[10px] rounded-[14px] bg-[#27C5D0] text-[#fff] link">Оценить бесплатно</button>
-            </div>
+                <button type="submit" class="px-[24px] py-[10px] rounded-[14px] bg-[#27C5D0] text-[#fff] link" [disabled]="pricingFrom.invalid">Оценить бесплатно</button>
+            </form>
             <p class="w-[100%] text-center p-[8px] text-[#A1A1A1] link">Ввести параметры вручную</p>
         </div>
     </div>

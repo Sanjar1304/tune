@@ -20,7 +20,10 @@ export class SortingService {
   public getSortingForm(): Observable<SortingFormModel | null>{
     return this.http.get<BackendResponseModel<SortingFormModel>>(`${this.API_URL}filter/list?categoryId=1`)
     .pipe(
-      map(this.sessionService.handleResponse<SortingFormModel>),
+      map((response) => {
+        this.sessionService.handleResponse(response);
+        return response.result.data
+      } ),
       catchError(this.sessionService.handleError)
     )
   }

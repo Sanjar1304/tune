@@ -28,7 +28,10 @@ export class AddsService {
 
     return this.http.post<BackendResponseModel<ICarModelList>>(`${this.API_URL}asset/paging`, JSON.stringify({pagging}))
      .pipe(
-        map(this.sessionService.handleResponse<ICarModelList>),
+        map((response) => {
+          this.sessionService.handleResponse<ICarModelList>(response);
+          return response.result.data
+        }),
         catchError(this.sessionService.handleError)
      )
   }
@@ -41,7 +44,10 @@ export class AddsService {
     }
     return this.http.post<BackendResponseModel<CarSelectInfoResponse>>(`${this.API_URL}property/by-category`, {categoryId, assetId, paging})
     .pipe(
-      map(this.sessionService.handleResponse<CarSelectInfoResponse>),
+      map((response) => {
+        this.sessionService.handleResponse<CarSelectInfoResponse>(response);
+        return response.result.data
+      }),
       catchError(this.sessionService.handleError)
     )
   }
@@ -49,7 +55,10 @@ export class AddsService {
   public uploadImage(formData: FormData): Observable<ImageUploadModel | null>{
     return this.http.post<BackendResponseModel<ImageUploadModel>>(`${this.API_FILE_SERVER}general/car`, formData)
     .pipe(
-      map(this.sessionService.handleResponse<ImageUploadModel>),
+      map((response) => {
+        this.sessionService.handleResponse<ImageUploadModel>(response);
+        return response.result.data
+      }),
       catchError(this.sessionService.handleError)
     )
   }

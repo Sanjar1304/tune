@@ -5,10 +5,10 @@ import {
   DestroyRef,
   OnInit,
   inject,
-  model,
+  model, ViewChild,
 } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatOption, MatSelect} from "@angular/material/select";
+import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import { NgFor, NgIf } from '@angular/common';
 
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -19,6 +19,7 @@ import { SortingFormModel } from './models/sorting-form.model';
 import { SortingService } from './services/sorting.service';
 import { UiSvgIconComponent } from '../../../core/components/ui-svg-icon/ui-svg-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {MatInput} from "@angular/material/input";
 
 @Component({
   selector: 'app-catalog-sorting',
@@ -32,8 +33,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatSelect,
     MatOption,
     MatFormField,
+    MatLabel,
     NgFor,
-    NgIf
+    NgIf,
+    MatInput
   ],
   templateUrl: './catalog-sorting.component.html',
   styles: `
@@ -151,9 +154,14 @@ export class CatalogSortingComponent implements OnInit{
   readonly indeterminate = model(false);
   labelPosition = model<'Торг есть' | 'Автосалон' | 'C фото'>('Торг есть');
   readonly disabled = model(false);
-  formModel: null | SortingFormModel[] = null;
+  sortingCategories: null | SortingFormModel[] = null;
+
+  @ViewChild('sortingForm') form!: NgForm;
+  sortingFormSelections: any[] = [];
+  pricingFrom!: FormGroup;
 
   private router = inject(Router);
+  private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = inject(DestroyRef);
   private sortingService = inject(SortingService);
@@ -161,6 +169,14 @@ export class CatalogSortingComponent implements OnInit{
 
   public ngOnInit(): void {
     this.getSortingModelFormSubscription();
+    this.validatePricingForm();
+  }
+
+  public validatePricingForm(){
+    this.pricingFrom = this.fb.group({
+      vinNomer: ['',[ Validators.required, Validators.minLength(5)]],
+      probeg: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]]
+    })
   }
 
   public getSortingModelFormSubscription(){
@@ -168,12 +184,20 @@ export class CatalogSortingComponent implements OnInit{
     .pipe(takeUntilDestroyed(this.destroy$))
     .subscribe({
       next: res => {
-        this.formModel = res as unknown  as SortingFormModel[];
+        this.sortingCategories = res as unknown  as SortingFormModel[];
       },
       error: err => console.log(err),
       complete:()=>{
         this.cdr.detectChanges()
       }
     })
+  }
+
+  public onSubmit(){
+    console.log(this.form.value);
+  }
+
+  public pricingSubmit(){
+    console.log(this.pricingFrom.value)
   }
 }

@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, model} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 
-import {TranslocoPipe} from "@jsverse/transloco";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSliderModule} from "@angular/material/slider";
 import {MatRadioModule} from "@angular/material/radio";
 
 import {CustomCurrencyPipe} from "../../../../../shared/pipes/custom-currency.pipe";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 
 @Component({
@@ -20,6 +20,7 @@ import {CustomCurrencyPipe} from "../../../../../shared/pipes/custom-currency.pi
     FormsModule,
     CommonModule,
     CustomCurrencyPipe,
+    NgOptimizedImage,
     TranslocoPipe,
   ],
   templateUrl: './card-detail-calculator.component.html',

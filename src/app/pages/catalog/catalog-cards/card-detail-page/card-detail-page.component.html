@@ -3,8 +3,8 @@
         <div class="container mx-auto  flex justify-between pb-[16px]">
             <app-breadcrumb></app-breadcrumb>
             <div class="flex gap-[8px]">
-                <img class="" ngSrc="./assets/icons/share.svg" alt="" height="44" width="44">
-                <img class="" ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44">
+                <img class="" ngSrc="./assets/icons/share.svg" alt="" height="44" width="44" loading="lazy">
+                <img class="" ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44" loading="lazy">
             </div>
         </div>
     </div>
@@ -22,11 +22,10 @@
             <div class="w-full flex
                     2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col mobile:flex-col
                     2xl:gap-[60px] xl:gap-[60px] lg:gap-[60px] md:gap-[24px] sm:gap-[24px] mobile:gap-[24px]">
-
                 <div class="2xl:w-[60%] xl:w-[60%] lg:w-[60%]
                     2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden
                     flex-col gap-[8px]">
-                    <img class="w-full selected-image" [src]="selectedImage" loading="lazy" alt="selected image">
+                    <img class="w-full h-[520px] selected-image object-cover" [src]="selectedImage" loading="lazy" alt="selected image">
 
                     <div class="grid grid-cols-5 gap-[8px] relative">
                         <ng-container *ngIf="carFromBackend?.images; else noImages">
@@ -40,7 +39,7 @@
                                 </ng-container>
 
                                 <!-- Image Thumbnails -->
-                                <img class="h-[86px] w-[100%] cursor-pointer" [src]="image || 'assets/images/fallback-image.jpg'" loading="lazy" alt="Car image" (click)="selectImage(i)">
+                                <img class="h-[86px] w-[100%] cursor-pointer object-cover" [src]="image || 'assets/images/fallback-image.jpg'" loading="lazy" alt="Car image" (click)="selectImage(i)">
                             </ng-container>
                         </ng-container>
 
@@ -53,7 +52,7 @@
 
                 <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex mobile:flex w-full overflow-x-scroll scrollbar-none">
                     <div class="flex flex-nowrap gap-[5px]">
-                        <img *ngFor="let img of displayImages" [src]="img" alt="">
+                        <img class="" *ngFor="let img of displayImages" [src]="img" alt="" loading="lazy">
                     </div>
                 </div>
 
@@ -71,7 +70,7 @@
                             <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
                         </div>
                         <div class="flex justify-center items-center gap-[6px]">
-                            <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16">
+                            <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16" loading="lazy">
                             <p class="b5 text-[#C8C8C8]">7 025</p>
                         </div>
                     </div>
@@ -99,11 +98,11 @@
                 <div class="2xl:w-[100%] xl:w-[100%] lg:w-[100%] md:w-[40%] sm:w-[40%] mobile:w-full
                     flex flex-col justify-center gap-[12px]">
                     <div class="p-[24px] flex justify-center items-center gap-[16px] bg-[#27C5D0] rounded-[24px]">
-                        <img src="./assets/icons/chat.svg" alt="">
+                        <img ngSrc="./assets/icons/chat.svg" alt="" loading="lazy" height="24" width="25">
                         <p class="b3 text-[#fff]">Написать продавцу</p>
                     </div>
                     <div class="p-[24px] flex justify-center items-center gap-[16px] border border-solid border-[#27C5D0] rounded-[24px]">
-                        <img src="./assets/icons/phone.svg" alt="">
+                        <img ngSrc="./assets/icons/phone.svg" alt="" height="24" width="24" loading="lazy">
                         <p class="b3 text-[#000]">Показать телефон</p>
                     </div>
                     <!--======= ads-date should be here =======-->
@@ -115,7 +114,7 @@
                         <div class="flex justify-start gap-[25px]">
                             <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
                             <div class="flex gap-[5px]">
-                                <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16">
+                                <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16" loading="lazy">
                                 <p class="b5 text-[#C8C8C8]">7 025</p>
                             </div>
                         </div>
@@ -124,7 +123,7 @@
                 <div class="flex flex-col gap-[12px] p-[32px] bg-[#F7F7F7] rounded-[24px]">
                     <h4 class="h4 text-[#262626]">{{sellerName}}</h4>
                     <div class="flex items-center gap-[8px]">
-                        <img src="./assets/icons/location.svg" alt="">
+                        <img ngSrc="./assets/icons/location.svg" alt="" height="24" width="24" loading="lazy">
                         <p class="b3 text-[#000]">{{sellerAddress}}</p>
                     </div>
                 </div>

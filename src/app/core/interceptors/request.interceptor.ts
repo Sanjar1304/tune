@@ -1,9 +1,13 @@
 import {HttpInterceptorFn} from "@angular/common/http";
 import { UserService } from "../services/root/user.service";
 import { inject } from "@angular/core";
+import {TranslocoService} from "@jsverse/transloco";
+
 
 export const requestInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(UserService);
+  const translocoService = inject(TranslocoService);
+  const lang = translocoService.getActiveLang().toUpperCase();
   const header = req.headers
     .set('Content-Type', 'application/json')
     .set('X-Device-Id', '42b6e24e2fc8df5b')
@@ -13,7 +17,7 @@ export const requestInterceptor: HttpInterceptorFn = (req, next) => {
     .set('X-App-Version', '1.0')
     .set('X-App-Build', '1.0')
     .set('X-Device-Model', 'samsung s 24')
-    .set('X-Lang', 'UZB')
+    .set('X-Lang', lang)
     .set('X-Auth-Token', String(token.getToken()) );
 
     const clonedReq = req.clone({headers: header});

@@ -2,18 +2,33 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnIni
 
 import { CarCatalogRes } from '../../../core/constants/carCatalogRes';
 import { SortingModel } from './models/sorting.model';
-import {SortingModelService} from "./sorting-model.service";
-import {TranslocoPipe} from "@jsverse/transloco";
-import { subscribe } from 'diagnostics_channel';
+import {SortingModelService} from "./services/sorting-model.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {DecimalPipe, NgForOf, NgIf} from "@angular/common";
+import {DecimalPipe, NgClass, NgForOf, NgIf, NgOptimizedImage, TitleCasePipe} from "@angular/common";
+import {TranslocoPipe} from "@jsverse/transloco";
+
 
 @Component({
   selector: 'app-sorting-models',
   standalone: true,
-  imports: [TranslocoPipe, NgForOf, NgIf, DecimalPipe],
+  imports: [NgForOf, NgIf, DecimalPipe, NgOptimizedImage, NgClass, TitleCasePipe, TranslocoPipe],
   templateUrl: './sorting-models.component.html',
-  styles: ``,
+  styles: `
+    :host {
+      .btn_animation {
+        transition: .7s ease-in-out
+      }
+
+      .brand_icons {
+        transition: .7s ease-in-out;
+      }
+
+      .brand_icons:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+      }
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SortingModelsComponent implements OnInit{
@@ -23,8 +38,10 @@ export class SortingModelsComponent implements OnInit{
   public carModelsInfo!: CarCatalogRes;
   public selectedModelsInfo!: CarCatalogRes;
   public carModelMenu!: SortingModel[];
+  public selectedModelsLength = 0;
 
   public isSelectedPressed: boolean = false;
+  public activeModel!: SortingModel;
 
   private destroy$ = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
@@ -47,6 +64,10 @@ export class SortingModelsComponent implements OnInit{
             value: val.value
           }));
           this.carModelMenu = this.carModels.filter(val => val.type === 'USING_STATE');
+          if(this.carModelMenu.length > 0){
+            const selectedModel = this.carModelMenu[0];
+            this.selectedActiveButton(selectedModel.type, selectedModel.value)
+          }
           this.isSelectedPressed = false;
           this.cdr.detectChanges();
         },
@@ -55,7 +76,6 @@ export class SortingModelsComponent implements OnInit{
   }
 
   public getCarModelNamesSubscription(isInitialLoad: boolean = false) {
-    // Ensure the correct type here
     const filterStatic = isInitialLoad ? { type: "USING_STATE", value: "-1" } : undefined;
     this.sortingService.getModelsName({ query: '', filterStatic }, { page: 0, size: 10 })
       .pipe(takeUntilDestroyed(this.destroy$))
@@ -74,22 +94,31 @@ export class SortingModelsComponent implements OnInit{
   }
 
   private fetchModelNames(type: string, value: string) {
-    // Ensure the correct format here
     this.sortingService.getModelsName({ query: '', filterStatic: { type, value } }, { page: 0, size: 10 })
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe(res => {
         this.selectedModelsInfo = res as CarCatalogRes;
-        console.log(this.selectedModelsInfo.facets.length)
+        this.selectedModelsLength = this.selectedModelsInfo.items.length;
         this.isSelectedPressed = true;
         this.cdr.detectChanges();
       });
   }
 
-  public remainSelectedModel(type: string, value: string) {
-    this.fetchModelNames(type, value);
+  public remainSelectedModel(menu: SortingModel) {
+    this.activeModel = menu;
+    this.fetchModelNames(menu.type, menu.value);
   }
 
   public getImageValue(type: string, value: string) {
+    this.fetchModelNames(type, value);
+  }
+
+  public selectedActiveButton(type: string, value: string) {
+    const selectedModel = this.carModelMenu.find(model => model.type === type && model.value === value);
+    if (selectedModel) {
+      this.activeModel = selectedModel;
+      this.cdr.markForCheck();
+    }
     this.fetchModelNames(type, value);
   }
 }

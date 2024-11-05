@@ -21,7 +21,6 @@ import { ICarModelList } from './models/cars.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatFormField} from "@angular/material/form-field";
 
-import {TranslocoPipe} from "@jsverse/transloco";
 import {UiSvgIconComponent} from "../../core/components/ui-svg-icon/ui-svg-icon.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
@@ -36,7 +35,6 @@ interface Food {
   imports: [
     NgFor,
     NgIf,
-    TranslocoPipe,
     RouterLink,
     MatCheckbox,
     FormsModule,

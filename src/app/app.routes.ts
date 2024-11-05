@@ -1,11 +1,12 @@
 import { NotAuthorizedGuard } from './core/guards/auth.guard';
 import { Routes } from '@angular/router';
+import {HomeComponent} from "./pages/home/home.component";
 
 export const routes: Routes = [
   {
     path: '',
     data: { breadcrumb: null },
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    component:HomeComponent
   },
   {
     path: 'my-avto',

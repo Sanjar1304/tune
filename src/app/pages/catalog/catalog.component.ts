@@ -4,13 +4,11 @@ import {CatalogSortingComponent} from "./catalog-sorting/catalog-sorting.compone
 import {CommonModule} from "@angular/common";
 import {Component} from '@angular/core';
 import {RouterModule} from "@angular/router";
-import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
   imports: [
-    TranslocoPipe,
     CommonModule,
     RouterModule,
     CatalogSortingComponent,

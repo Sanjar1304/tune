@@ -3,8 +3,8 @@
     <nav class="flex justify-between pb-4">
       <app-breadcrumb></app-breadcrumb>
       <div class="flex gap-2">
-        <img ngSrc="./assets/icons/share.svg" alt="" height="44" width="44">
-        <img ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44">
+        <img ngSrc="./assets/icons/share.svg" alt="" height="44" width="44" loading="lazy">
+        <img ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44" loading="lazy">
       </div>
     </nav>
   </div>
@@ -74,10 +74,10 @@
           <div class="flex gap-2">
             <div class="w-52 h-40 p-2 flex justify-center items-center bg-white rounded-lg hover:cursor-pointer relative">
               <input type="file" accept="image/*" multiple (change)="selectFile($event)" class="opacity-0 absolute z-10 w-52 h-40">
-              <img class="" ngSrc="./assets/icons/gallery-add.svg" alt="" height="40" width="40">
+              <img class="" ngSrc="./assets/icons/gallery-add.svg" alt="" height="40" width="40" loading="lazy">
             </div>
             <div class="flex flex-wrap justify-start gap-2">
-              <img *ngFor="let preview of previews" [src]="preview" class="w-52 h-40 object-cover rounded-lg" alt="Image preview">
+              <img *ngFor="let preview of previews" [src]="preview" class="w-52 h-40 object-cover rounded-lg" alt="Image preview" loading="lazy">
             </div>
           </div>
         </div>

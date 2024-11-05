@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, inject, input, output, signal} from '@angular/core';
-import {CommonModule, NgIf} from "@angular/common";
+import {CommonModule, NgIf, NgOptimizedImage} from "@angular/common";
 import {INavbarMenu, NAVBAR_MENUS} from "../../core/constants/navbar-menus";
 import {
   MatAccordion,
@@ -8,13 +8,18 @@ import {
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {Router, RouterLink} from "@angular/router";
-import {TranslocoPipe, TranslocoService} from "@jsverse/transloco";
 
-import {LocalStorageService} from "../../core/services/utils/localStorage.service";
+
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from '@angular/material/menu';
 import { UiSvgIconComponent } from "../../core/components/ui-svg-icon/ui-svg-icon.component";
 import { UserService } from '../../core/services/root/user.service';
+import {MatOption} from "@angular/material/core";
+import {MatSelect} from "@angular/material/select";
+import {ReactiveFormsModule} from "@angular/forms";
+import {TranslocoPipe, TranslocoService} from "@jsverse/transloco";
+import {LocalStorageService} from "../../core/services/utils/storage.service";
+
 
 @Component({
   selector: 'app-header',
@@ -23,19 +28,22 @@ import { UserService } from '../../core/services/root/user.service';
     MatButtonModule,
     MatMenuModule,
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     NgIf,
-    UiSvgIconComponent
-],
+    UiSvgIconComponent,
+    NgOptimizedImage,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    TranslocoPipe
+  ],
   templateUrl: './header.component.html',
   styles: `
     :host {
-
       .custom-size {
         max-width: none;
         width: auto;
@@ -58,6 +66,10 @@ import { UserService } from '../../core/services/root/user.service';
       }
 
       ::ng-deep {
+        .cdk-overlay-connected-position-bounding-box{
+          top: 55px !important;
+        }
+
         .mat-expansion-panel {
           display: flex !important;
           flex-direction: column !important;
@@ -90,9 +102,10 @@ import { UserService } from '../../core/services/root/user.service';
   `
 })
 export class HeaderComponent implements  OnInit {
+
   public bnwMode = false;
-  public highlightMode = false;
   public dropdownOpen = false;
+  public highlightMode = false;
   public burgerMenuOpen = false;
   public logoutOpen = false;
   public isLoggedIn = false;
@@ -100,15 +113,17 @@ export class HeaderComponent implements  OnInit {
   public closeTrigger = output<boolean>();
   public readonly panelOpenState = signal(false);
 
-  private readonly translocoService = inject(TranslocoService);
-  private readonly localStorage = inject(LocalStorageService);
   private readonly router = inject(Router);
-  private readonly cd = inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
   private userService = inject(UserService);
+  private translocoService = inject(TranslocoService);
+  private storageService = inject(LocalStorageService);
+
 
   public ngOnInit(): void {
     this.applyAccessibility();
-    const savedLocale = this.localStorage.getItem('locale');
+
+    const savedLocale = this.storageService.getItem('locale');
     if (savedLocale) {
       this.translocoService.setActiveLang(savedLocale);
     }
@@ -118,7 +133,6 @@ export class HeaderComponent implements  OnInit {
     })
   }
 
-
   public get navbarMenus(): INavbarMenu[] {
     return NAVBAR_MENUS;
   }
@@ -127,6 +141,7 @@ export class HeaderComponent implements  OnInit {
     return this.translocoService
       .getAvailableLangs()
       .map(lang => typeof lang === 'string' ? lang : lang.label);
+
   }
 
   public get currentLocale(): string {
@@ -135,8 +150,9 @@ export class HeaderComponent implements  OnInit {
 
   public localeSelect(locale: string): void {
     this.translocoService.setActiveLang(locale);
-    this.localStorage.setItem('locale', locale);
+    this.storageService.setItem('locale', locale);
     this.dropdownOpen = false;
+    window.location.reload();
   }
 
   public toggleDropdown(): void {

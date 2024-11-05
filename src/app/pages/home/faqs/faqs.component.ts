@@ -1,5 +1,8 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {MatExpansionModule} from "@angular/material/expansion";
+import {FaqsService} from "./services/faqs.service";
+import {FaqsModel} from "./models/faqs.model";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
@@ -81,6 +84,29 @@ import {TranslocoPipe} from "@jsverse/transloco";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FaqsComponent {
+export class FaqsComponent implements OnInit{
   readonly panelOpenState = signal(false);
+
+  faqList!: FaqsModel
+
+  private cdr = inject(ChangeDetectorRef);
+  private destroy$ = inject(DestroyRef);
+  private faqService = inject(FaqsService);
+
+
+  public ngOnInit() {
+    this.faqSubscription();
+  }
+
+  public  faqSubscription(){
+    this.faqService.getFaqsData({page: 0, size: 10, filter: {productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6', faqProductType: 'ALL', }})
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.faqList = res as unknown as FaqsModel;
+          this.cdr.detectChanges();
+        },
+        error: err => console.log(err)
+      })
+  }
 }

@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
+import {QuestionService} from "./services/question.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from "@angular/forms";
 import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-question-form',
   standalone: true,
-  imports: [TranslocoPipe],
+  imports: [NgOptimizedImage, ReactiveFormsModule, FormsModule, TranslocoPipe],
   templateUrl: './question-form.component.html',
   styles: `
      .checkbox-custom {
@@ -106,6 +116,44 @@ import {TranslocoPipe} from "@jsverse/transloco";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuestionFormComponent {
+export class QuestionFormComponent implements OnInit{
 
+  questionForm!: FormGroup;
+  isButtonChecked: boolean = false
+
+  private fb = inject(FormBuilder);
+  private destroy$ = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  private questionService = inject(QuestionService);
+
+  public ngOnInit(){
+    this.questionForm = this.fb.group({
+      fullName: ['',[ Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      phoneNumber: ['', [Validators.required, Validators.minLength(12), Validators.maxLength(12), Validators.pattern('^[0-9]*$')]]
+    })
+    this.isCheckboxClicked();
+  }
+
+  public isCheckboxClicked() {
+    this.isButtonChecked = !this.isButtonChecked;
+  }
+
+  public subscribeQuestion(form: FormGroup){
+    if (this.questionForm.valid) {
+      console.log('Form submitted:', this.questionForm.value);
+    }
+    const fullName = form.get('fullName')?.value;
+    const phoneNumber = form.get('phoneNumber')?.value;
+
+
+    this.questionService.sendQuestion({fullName:fullName, phoneNumber: phoneNumber, email:null, productId: null, productType:'ALL'})
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          console.log(res)
+          this.cdr.detectChanges();
+        },
+        error: err => console.log(err)
+    })
+  }
 }

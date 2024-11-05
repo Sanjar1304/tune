@@ -2,13 +2,13 @@
     <div class="flex flex-col lg:gap-[24px] sm:gap-[12px] mobile:gap-[8px]">
         <div class="flex justify-between rounded-[30px] bg-custom-gradient relative mobile:h-[430px] mobile:relative overflow-hidden hover:cursor-pointer bg-banner-gradient">
             <div class="lg:pt-[50px] lg:pb-[50px] lg:pl-[50px]
-                         md:pt-[40px] md:pb-[40px] md:pl-[40px]
-                         mobile:w-full mobile:p-[24px]
-                         flex flex-col mobile:justify-between lg:gap-[94px]">
+                        md:pt-[40px] md:pb-[40px] md:pl-[40px]
+                        mobile:w-full mobile:p-[24px]
+                        flex flex-col mobile:justify-between justify-between">
                 <div class="flex flex-col lg:gap-[24px] sm:gap-[20px] mobile:gap-[16px] z-[9999]">
                     @if(bannerList && bannerList[currentIndex]){
-                      <h1 class="h1 w-[50%] text-left text-[#000]">{{bannerList[currentIndex].title}}</h1>
-                      <h3 class="b2 w-[40%] text-left text-[#000]">{{bannerList[currentIndex].description}}</h3>
+                      <h1 class="h1 w-[50%] text-left text-[#fff]">{{bannerList[currentIndex].title}}</h1>
+                      <h3 class="b2 w-[40%] text-left text-[#fff]">{{bannerList[currentIndex].description}}</h3>
                     }
                 </div>
                 @if(bannerList && bannerList[currentIndex]){
@@ -16,7 +16,7 @@
                 }
             </div>
             @if(bannerList && bannerList[currentIndex]){
-              <img class="absolute mobile:absolute lg:right-[0px] md:right-[-320px] md:bottom-0 mobile:bottom-0 mobile:z-[1]" [src]="bannerList[currentIndex].imageUrl" alt="Slide">
+              <img class="absolute mobile:absolute lg:right-[0px] md:right-[-320px] md:bottom-0 mobile:bottom-0 mobile:z-[1]" [src]="bannerList[currentIndex].imageUrl" alt="Slide" loading="lazy">
             }
         </div>
         <div class="w-[100%] flex lg:gap-[24px] md:gap-[16px]">
@@ -31,7 +31,7 @@
                             <h3 class="b1">{{slide.title}}</h3>
                             <h3 class="b5 w-2/3">{{slide.description}}</h3>
                         </div>
-                        <img class="w-[172px] absolute bottom-[-7px] right-[-20px]" [src]="slide.imageUrl" alt="Slide">
+                        <img class="w-[172px] absolute bottom-[-7px] right-[-20px]" [src]="slide.imageUrl" alt="Slide" loading="lazy">
                     </div>
                 </div>
               }@empty {

@@ -46,7 +46,8 @@ export class AuthService {
       { username, userType }).pipe(
       map(response => {
         this.userCheckResponse = response;
-        return this.sessionService.handleResponse<UserCheckResponseModel>(response);
+        this.sessionService.handleResponse<UserCheckResponseModel>(response);
+        return response.result.data
       }),
       catchError(this.sessionService.handleError)
     );
@@ -54,10 +55,12 @@ export class AuthService {
 
 
   public sendOtpCode(identity: string, code:string): Observable<UserVerifyResponseModel | null>{
+
     return this.http.post<BackendResponseModel<UserVerifyResponseModel>>(`${this.API_URL}external/sign/user/verify`, {identity, code}).pipe(
       map(res => {
         this.encryptKey = res;
-        return this.sessionService.handleResponse<UserVerifyResponseModel>(res);
+        this.sessionService.handleResponse<UserVerifyResponseModel>(res);
+        return res.result.data
       }),
       catchError(this.sessionService.handleError)
     )
@@ -66,7 +69,8 @@ export class AuthService {
   public sendEncryptedLoginPassword(identity: string, password:string): Observable<UserDataDto | null> {
     return this.http.post<BackendResponseModel<UserDataDto>>(`${this.API_URL}external/sign/up-in`, {identity, password}).pipe(
       map(res => {
-        return this.sessionService.handleResponse<UserDataDto>(res);
+        this.sessionService.handleResponse(res);
+        return res.result.data
       }),
       catchError(this.sessionService.handleError)
     )

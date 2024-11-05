@@ -1,7 +1,7 @@
 <section class="container mx-auto flex flex-col lg:gap-[40px] md:gap-[32px] sm:gap-[32px] mobile:gap-[32px]">
   <h2 class="lg:block md:hidden sm:hidden mobile:hidden h2 text-[#262626]">{{"calculateCreditPage.title1" | transloco}}</h2>
   <h2 class="lg:hidden md:block h2 text-[#262626]">{{"calculateCreditPage.title2" | transloco}}</h2>
-  <div class="lg:block md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
+  <div class="md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">1</p>
       <p class="b1 text-[#262626]">{{"calculateCreditPage.cards.card1" | transloco}}</p>
@@ -25,7 +25,7 @@
         <h3 class="b3">{{"calculateCreditPage.slider1.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
           <h3 class="h3"> {{ slider.value | customCurrency}} </h3>
-          <img src="./assets/icons/editing-icon.svg" alt="edit icon">
+          <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18" loading="lazy">
         </div>
         <div class="">
           <mat-slider
@@ -46,7 +46,7 @@
         <h3 class="b3">{{"calculateCreditPage.slider2.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
           <h3 class="h3">{{slider2.value}} {{"calculateCreditPage.slider2.year" | transloco}}</h3>
-          <img src="./assets/icons/editing-icon.svg" alt="edit icon">
+          <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18" loading="lazy">
         </div>
         <div class="">
           <mat-slider
@@ -67,7 +67,7 @@
         <h3 class="b3">{{"calculateCreditPage.slider3.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
           <h3 class="h3">{{slider3.value }} % </h3>
-          <img src="./assets/icons/editing-icon.svg" alt="edit icon">
+          <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18" loading="lazy">
         </div>
         <div class="">
           <mat-slider
@@ -93,7 +93,7 @@
     </div>
 
     <div class="lg:w-[50%] md:w-[100%]
-                pt-[50px] px-[50px] lg:pb-[87px] md:pb-[50px] sm:p-[24px] mobile:p-[24px]
+                py-[100px] px-[50px] lg:pb-[87px] md:pb-[50px] sm:p-[24px] mobile:p-[24px]
                 flex flex-col justify-between
                 lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px]
                 rounded-[30px] bg-[#fff]">
@@ -109,13 +109,13 @@
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title3" | transloco}}</p>
         <h2 class="h2 text-[#262626]">17%</h2>
       </div>
-      <div class="flex lg:items-center md:items-center
-                  2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-col mobile:flex-col
-                  lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px] sm:pt-[8px] mobile:pt-[8px]
-                  ">
-        <button class="b4 py-[16px] px-[28px] rounded-[14px] bg-[#27C5D0] text-[#fff]">{{"buttonTexts.calculateCreditBtn" | transloco}}</button>
-        <p class="b6 text-[#262626]">{{"calculateCreditPage.sideCard.condition" | transloco}}</p>
-      </div>
+<!--      <div class="flex lg:items-center md:items-center-->
+<!--                  2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-col mobile:flex-col-->
+<!--                  lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px] sm:pt-[8px] mobile:pt-[8px]-->
+<!--                  ">-->
+<!--        <button class="b4 py-[16px] px-[28px] rounded-[14px] bg-[#27C5D0] text-[#fff]">{{"buttonTexts.calculateCreditBtn" | transloco}}</button>-->
+<!--        <p class="b6 text-[#262626]">{{"calculateCreditPage.sideCard.condition" | transloco}}</p>-->
+<!--      </div>-->
     </div>
   </div>
 </section>

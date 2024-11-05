@@ -1,19 +1,19 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
-import {NgClass, NgIf, NgOptimizedImage, SlicePipe} from "@angular/common";
+import {AsyncPipe, NgClass, NgIf, NgOptimizedImage, SlicePipe} from "@angular/common";
 
-import {TranslocoPipe} from "@jsverse/transloco";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
-import {BannerRequestService} from "./banner.request.service";
+import {BannerRequestService} from "./services/banner.request.service";
 import {Banner, BannerRes} from "../../../core/constants/bannerRes";
 import {Router} from "@angular/router";
 import {environment} from "../../../../environments/environment";
+import {shareReplay, take} from "rxjs";
 
 
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [NgClass, TranslocoPipe, SlicePipe, NgOptimizedImage, NgIf],
+  imports: [NgClass, SlicePipe, NgOptimizedImage, NgIf, AsyncPipe],
   templateUrl: './slider.component.html',
   styles: `
     :host {
@@ -79,8 +79,8 @@ export class SliderComponent implements OnInit, OnDestroy {
 
   currentIndex = 0;
   timer: any;
-  transitionDuration = 5000; // duration for each slide in milliseconds
-  banners!: BannerRes;
+  transitionDuration = 5000;
+  banners: BannerRes | null = null;
   bannerList: Banner[] = [];
   API_URL = `${environment.API_BASE}`
 
@@ -90,17 +90,17 @@ export class SliderComponent implements OnInit, OnDestroy {
   private bannerService = inject(BannerRequestService);
 
   ngOnInit(): void {
-    this.startAutoSlide();
     this.getBannersSubscription();
   }
 
   public getBannersSubscription(){
     this.bannerService.getBanner(0, 10)
-      .pipe(takeUntilDestroyed(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroy$), shareReplay(1))
       .subscribe({
         next: res => {
-          this.banners = res as BannerRes;
-          this.bannerList = this.banners.items.map(val => val.banner)
+          this.banners = res as unknown as BannerRes;
+          this.bannerList = this.banners.items.map(val => val.banner);
+          this.startAutoSlide();
           this.cdr.detectChanges();
         },
         error: err => console.log('slider from backend: ', err)
@@ -113,20 +113,31 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`${this.API_URL}${url}`);
   }
 
-
   ngOnDestroy() {
     clearInterval(this.timer);
   }
 
-  startAutoSlide() {
-    this.timer = setInterval(() => {
+  public startAutoSlide() {
+    this.timer = setTimeout(() => {
       this.currentIndex = (this.currentIndex + 1) % this.bannerList.length;
+      this.cdr.detectChanges();
     }, this.transitionDuration);
   }
 
-  setCurrentIndex(index: number) {
+  public setCurrentIndex(index: number) {
     this.currentIndex = index;
-    clearInterval(this.timer);
+    this.resetAutoSlide();
+  }
+
+  private resetAutoSlide() {
+    this.clearAutoSlide();
     this.startAutoSlide();
+  }
+
+  private clearAutoSlide() {
+    // if (this.timer) {
+    //   (this.timer);
+    // }
+    return this.timer
   }
 }

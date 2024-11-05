@@ -1,11 +1,11 @@
 import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../environments/environment";
-import {SessionService} from "../../../core/services/root/sessionService";
+import {environment} from "../../../../../environments/environment";
+import {SessionService} from "../../../../core/services/root/sessionService";
 import {catchError, map, Observable} from "rxjs";
-import {BackendResponseModel} from "../../../core/models/backend-response.model";
-import { SortingModel } from "./models/sorting.model";
-import { CarCatalogRes } from "../../../core/constants/carCatalogRes";
+import {BackendResponseModel} from "../../../../core/models/backend-response.model";
+import { SortingModel } from "../models/sorting.model";
+import { CarCatalogRes } from "../../../../core/constants/carCatalogRes";
 
 @Injectable({
   providedIn: 'root'

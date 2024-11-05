@@ -8,18 +8,19 @@ import {
   Output,
   inject
 } from '@angular/core';
-import {DecimalPipe, JsonPipe, NgFor, NgIf, SlicePipe} from "@angular/common";
+import {AsyncPipe, DecimalPipe, JsonPipe, NgFor, NgIf, NgOptimizedImage, SlicePipe} from "@angular/common";
 
 import { CarCatalogRes } from '../../../core/constants/carCatalogRes';
 import {CatalogCardsService} from "../../catalog/catalog-cards/services/catalog-cards.service";
 import {Router} from "@angular/router";
-import {TranslocoPipe} from "@jsverse/transloco";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {TranslocoPipe} from "@jsverse/transloco";
+
 
 @Component({
   selector: 'app-recommendation-cards',
   standalone: true,
-  imports: [TranslocoPipe, SlicePipe, NgIf, NgFor, JsonPipe, DecimalPipe],
+  imports: [SlicePipe, NgIf, NgFor, JsonPipe, DecimalPipe, NgOptimizedImage, AsyncPipe, TranslocoPipe],
   templateUrl: './recommendation-cards.component.html',
   styles: `
     .custom {
@@ -30,21 +31,12 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 })
 export class RecommendationCardsComponent implements OnInit{
 
+  bg_color = 'green';
+  cardsPerPage: number = 6;
   carCards!: CarCatalogRes;
-  brandName: string = '';
-  carName: string = '';
-  productionYear: string = ''
-  mileage: string = '';
-  fuelType: string = '';
-  transmission: string = '';
+  displayedCards: any[] = [];
 
   @Output() cardSelected: EventEmitter<string> = new EventEmitter<string>();
-  carDetails: {
-    name: string[];
-    valueTranslate: string[];
-    id: number[];
-    value: string[];
-    slug: string[] }[] = [];
 
   private destroy$ = inject(DestroyRef);
   private router = inject(Router);
@@ -60,19 +52,16 @@ export class RecommendationCardsComponent implements OnInit{
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
-          this.carCards = res as CarCatalogRes;
-
-          this.carDetails = this.carCards.items.map(prop => ({
-            id: prop.resProperties.map(val => val.id),
-            slug: prop.resProperties.map(val => val.slug),
-            name: prop.resProperties.map(val => val.name),
-            value: prop.resProperties.map(val => val.value),
-            valueTranslate: prop.resProperties.map(val => val.valueTranslate)
-          }));
+          this.carCards = res as unknown as CarCatalogRes;
+          this.loadInitialCards();
           this.cdr.markForCheck();
         },
         error: err => console.log(err)
       })
+  }
+
+  private loadInitialCards() {
+    this.displayedCards = this.carCards.items.slice(0, this.cardsPerPage);
   }
 
   public openCardContent(id: string){
