@@ -1,7 +1,7 @@
 <section class="pt-[24px]">
     <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
         <div class="container mx-auto  flex justify-between pb-[16px]">
-            <app-breadcrumb></app-breadcrumb>
+<!--            <app-breadcrumb></app-breadcrumb>-->
             <div class="flex gap-[8px]">
                 <img class="" ngSrc="./assets/icons/share.svg" alt="" height="44" width="44" loading="lazy">
                 <img class="" ngSrc="./assets/icons/heart.svg" alt="" height="44" width="44" loading="lazy">
@@ -65,9 +65,12 @@
                     </div>
                     <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden mobile:hidden justify-between 2xl:flex-nowrap xl:flex-nowrap lg:flex-wrap">
                         <div class="flex gap-[8px]">
-                            <p class="b5 text-[#C8C8C8]">Объявление</p>
+                            <p class="b5 text-[#C8C8C8]">{{"carDetailPage.createdAtItems.ads" | transloco}}</p>
                             <p class="b5 text-[#C8C8C8]">1124105141</p>
-                            <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
+                            <p class="b5 text-[#C8C8C8]">
+                              {{"carDetailPage.createdAtItems.adsData.from" | transloco}} 10 июля 2024
+                              {{"carDetailPage.createdAtItems.adsData.year" | transloco}}
+                            </p>
                         </div>
                         <div class="flex justify-center items-center gap-[6px]">
                             <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16" loading="lazy">
@@ -99,20 +102,23 @@
                     flex flex-col justify-center gap-[12px]">
                     <div class="p-[24px] flex justify-center items-center gap-[16px] bg-[#27C5D0] rounded-[24px]">
                         <img ngSrc="./assets/icons/chat.svg" alt="" loading="lazy" height="24" width="25">
-                        <p class="b3 text-[#fff]">Написать продавцу</p>
+                        <p class="b3 text-[#fff]">{{"carDetailPage.createdAtItems.btn_write" | transloco}}</p>
                     </div>
                     <div class="p-[24px] flex justify-center items-center gap-[16px] border border-solid border-[#27C5D0] rounded-[24px]">
                         <img ngSrc="./assets/icons/phone.svg" alt="" height="24" width="24" loading="lazy">
-                        <p class="b3 text-[#000]">Показать телефон</p>
+                        <p class="b3 text-[#000]">{{ "carDetailPage.createdAtItems.btn_tel" | transloco}}</p>
                     </div>
                     <!--======= ads-date should be here =======-->
                     <div [ngClass]="{'flex': isFlexVisible(), 'hidden': isHidden()}" class="flex flex-col justify-between">
                         <div class="flex gap-[8px]">
-                            <p class="b5 text-[#C8C8C8]">Объявление</p>
+                            <p class="b5 text-[#C8C8C8]">{{"carDetailPage.createdAtItems.ads" | transloco}}</p>
                             <p class="b5 text-[#C8C8C8]">1124105141</p>
                         </div>
                         <div class="flex justify-start gap-[25px]">
-                            <p class="b5 text-[#C8C8C8]">от 10 июля 2024 г.</p>
+                            <p class="b5 text-[#C8C8C8]">
+                              {{"carDetailPage.createdAtItems.adsData.from" | transloco}} 10 июля 2024
+                              {{"carDetailPage.createdAtItems.adsData.year" | transloco}}
+                            </p>
                             <div class="flex gap-[5px]">
                                 <img class="" ngSrc="./assets/icons/eye-silver.svg" alt="" height="16" width="16" loading="lazy">
                                 <p class="b5 text-[#C8C8C8]">7 025</p>

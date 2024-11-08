@@ -1,9 +1,10 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 
 import { BreadCrumb } from '../../models/breadcrumb.model';
 import { BreadcrumbService } from '../../services/utils/breadcrumb.service';
-import { RouterLink } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-breadcrumb',
@@ -20,7 +21,7 @@ export class BreadcrumbComponent implements OnInit {
 
   breadcrumbs: BreadCrumb[] = [];
 
-  constructor(public breadcrumbService: BreadcrumbService) {}
+  public breadcrumbService = inject(BreadcrumbService)
 
   ngOnInit(): void {
     this.breadcrumbService.breadcrumbs$.subscribe((breadcrumbs) => {

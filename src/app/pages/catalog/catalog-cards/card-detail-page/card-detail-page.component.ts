@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {DecimalPipe, NgClass, NgFor, NgIf, NgOptimizedImage} from "@angular/common";
 
-import { BreadcrumbComponent } from "../../../../core/components/breadcrumb/breadcrumb.component";
+// import { BreadcrumbComponent } from "../../../../core/components/breadcrumb/breadcrumb.component";
 import { BreadcrumbService } from "../../../../core/services/utils/breadcrumb.service";
 import {CalculateCreditComponent} from "../../../home/calculate-credit/calculate-credit.component";
 import {CardDetailCalculatorComponent} from "./card-detail-calculator/card-detail-calculator.component";
@@ -21,6 +21,8 @@ import {ICard} from "../../../../core/constants/cards";
 import {RecommendationCardsComponent} from "../../../home/recommendation-cards/recommendation-cards.component";
 import {filter} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {LanguageService} from "../../../../core/services/utils/language.service";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-card-detail-page',
@@ -33,10 +35,10 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
     CustomCurrencyPipe,
     NgIf,
     NgFor,
-    BreadcrumbComponent,
     DecimalPipe,
     NgClass,
-    NgOptimizedImage
+    NgOptimizedImage,
+    TranslocoPipe
   ],
   templateUrl: './card-detail-page.component.html',
   styles: `
@@ -76,6 +78,28 @@ export class CardDetailPageComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private catalogCardsService = inject(CatalogCardsService);
   private breadcrumbService = inject(BreadcrumbService);
+  private languageService = inject(LanguageService);
+
+  public ngOnInit() {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.scrollToTop();
+      });
+
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(params => {
+        const id = params.get('id');
+        if (id) {
+          this.languageService.currentLanguage$
+            .pipe(takeUntilDestroyed(this.destroy$))
+            .subscribe(() => {
+              this.loadCardDetails(id);
+          })
+        }
+      });
+  }
 
 
   @HostListener('window:resize', ['$event'])
@@ -91,22 +115,7 @@ export class CardDetailPageComponent implements OnInit {
     return this.innerWidth >= 375 && this.innerWidth <= 767 || this.innerWidth > 1023;
   }
 
-  public ngOnInit() {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.scrollToTop();
-      });
 
-    this.route.paramMap
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.loadCardDetails(id);
-      }
-    });
-  }
 
   public loadCardDetails(id: string): void {
     this.catalogCardsService.getCarById(id)
@@ -140,7 +149,7 @@ export class CardDetailPageComponent implements OnInit {
               valueTranslate: prop.valueTranslate
             }));
 
-            this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
+            // this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
 
             this.scrollToTop();
             this.cdr.detectChanges();
@@ -151,9 +160,6 @@ export class CardDetailPageComponent implements OnInit {
       });
   }
 
-  // public get carData(){
-  //   return this.carInfos = this.carInfos.slice(2, this.carInfos.length-3)
-  // }
 
   private scrollToTop() {
     setTimeout(() => {

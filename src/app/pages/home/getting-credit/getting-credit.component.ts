@@ -1,11 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {AsyncPipe, NgOptimizedImage} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {GettingCreditService} from "./services/getting-credit.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {GettingCreditModel} from "./models/getting-credit.model";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 @Component({
   selector: 'app-getting-credit',
   standalone: true,
-  imports: [NgOptimizedImage, TranslocoPipe],
+  imports: [NgOptimizedImage, TranslocoPipe, AsyncPipe],
   templateUrl: './getting-credit.component.html',
   styles: `
     .custom-bullets {
@@ -37,6 +41,32 @@ import {TranslocoPipe} from "@jsverse/transloco";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GettingCreditComponent {
+export class GettingCreditComponent implements OnInit{
 
+  gettingCreditsList!: GettingCreditModel;
+
+  private destroy$ = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  private gettingCreditService = inject(GettingCreditService);
+  private languageService = inject(LanguageService);
+
+  public ngOnInit() {
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.gettingCreditSubscription();
+      })
+  }
+
+  public gettingCreditSubscription(){
+    this.gettingCreditService.getCreditInfos()
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.gettingCreditsList = res as unknown as GettingCreditModel;
+          this.cdr.detectChanges();
+        },
+        error: err => console.log(err)
+      })
+  }
 }

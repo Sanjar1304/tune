@@ -7,7 +7,7 @@ export interface INavbarMenu {
 export const NAVBAR_MENUS: INavbarMenu[] = [
   {
     label:"headerMenu.menuTab.myAvto",
-    path:"/my-avto",
+    path:"/",
     id: "0"
   },
   {

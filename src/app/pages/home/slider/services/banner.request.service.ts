@@ -25,10 +25,7 @@ export class BannerRequestService {
     };
     return this.http.post<BackendResponseModel<BannerRes>>(`${this.API_URL}/carousel/list`, requestBody)
       .pipe(
-        map( (response) => {
-          console.log(typeof response)
-          return this.sessionService.handleResponse<BannerRes>(response)
-        }),
+        map(this.sessionService.handleResponse<BannerRes>),
         catchError(error => {
           this.sessionService.handleError(error)
           return of(null as unknown as BannerRes)

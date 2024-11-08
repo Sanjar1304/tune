@@ -6,6 +6,7 @@ import {SortingModelService} from "./services/sorting-model.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {DecimalPipe, NgClass, NgForOf, NgIf, NgOptimizedImage, TitleCasePipe} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 
 @Component({
@@ -46,10 +47,16 @@ export class SortingModelsComponent implements OnInit{
   private destroy$ = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
   private sortingService = inject(SortingModelService);
+  private languageService = inject(LanguageService);
 
   public ngOnInit() {
-    this.getModelsSubscription();
-    this.getCarModelNamesSubscription();
+
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.getModelsSubscription();
+        this.getCarModelNamesSubscription();
+      })
   }
 
   public getModelsSubscription() {

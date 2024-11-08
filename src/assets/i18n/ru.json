@@ -4,12 +4,15 @@
   },
   "headerMenu" : {
     "menuTab": {
+      "home": "Главная",
       "myAvto": "MyAuto",
       "catalog": "Каталог",
       "carCredit": "Автокредит",
       "carInsurance": "Автострахование",
-      "applyDocs": "Оформление документов"
-    }
+      "applyDocs": "Оформление документов",
+      "addsCreate": "Создать объявление"
+    },
+    "searchPlaceholder": "Поиск"
   },
   "sliderHomePage": {
     "title": "Автокредит под 25% годовых",
@@ -217,6 +220,68 @@
     "sorting_btn_2": "предложений",
     "recommendationBtn": "Перейти в католог",
     "orderPhoneBtn": "Заказать звонок",
-    "calculateCreditBtn": "Перейти к оформлению"
+    "calculateCreditBtn": "Перейти к оформлению",
+    "createAds": "Подать объявление",
+    "logout": "Выйти"
+  },
+  "catalogSortingSection": {
+    "title": "Купить автомобиль в Ташкенте",
+    "button": {
+      "all": "Все",
+      "new": "Новый",
+      "withMileage": "С пробегом",
+      "show": "Показать",
+      "clear": "Очистить"
+    },
+    "sideForm": {
+      "title": "Узнайте, сколько стоит ваш автомобиль",
+      "button": "Оценить бесплатно",
+      "subText": "Ввести параметры вручную"
+    }
+  },
+  "catalogPageItems":{
+    "cardsLength": "Объявлений",
+    "button": "Сортировать",
+    "more_btn": "Загрузить еще"
+  },
+  "carDetailPage": {
+    "createdAtItems": {
+      "ads": "Объявление",
+      "adsData": {
+        "from": "от",
+        "year": "г."
+      },
+      "btn_write": "Написать продавцу",
+      "btn_tel": "Показать телефон"
+    },
+    "calculator": {
+      "title": "Рассчитайте условия и отправьте заявку по кредиту",
+      "calcCards": {
+        "card1": "Оставьте заявку онлайн",
+        "card2": "Дождитесь одобрения банком",
+        "card3": "Получите деньги в офисе банка",
+        "card4": "Получите деньги в офисе банка"
+      },
+      "calculator": "Калькулятор",
+      "calcSelection": "Автокредит my car",
+      "calcType": {
+        "title": "Тип погашения",
+        "aniutet": "Аннунитеный",
+        "differential": "Дифференцированный"
+      },
+      "creditSumma": "Сумма кредита",
+      "initialPay": "Первоначальный взнос",
+      "creditDuration": "Срок кредита",
+      "interest": "Процентная ставка",
+      "application": {
+        "title": "Контактные данные",
+        "agreement": {
+          "text1": "Заполняя форму, я принимаю",
+          "link": "условия передачи информации",
+          "text2": "и даю согласие на получение информации о продуктах и услугах Банка и партнеров"
+        },
+        "btn": "Отправить заявку"
+      }
+    }
   }
 }

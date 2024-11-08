@@ -4,12 +4,15 @@
   },
   "headerMenu": {
     "menuTab": {
+      "home": "Home",
       "myAvto": "MyAuto",
       "catalog": "Catalog",
       "carCredit": "Car loan",
       "carInsurance": "Car insurance",
-      "applyDocs": "Registration of documents"
-    }
+      "applyDocs": "Registration of documents",
+      "addsCreate": "Create an ad"
+    },
+    "searchPlaceholder": "Search"
   },
   "sliderHomePage": {
     "title": "Car loan at 25% per year",
@@ -217,6 +220,69 @@
     "sorting_btn_2": "offers",
     "recommendationBtn": "Go to the catalog",
     "orderPhoneBtn": "Request a call",
-    "calculateCreditBtn": "Proceed to checkout"
+    "calculateCreditBtn": "Proceed to checkout",
+    "createAds": "Submit an ad",
+    "logout": "Log out"
+  },
+  "catalogSortingSection": {
+    "title": "Buy a car in Tashkent",
+    "button": {
+      "all": "All",
+      "new": "New",
+      "withMileage": "With mileage",
+      "show": "Show",
+      "clear": "Clear"
+    },
+    "sideForm": {
+      "title": "Find out how much your car is worth",
+      "button": "Rate for free",
+      "subText": "Enter parameters manually"
+    }
+  },
+  "catalogPageItems":{
+    "cardsLength": "Ads",
+    "button": "Sort",
+    "more_btn": "Load more"
+  },
+  "carDetailPage": {
+    "createdAtItems": {
+      "ads": "Ads",
+      "adsData": {
+        "from": "from",
+        "year": "y."
+      },
+      "btn_write": "Write to the seller",
+      "btn_tel": "Show telephone"
+    },
+    "calculator": {
+      "title": "Calculate the terms and submit a loan application",
+      "calcCards": {
+        "card1": "Leave a request online",
+        "card2": "Wait for bank approval",
+        "card3": "Receive money at the bank office",
+        "card4": "Receive money at the bank office"
+      },
+      "calculator": "Calculator",
+      "calcSelection": "Auto loan my car",
+      "calcType": {
+        "title": "Repayment type",
+        "aniutet": "Annunite",
+        "differential": "Differential"
+      },
+      "creditSumma": "Loan amount",
+      "initialPay": "Initial payment",
+      "creditDuration": "Loan term",
+      "interest": "Interest rate",
+      "application": {
+        "title": "Contact details",
+        "agreement": {
+          "text1": "By filling out the form, I accept",
+          "link": "conditions for the transfer of information",
+          "text2": "and I agree to receive information about the products and services of the Bank and its partners"
+        },
+        "btn": "Submit request"
+      }
+    }
   }
+
 }

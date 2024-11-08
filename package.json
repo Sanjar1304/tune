@@ -29,9 +29,11 @@
     "jsencrypt": "^3.3.2",
     "ng-otp-input": "^1.9.3",
     "ngx-cookie-service": "^18.0.0",
+    "ngx-sonner": "^2.0.2",
     "ngx-toastr": "^19.0.0",
     "node-rsa": "^1.1.1",
     "rxjs": "~7.8.0",
+    "sonner": "^1.7.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

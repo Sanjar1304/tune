@@ -1,9 +1,12 @@
-import {ChangeDetectionStrategy, Component, Pipe} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {MatSliderModule} from "@angular/material/slider";
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {CustomCurrencyPipe} from "../../../shared/pipes/custom-currency.pipe";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {CalculateService} from "./services/calculate.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {CalculateModel} from "./models/calculate.model";
 
 @Component({
   selector: 'app-calculate-credit',
@@ -14,7 +17,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
     CommonModule,
     CustomCurrencyPipe,
     NgOptimizedImage,
-    TranslocoPipe
+    TranslocoPipe,
+    ReactiveFormsModule
   ],
   templateUrl: './calculate-credit.component.html',
   styles: `
@@ -86,24 +90,61 @@ import {TranslocoPipe} from "@jsverse/transloco";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalculateCreditComponent {
-  step:number = 1;
+export class CalculateCreditComponent implements OnInit{
 
+  step:number = 1;
   maxPrice: number = 100000000;
   minPrice: number = 1000000;
   price: number = 1000000;
+  minYear: number = 3;
+  maxYear: number = 60;
+  maxPercent: number = 100000000;
+  minPercent: number = 0;
 
-  minYear = 0;
-  maxYear = 15;
-  year = 0;
+  calcResults!: CalculateModel;
 
-  maxPercent = 50;
-  minPercent = 0;
-  firstPay = 0;
+  interest: number | undefined = 0;
+  totalPayment: number | undefined = 0;
+  monthlyPayment: number | undefined = 0;
 
+  calculatorForm!: FormGroup;
 
-  // formatCurrency(value: number, currencyCode: string = 'UZS'): string {
-  //   const formattedValue = value.toLocaleString('en-US').replace(/,/g, ' ');
-  //   return `${formattedValue} ${currencyCode}`;
-  // }
+  private fb = inject(FormBuilder);
+  private destroy$ = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  private calculateService = inject(CalculateService);
+
+  public ngOnInit() {
+    this.validateCalculatorForm();
+  }
+
+  public validateCalculatorForm(){
+    this.calculatorForm = this.fb.group({
+      amount: [1000000, Validators.required],
+      term: [3, Validators.required],
+      initialAmount: [1000000,Validators.required]
+    })
+  }
+
+  onSliderChange(): void {
+    console.log('Current Form Values:', this.calculatorForm.value);
+
+    if (this.calculatorForm.valid) {
+      this.calculateService.calculateData(this.calculatorForm.value)
+        .pipe(takeUntilDestroyed(this.destroy$))
+        .subscribe({
+          next: res => {
+            this.calcResults = res as unknown as CalculateModel;
+            this.interest = res?.interest;
+            this.monthlyPayment =  res?.monthlyAmount.amount;
+            this.totalPayment = res?.totalPaymentAmount.amount;
+            this.cdr.detectChanges();
+          },
+          error: err => console.error('Error in calculation:', err)
+        });
+    } else {
+      console.error('Form is invalid:', this.calculatorForm.errors);
+    }
+  }
+
 }

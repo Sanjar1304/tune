@@ -1,11 +1,11 @@
 <section class="container mx-auto pt-[40px] pb-[60px] flex flex-col gap-[40px]">
-    <h1 class="h1 text-[#262626]">Купить автомобиль в Ташкенте</h1>
+    <h1 class="h1 text-[#262626]">{{ 'catalogSortingSection.title' | transloco}}</h1>
     <div class="flex 2xl:flex-row xl:flex-row lg:flex-col md:flex-col sm:flex-col mobile:flex-col gap-[24px]">
         <div class="2xl:w-3/4 xl:w-3/4 lg:w-full md:w-full p-[24px] flex flex-col gap-[20px] bg-[#F3F3F3] rounded-[16px]">
             <div class="2xl:w-[34%] xl:w-[45%] lg:w-[40%] md:w-[50%] sm:w-[60%] mobile:w-full flex gap-[2px] p-[6px] border border-solid border-[#E8E8E8] rounded-[12px]">
-                <button class="b2 py-[6px] px-[18px] bg-[#fff] rounded-[6px]">Все</button>
-                <button class="b2 py-[6px] px-[18px] rounded-[6px]">Новые</button>
-                <button class="b2 py-[6px] px-[18px] rounded-[6px]">С пробегом</button>
+                <button class="b2 py-[6px] px-[18px] bg-[#fff] rounded-[6px]">{{'catalogSortingSection.button.all' | transloco}}</button>
+                <button class="b2 py-[6px] px-[18px] rounded-[6px]">{{'catalogSortingSection.button.new' | transloco}}</button>
+                <button class="b2 py-[6px] px-[18px] rounded-[6px]">{{'catalogSortingSection.button.withMileage' | transloco}}</button>
             </div>
 
             <!--===== DESKTOP SCREEN SIZE FORM 1024 and larger =====-->
@@ -51,8 +51,8 @@
                   </div>
 
                   <div class="flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
-                    <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]">Очистить</button>
-                    <button class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">Показать</button>
+                    <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]">{{'catalogSortingSection.button.clear' | transloco}}</button>
+                    <button class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">{{'catalogSortingSection.button.show' | transloco}}</button>
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@
 
 
         <div class="2xl:w-1/4 xl:w-1/4 lg:w-full md:w-full p-[24px] bg-[#E3FBFC] rounded-[16px]">
-            <h4 class="h4 pb-[16px]">Узнайте, сколько стоит ваш автомобиль</h4>
+            <h4 class="h4 pb-[16px]">{{'catalogSortingSection.sideForm.title' | transloco}}</h4>
             <form [formGroup]="pricingFrom" class="flex flex-col gap-[12px] pb-[16px]" (ngSubmit)="pricingSubmit()">
                 <div class="w-full flex 2xl:flex-col xl:flex-col lg:flex-row md:flex-row mobile:flex-col gap-[12px]">
                     <input class="2xl:w-full xl:w-full lg:w-1/2 md:w-1/2
@@ -74,9 +74,9 @@
                                   py-[8px] px-[12px] rounded-[10px] focus:outline-none"
                            placeholder="Пробег, км" formControlName="probeg">
                 </div>
-                <button type="submit" class="px-[24px] py-[10px] rounded-[14px] bg-[#27C5D0] text-[#fff] link" [disabled]="pricingFrom.invalid">Оценить бесплатно</button>
+                <button type="submit" class="px-[24px] py-[10px] rounded-[14px] bg-[#27C5D0] text-[#fff] link" [disabled]="pricingFrom.invalid">{{'catalogSortingSection.sideForm.button' | transloco}}</button>
             </form>
-            <p class="w-[100%] text-center p-[8px] text-[#A1A1A1] link">Ввести параметры вручную</p>
+            <p class="w-[100%] text-center p-[8px] text-[#A1A1A1] link">{{'catalogSortingSection.sideForm.subText' | transloco}}</p>
         </div>
     </div>
 </section>

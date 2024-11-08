@@ -1,4 +1,4 @@
-import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, isDevMode} from '@angular/core';
+import {ApplicationConfig, provideZoneChangeDetection, isDevMode} from '@angular/core';
 import {authRequestCheckInterceptor, fileUploadInterceptor, requestInterceptor} from "./core/interceptors/request.interceptor";
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideTransloco({
         config: {
           availableLangs: ['en','uz','ru'],
-          defaultLang: 'en',
+          defaultLang: 'uz',
           // Remove this option if your application doesn't support changing language in runtime.
           reRenderOnLangChange: true,
           prodMode: !isDevMode(),

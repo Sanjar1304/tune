@@ -4,6 +4,7 @@ import {FaqsService} from "./services/faqs.service";
 import {FaqsModel} from "./models/faqs.model";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 @Component({
   selector: 'app-faqs',
@@ -89,13 +90,18 @@ export class FaqsComponent implements OnInit{
 
   faqList!: FaqsModel
 
-  private cdr = inject(ChangeDetectorRef);
   private destroy$ = inject(DestroyRef);
   private faqService = inject(FaqsService);
+  private cdr = inject(ChangeDetectorRef);
+  private languageService = inject(LanguageService);
 
 
   public ngOnInit() {
-    this.faqSubscription();
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.faqSubscription();
+      })
   }
 
   public  faqSubscription(){

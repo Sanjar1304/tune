@@ -5,8 +5,10 @@
                  height="44" width="135" priority="priority"/>
             <ul class="xl:flex gap-[24px] hidden">
                 @for(routes of navbarMenus; track routes.id){
-                <li class="">
-                    <a class="b4 text-[#262626]" [routerLink]="routes.path">{{routes.label | transloco}}</a>
+                <li class="nav-item">
+                    <a class="b4 text-[#262626]"
+                       [ngClass]="{ 'active': isActive(routes.path) }"
+                       [routerLink]="routes.path">{{routes.label | transloco}}</a>
                 </li>
                 }
             </ul>
@@ -34,8 +36,8 @@
                   @if(dropdownOpen){
                     <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
                       @for(lang of locales; track lang){
-                        <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
-                          {{ lang | transloco }}
+                        <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px] lang_animation">
+                          {{ lang |uppercase | transloco }}
                         </div>
                       }
                     </div>
@@ -48,14 +50,15 @@
                 <img ngSrc="./assets/icons/user-square.svg" class="custom-size " alt="user icon" height="24" width="24">
               </div>
               <img ngSrc="./assets/icons/arrow-down.svg" class="" alt="arrow down icon" height="16" width="16">
-            </button> @if(logoutOpen){
-            <div class="w-[80px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-[100px] ml-[152px] lang-shadow">
-                <div (click)="logoutUser()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
-                    log out
-                </div>
-            </div>
+            </button>
+            @if(logoutOpen){
+              <div class="w-[80px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-[100px] ml-[152px] lang-shadow">
+                  <div (click)="logoutUser()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
+                      {{'buttonTexts.logout' | transloco}}
+                  </div>
+              </div>
             }
-            <button class="b4 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:block xl:block lg:block md:hidden sm:block mobile:hidden" (click)="navigateToAdsCreatePage()">Подать объявление</button>
+            <button class="b4 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:block xl:block lg:block md:hidden sm:block mobile:hidden" (click)="navigateToAdsCreatePage()">{{'buttonTexts.createAds' | transloco}}</button>
             <button class="h-[38px] w-[38px] flex justify-center items-center p-[5px !important]
                      border border-1 border-[#C8C8C8] rounded-[12px] xl:hidden" [ngClass]="{ 'bg-[#FF553D]': burgerMenuOpen, 'bg-white': !burgerMenuOpen, 'border': !burgerMenuOpen, 'border-0':burgerMenuOpen }" (click)="toggleBurgerMenu()">
                 <img class="burger-menu" [src]="burgerMenuOpen ? './assets/icons/exit-icon.svg' : './assets/icons/hamburger.svg'" alt="menu icon"/>
@@ -79,7 +82,7 @@
                     <div class="w-[100%] h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px]">
                         <img class="w-[18px] h-[18px]" ngSrc="./assets/icons/lupe.svg" alt="lupe icon" height="18"
                              width="18">
-                        <input class="h-[18px] focus:outline-none" placeholder="Поиск">
+                        <input class="h-[18px] focus:outline-none" [placeholder]="searchPlaceholder">
                     </div>
                     <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]">
                       <img class="" ngSrc="./assets/icons/eye.svg" alt="" height="18" width="18"/>
@@ -89,13 +92,13 @@
                          border border-solid border-[#E8E8E8]
                          h-[38px] w-[38px] px-[10px] rounded-[10px]
                          flex items-center justify-center" (click)="toggleDropdown()">
-                              {{ currentLocale | transloco }}
+                              {{ currentLocale | uppercase | transloco }}
                         </button>
                       @if(dropdownOpen){
                         <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
                             @for(lang of locales; track lang){
-                              <div (click)="localeSelect(lang)" class=" p-2 cursor-pointer hover:bg-gray-200 rounded-[10px] ">
-                                  {{ lang | transloco }}
+                              <div (click)="localeSelect(lang)" class=" p-2 cursor-pointer hover:bg-gray-200 rounded-[10px] lang_animation">
+                                  {{ lang | uppercase | transloco }}
                               </div>
                             }
                         </div>
@@ -121,7 +124,7 @@
                 </mat-expansion-panel>
                 <hr class="border solid border-[#E8E8E8] sm:my-[12px] mobile:my-[12px]"> }
             </mat-accordion>
-            <button class="nav-menu w-full h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:hidden sm:hiden mobile:block" (click)="navigateToAdsCreatePage()">Подать объявление</button>
+            <button class="nav-menu w-full h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:hidden sm:hiden mobile:block" (click)="navigateToAdsCreatePage()">{{'buttonTexts.createAds' | transloco}}</button>
         </ul>
         <div class="flex lg:flex-col md:flex-col sm:flex-row mobile:flex-col rounded-[30px] bg-header-ads-gradient ">
             <div class="flex flex-col lg:items-center md:items-center sm:items-start mobile:items-start justify-center mobile:justify-between

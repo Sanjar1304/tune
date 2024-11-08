@@ -15,6 +15,7 @@ import {CatalogCardsService} from "../../catalog/catalog-cards/services/catalog-
 import {Router} from "@angular/router";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 
 @Component({
@@ -42,9 +43,14 @@ export class RecommendationCardsComponent implements OnInit{
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private catalogCardsService = inject(CatalogCardsService);
+  private languageService = inject(LanguageService);
 
   public ngOnInit() {
-    this.getCatalogCardsSubscription();
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.getCatalogCardsSubscription();
+      })
   }
 
   public getCatalogCardsSubscription(){

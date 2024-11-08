@@ -2,7 +2,8 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {BehaviorSubject, filter,} from "rxjs";
 
 import { BreadCrumb } from "../../models/breadcrumb.model";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
+import {TranslocoService} from "@jsverse/transloco";
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,13 @@ import {Injectable} from "@angular/core";
 export class BreadcrumbService {
 
   private breadcrumbsSubject = new BehaviorSubject<BreadCrumb[]>([]);
-  public breadcrumbs$ = this.breadcrumbsSubject.asObservable();;
+  public breadcrumbs$ = this.breadcrumbsSubject.asObservable();
 
-  public constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
+
+  public constructor() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -28,7 +33,6 @@ export class BreadcrumbService {
       this.breadcrumbsSubject.next(breadcrumb); // Emit the updated breadcrumb
     }
   }
-
 
   private buildBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: BreadCrumb[] = []): BreadCrumb[] {
     const children: ActivatedRoute[] = route.children;

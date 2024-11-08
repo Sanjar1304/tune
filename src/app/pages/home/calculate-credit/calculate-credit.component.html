@@ -20,7 +20,8 @@
     </div>
   </div>
   <div class="lg:w-full lg:flex lg:flex-row md:flex md:flex-col bg-[#ECECEC] rounded-[30px]">
-    <div class="lg:w-[50%] md:w-[100%] lg:p-[50px] md:p-[40px] sm:p-[24px] mobile:p-[24px] flex flex-col gap-[40px]">
+    <form [formGroup]="calculatorForm"
+          class="lg:w-[50%] md:w-[100%] lg:p-[50px] md:p-[40px] sm:p-[24px] mobile:p-[24px] flex flex-col gap-[40px]">
       <div class="flex flex-col gap-[14px]">
         <h3 class="b3">{{"calculateCreditPage.slider1.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
@@ -33,7 +34,7 @@
             [max]="maxPrice"
             [min]="minPrice"
             [step]="step">
-            <input matSliderThumb [(ngModel)]="price" #slider>
+            <input matSliderThumb #slider formControlName="amount" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
             <p class="b6 text-[#626262]">1 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
@@ -45,7 +46,7 @@
       <div class="flex flex-col gap-[14px]">
         <h3 class="b3">{{"calculateCreditPage.slider2.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
-          <h3 class="h3">{{slider2.value}} {{"calculateCreditPage.slider2.year" | transloco}}</h3>
+          <h3 class="h3">{{slider2.value}} {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</h3>
           <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18" loading="lazy">
         </div>
         <div class="">
@@ -54,19 +55,19 @@
             [max]="maxYear"
             [min]="minYear"
             [step]="step">
-            <input matSliderThumb [(ngModel)]="year" #slider2>
+            <input matSliderThumb #slider2 formControlName="term" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
-            <p class="b6 text-[#626262]">6 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
-            <p class="b6 text-[#626262]">8 {{"calculateCreditPage.slider2.smallYear.year" | transloco}}</p>
-            <p class="b6 text-[#626262]">15 {{"calculateCreditPage.slider2.smallYear.year" | transloco}}</p>
+            <p class="b6 text-[#626262]">3 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
+            <p class="b6 text-[#626262]">36 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
+            <p class="b6 text-[#626262]">60 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
           </div>
         </div>
       </div>
       <div class="flex flex-col gap-[14px]">
         <h3 class="b3">{{"calculateCreditPage.slider3.title" | transloco}}</h3>
         <div class="h-auto flex items-center gap-[12px]">
-          <h3 class="h3">{{slider3.value }} % </h3>
+          <h3 class="h3">{{slider3.value | customCurrency}} </h3>
           <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18" loading="lazy">
         </div>
         <div class="">
@@ -75,22 +76,16 @@
             [max]="maxPercent"
             [min]="minPercent"
             [step]="step">
-            <input matSliderThumb [(ngModel)]="firstPay" #slider3>
+            <input matSliderThumb #slider3 formControlName="initialAmount" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
-            <p class="b6 text-[#626262]">10%</p>
-            <p class="b6 text-[#626262]">15%</p>
-            <p class="b6 text-[#626262]">20%</p>
-            <p class="b6 text-[#626262]">25%</p>
-            <p class="b6 text-[#626262]">30%</p>
-            <p class="b6 text-[#626262]">35%</p>
-            <p class="b6 text-[#626262]">40%</p>
-            <p class="b6 text-[#626262]">45%</p>
-            <p class="b6 text-[#626262]">50%</p>
+            <p class="b6 text-[#626262]">1 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+            <p class="b6 text-[#626262]">3 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+            <p class="b6 text-[#626262]">5 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
           </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="lg:w-[50%] md:w-[100%]
                 py-[100px] px-[50px] lg:pb-[87px] md:pb-[50px] sm:p-[24px] mobile:p-[24px]
@@ -99,15 +94,15 @@
                 rounded-[30px] bg-[#fff]">
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">32 000 UZS</h2>
+        <h2 class="h2 text-[#262626]">{{monthlyPayment | customCurrency}}</h2>
       </div>
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">2 400 000 UZS</h2>
+        <h2 class="h2 text-[#262626]">{{totalPayment | customCurrency}}</h2>
       </div>
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title3" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">17%</h2>
+        <h2 class="h2 text-[#262626]">{{interest}} %</h2>
       </div>
 <!--      <div class="flex lg:items-center md:items-center-->
 <!--                  2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-col mobile:flex-col-->

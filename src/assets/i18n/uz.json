@@ -4,12 +4,15 @@
   },
   "headerMenu" : {
     "menuTab": {
+      "home": "Asosiy sahifa",
       "myAvto": "MyAuto",
       "catalog": "Katalog",
       "carCredit": "Avto kredit",
       "carInsurance": "Avto sug'urta",
-      "applyDocs": "Hujjatlarni rasmiylashtirish"
-    }
+      "applyDocs": "Hujjatlarni rasmiylashtirish",
+      "addsCreate": "E'lon yaratish"
+    },
+    "searchPlaceholder": "Qidirish"
   },
   "sliderHomePage": {
     "title": "Yiliga 25% avtokredit",
@@ -219,6 +222,68 @@
     "sorting_btn_2": "ko'rsatish",
     "recommendationBtn": "Katalogga o'ting",
     "orderPhoneBtn": "Qo'ng'iroqni qiling",
-    "calculateCreditBtn": "To'lovga o'ting"
+    "calculateCreditBtn": "To'lovga o'ting",
+    "createAds": "E'lon berish",
+    "logout": "Chiqish"
+  },
+  "catalogSortingSection": {
+    "title": "Toshkentda mashina sotib oling",
+    "button": {
+      "all": "Barchasi",
+      "new": "Yangi",
+      "withMileage": "Yurgan",
+      "show": "Ko'rsatish",
+      "clear": "Tozalash"
+    },
+    "sideForm": {
+      "title": "Mashinangiz qancha ekanligini bilib oling",
+      "button": "Bepul baholash",
+      "subText": "Parametrlarni qo'lda kiriting"
+    }
+  },
+  "catalogPageItems": {
+    "cardsLength": "E'lon",
+    "button": "Saralash",
+    "more_btn": "Ko'proq yuklash"
+  },
+  "carDetailPage": {
+    "createdAtItems": {
+      "ads": "E'lon",
+      "adsData": {
+        "from": "dan",
+        "year": "y."
+      },
+      "btn_write": "Sotuvchiga yozing",
+      "btn_tel": "Telefonni ko'rsatish"
+    },
+    "calculator": {
+      "title": "Shartlarni hisoblang va kredit arizasini yuboring",
+      "calcCards": {
+        "card1": "So'rovingizni onlayn qoldiring",
+        "card2": "Bankning roziligini kuting",
+        "card3": "Bank ofisida pul oling",
+        "card4": "Bank ofisida pul oling"
+      },
+      "calculator": "Kalkulyator",
+      "calcSelection": "Auto loan my car",
+      "calcType": {
+        "title": "To'lov turi",
+        "aniutet": "Anuitet",
+        "differential": "Differensial"
+      },
+      "creditSumma": "Kredit miqdori",
+      "initialPay": "Boshlang'ich to'lov",
+      "creditDuration": "Kredit muddati",
+      "interest": "Foiz stavkasi",
+      "application": {
+        "title": "Aloqa ma'lumotlari",
+        "agreement": {
+          "text1": "Shaklni to'ldirib, men qabul qilaman",
+          "link": "axborot uzatish shartlari",
+          "text2": "va men Bank va hamkorlarning mahsulotlari va xizmatlari haqida ma'lumot olishga roziman"
+        },
+        "btn": "So'rov yuboring"
+      }
+    }
   }
 }

@@ -1,5 +1,6 @@
 <section class="container mx-auto
                 lg:py-[100px] md:py-[60px] mobile:py-[60px]">
+  <app-toast></app-toast>
   <div class="lg:flex lg:gap-[36px]">
     <div class="w-[100%] xl:flex xl:flex-col items-stretch
                 lg:w-[55%] lg:p-[50px]
@@ -13,20 +14,30 @@
         <div class="flex flex-col gap-[20px] sm:gap-[16px] mobile:gap-[16px]">
           <input type="text" formControlName="fullName"
             class="px-[20px] py-[18px] lg:bg-[#27C5D0] text-[#fff] lg:border-2 lg:border-solid lg:border-[#fff] md:bg-[#FFFFFF40] sm:bg-[#FFFFFF40] mobile:bg-[#FFFFFF40] md:border-0 rounded-[14px] placeholder:text-[#fff] focus:outline-none" placeholder='{{"questionFormPage.input1" | transloco}}'>
-          <input type="text" formControlName="phoneNumber"
-            class="px-[20px] py-[18px] lg:bg-[#27C5D0] text-[#fff] lg:border-2 lg:border-solid lg:border-[#fff] md:bg-[#FFFFFF40] sm:bg-[#FFFFFF40] mobile:bg-[#FFFFFF40] md:border-0 rounded-[14px] placeholder:text-[#fff] focus:outline-none" placeholder='{{"questionFormPage.input2" | transloco}}'>
-        </div>
-        <label class="w-full relative cursor-pointer">
-          <input class="checkbox-custom" type="checkbox" >
-          <div class="relative flex items-center gap-[8px]">
-            <p class="b6 text-[#fff]">{{"questionFormPage.condition" | transloco}}</p>
+          <input type="tel"
+                   formControlName="phoneNumber"
+                   class="px-[20px] py-[18px] lg:bg-[#27C5D0] text-[#fff] lg:border-2 lg:border-solid lg:border-[#fff] md:bg-[#FFFFFF40] sm:bg-[#FFFFFF40] mobile:bg-[#FFFFFF40] md:border-0 rounded-[14px] placeholder:text-[#fff] focus:outline-none"
+                   placeholder="998 XX XXX-XX-XX"
+                   (keyup)="onPhoneKeyup($event)"
+                   (blur)="onPhoneBlur()"
+                   (focus)="setInitialPhoneValue()">
+          <div *ngIf="phoneNumberHasError" class="text-red-500 text-sm mt-2">
+            {{ phoneNumberError }}
           </div>
+        </div>
+        <label class="w-full cursor-pointer">
+          <mat-checkbox type="checkbox" class="text-[#fff]" formControlName="isChecked" (change)="onCheckboxChange()">
+            {{"questionFormPage.condition" | transloco}}
+          </mat-checkbox>
+<!--          <div *ngIf="questionForm.get('fullName')?.touched && questionForm.get('phoneNumber')?.touched && isButtonChecked" class="text-red-500 mt-2">-->
+<!--            Please agree to the terms and conditions.-->
+<!--          </div>-->
         </label>
         <button class="lg:w-[252px] sm:w-full mobile:w-full link text-[#262626] py-[18px] px-[28px] bg-[#fff] rounded-[14px] hover:cursor-pointer" type="submit"
-                [disabled]="questionForm.invalid && !isButtonChecked">{{"buttonTexts.orderPhoneBtn" | transloco}}</button>
+                [disabled]="!questionForm.valid">{{"buttonTexts.orderPhoneBtn" | transloco}}</button>
       </form>
     </div>
-    <img class="lg:block md:hidden sm:hidden mobile:hidden" ngSrc="./assets/icons/lock.svg" alt="lock icon" loading="lazy"
+    <img class="lg:block md:hidden sm:hidden mobile:hidden" ngSrc="./assets/icons/question-form-image.svg" alt="lock icon" loading="lazy"
          height="548" width="532" priority="false">
   </div>
 </section>

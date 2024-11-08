@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit, inject, input, output, signal} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+  input,
+  output,
+  signal,
+  ElementRef,
+  HostListener, DestroyRef
+} from '@angular/core';
 import {CommonModule, NgIf, NgOptimizedImage} from "@angular/common";
 import {INavbarMenu, NAVBAR_MENUS} from "../../core/constants/navbar-menus";
 import {
@@ -7,7 +17,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import {Router, RouterLink} from "@angular/router";
+import {Router, RouterLink, RouterLinkActive} from "@angular/router";
 
 
 import {MatButtonModule} from "@angular/material/button";
@@ -17,8 +27,11 @@ import { UserService } from '../../core/services/root/user.service';
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {ReactiveFormsModule} from "@angular/forms";
-import {TranslocoPipe, TranslocoService} from "@jsverse/transloco";
+import {TranslocoDirective, TranslocoPipe, TranslocoService} from "@jsverse/transloco";
 import {LocalStorageService} from "../../core/services/utils/storage.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {LanguageService} from "../../core/services/utils/language.service";
+import {delay} from "rxjs";
 
 
 @Component({
@@ -39,11 +52,23 @@ import {LocalStorageService} from "../../core/services/utils/storage.service";
     MatOption,
     MatSelect,
     ReactiveFormsModule,
-    TranslocoPipe
+    TranslocoPipe,
+    RouterLinkActive,
+    TranslocoDirective
   ],
   templateUrl: './header.component.html',
   styles: `
     :host {
+      .nav-item a {
+        text-decoration: none;
+        padding: 3px;
+        color: black;
+      }
+
+      .nav-item a.active {
+        border-bottom: 1px solid #27C5D0;
+      }
+
       .custom-size {
         max-width: none;
         width: auto;
@@ -63,6 +88,10 @@ import {LocalStorageService} from "../../core/services/utils/storage.service";
 
       ul.custom-bullets {
         list-style: none;
+      }
+
+      .lang_animation {
+        transition: .6s ease-in-out;
       }
 
       ::ng-deep {
@@ -103,25 +132,32 @@ import {LocalStorageService} from "../../core/services/utils/storage.service";
 })
 export class HeaderComponent implements  OnInit {
 
+
   public bnwMode = false;
   public dropdownOpen = false;
   public highlightMode = false;
   public burgerMenuOpen = false;
   public logoutOpen = false;
   public isLoggedIn = false;
+  public searchPlaceholder = '';
   public burgerMenuOpened = input<boolean>(false);
   public closeTrigger = output<boolean>();
   public readonly panelOpenState = signal(false);
+  private isLanguageChanging = false;
 
   private readonly router = inject(Router);
+  private destroy$ = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
   private userService = inject(UserService);
   private translocoService = inject(TranslocoService);
   private storageService = inject(LocalStorageService);
+  private languageService = inject(LanguageService);
+  private elementRef: ElementRef = inject(ElementRef);
 
 
   public ngOnInit(): void {
     this.applyAccessibility();
+    this.setSearchPlaceHolder();
 
     const savedLocale = this.storageService.getItem('locale');
     if (savedLocale) {
@@ -133,15 +169,27 @@ export class HeaderComponent implements  OnInit {
     })
   }
 
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if ((this.dropdownOpen && !this.elementRef.nativeElement.contains(event.target)) ||
+        (this.logoutOpen && !this.elementRef.nativeElement.contains(event.target))) {
+      this.dropdownOpen = false;
+      this.logoutOpen = false;
+    }
+  }
+
   public get navbarMenus(): INavbarMenu[] {
     return NAVBAR_MENUS;
+  }
+
+  public isActive(path: string): boolean {
+    return this.router.url === path;
   }
 
   public get locales(): string[] {
     return this.translocoService
       .getAvailableLangs()
       .map(lang => typeof lang === 'string' ? lang : lang.label);
-
   }
 
   public get currentLocale(): string {
@@ -149,10 +197,24 @@ export class HeaderComponent implements  OnInit {
   }
 
   public localeSelect(locale: string): void {
-    this.translocoService.setActiveLang(locale);
-    this.storageService.setItem('locale', locale);
     this.dropdownOpen = false;
-    window.location.reload();
+    if (this.isLanguageChanging) {
+      return;
+    }
+
+    this.isLanguageChanging = true;
+    this.translocoService.setActiveLang(locale);
+    this.languageService.setLanguage(locale);
+    this.translocoService.load(locale)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isLanguageChanging = false;
+        },
+        error: () => {
+          this.isLanguageChanging = false;
+        }
+    });
   }
 
   public toggleDropdown(): void {
@@ -216,5 +278,9 @@ export class HeaderComponent implements  OnInit {
     this.router.navigate(['/'])
     this.isLoggedIn = false;
     this.logoutOpen = false
+  }
+
+  private setSearchPlaceHolder(): void{
+    this.searchPlaceholder = this.translocoService.translate('headerMenu.searchPlaceholder')
   }
 }

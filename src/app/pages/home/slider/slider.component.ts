@@ -8,6 +8,7 @@ import {Banner, BannerRes} from "../../../core/constants/bannerRes";
 import {Router} from "@angular/router";
 import {environment} from "../../../../environments/environment";
 import {shareReplay, take} from "rxjs";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 
 @Component({
@@ -79,7 +80,7 @@ export class SliderComponent implements OnInit, OnDestroy {
 
   currentIndex = 0;
   timer: any;
-  transitionDuration = 5000;
+  transitionDuration = 2000;
   banners: BannerRes | null = null;
   bannerList: Banner[] = [];
   API_URL = `${environment.API_BASE}`
@@ -88,9 +89,14 @@ export class SliderComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private bannerService = inject(BannerRequestService);
+  private languageService = inject(LanguageService);
 
   ngOnInit(): void {
-    this.getBannersSubscription();
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.getBannersSubscription();
+      })
   }
 
   public getBannersSubscription(){

@@ -1,148 +1,154 @@
 <section class="container mx-auto flex flex-col gap-[48px]">
-  <h2 class="w-2/3 h2 text-[#262626]">Рассчитайте условия и отправьте заявку по кредиту</h2>
+  <h2 class="w-2/3 h2 text-[#262626]">{{"carDetailPage.calculator.title" | transloco}}</h2>
   <div class="md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">1</p>
-      <p class="b1 text-[#262626]">Оставьте заявку онлайн</p>
+      <p class="b1 text-[#262626]">{{"carDetailPage.calculator.calcCards.card1" | transloco}}</p>
     </div>
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">2</p>
-      <p class="b1 text-[#262626]">Дождитесь одобрения банком</p>
+      <p class="b1 text-[#262626]">{{"carDetailPage.calculator.calcCards.card2" | transloco}}</p>
     </div>
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">3</p>
-      <p class="b1 text-[#262626]">Получите деньги в офисе банка</p>
+      <p class="b1 text-[#262626]">{{"carDetailPage.calculator.calcCards.card3" | transloco}}</p>
     </div>
     <div class="p-[24px] flex items-center gap-[16px] bg-[#fff] rounded-[30px]">
       <p class="w-[44px] h-[44px] p-[10px] b1 text-[#fff] bg-[#27C5D0] text-center rounded-[12px]">4</p>
-      <p class="b1 text-[#262626]">Получите деньги в офисе банка</p>
+      <p class="b1 text-[#262626]">{{"carDetailPage.calculator.calcCards.card4" | transloco}}</p>
     </div>
   </div>
   <div class="flex flex-col gap-[32px]">
-      <div class="w-full flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row mobile:flex-col
-                  justify-between mobile:gap-[10px]">
-        <h3 class="h3 flex mobile:items-start
-                  2xl:pl-[50px] xl:pl-[50px] lg:pl-[50px] md:pl-0 sm:pl-0 mobile:pl-0 text-[#262626]">Калькулятор</h3>
-        <div class="p-[8px] rounded-[20px] bg-[#EEE]">
-          <button class="w-full flex items-center gap-[8px] py-[10px] px-[14px] bg-[#fff] rounded-[12px]">
-            Автокредит my car
-            <img class="" ngSrc="./assets/icons/arrow-down.svg" alt="" height="16" width="16">
-          </button>
-        </div>
+    <div class="w-full flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row mobile:flex-col
+                 justify-between mobile:gap-[10px]">
+      <h3 class="h3 flex mobile:items-start
+                 2xl:pl-[50px] xl:pl-[50px] lg:pl-[50px] md:pl-0 sm:pl-0 mobile:pl-0 text-[#262626]">{{"carDetailPage.calculator.calculator" | transloco}}</h3>
+      <div class="p-[8px] rounded-[20px] bg-[#EEE]">
+        <button class="w-full flex items-center gap-[8px] py-[10px] px-[14px] bg-[#fff] rounded-[12px]">
+          {{"carDetailPage.calculator.calcSelection" | transloco}}
+          <img class="" ngSrc="./assets/icons/arrow-down.svg" alt="" height="16" width="16">
+        </button>
       </div>
-      <div class="flex gap-[50px]">
-        <div class="w-full flex lg:flex-row md:flex-col sm:flex-col mobile:flex-col
-                    md:gap-[48px] sm:gap-[30px] mobile:gap-[24px]">
-          <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-[100%] sm:w-full mobile:w-full
-                      lg:px-[50px] md:px-0 sm:px-0 mobile:px-0 flex flex-col gap-[25px]">
-            <div class="flex flex-col gap-[14px]">
-              <h3 class="b3 text-[#5C5C5C]">Тип погашения</h3>
-              <mat-radio-group class="flex gap-[34px]" [(ngModel)]="labelPosition">
-                <mat-radio-button class="" value="after">Аннунитеный</mat-radio-button>
-                <mat-radio-button class="" value="before">Дифференцированный</mat-radio-button>
-              </mat-radio-group>
+    </div>
+    <div class="flex gap-[50px]">
+      <div class="w-full flex lg:flex-row md:flex-col sm:flex-col mobile:flex-col
+                   md:gap-[48px] sm:gap-[30px] mobile:gap-[24px]">
+        <form [formGroup]="calculateForm" class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-[100%] sm:w-full mobile:w-full
+                     lg:px-[50px] md:px-0 sm:px-0 mobile:px-0 flex flex-col gap-[25px]">
+          <div class="flex flex-col gap-[14px]">
+            <h3 class="b3 text-[#5C5C5C]">{{'carDetailPage.calculator.calcType.title' | transloco}}</h3>
+            <mat-radio-group class="flex gap-[34px]">
+              <mat-radio-button class="" value="after">{{'carDetailPage.calculator.calcType.aniutet' | transloco}}</mat-radio-button>
+              <mat-radio-button class="" value="before">{{'carDetailPage.calculator.calcType.differential' | transloco}}</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="flex flex-col gap-[10px]">
+            <h3 class="b3">{{'carDetailPage.calculator.creditSumma' | transloco}}</h3>
+            <div class="h-auto flex items-center gap-[12px]">
+              <h3 class="h3"> {{ slider.value | customCurrency}} </h3>
+              <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18">
             </div>
-            <div class="flex flex-col gap-[10px]">
-              <h3 class="b3">Сумма кредита</h3>
-              <div class="h-auto flex items-center gap-[12px]">
-                <h3 class="h3"> {{ slider.value | customCurrency}} </h3>
-                <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18">
-              </div>
-              <div class="">
-                <mat-slider
-                  class="example-margin"
-                  [max]="maxPrice"
-                  [min]="minPrice"
-                  [step]="step">
-                  <input matSliderThumb [(ngModel)]="price" #slider>
-                </mat-slider>
-                <div class="flex justify-between">
-                  <p class="b6 text-[#626262]">1 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                  <p class="b6 text-[#626262]">3 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                  <p class="b6 text-[#626262]">5 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col gap-[10px]">
-              <h3 class="b3">Первоначальный взнос</h3>
-              <div class="h-auto flex items-center gap-[11px]">
-                <h3 class="h3">{{slider2.value | customCurrency}}</h3>
-                <img src="./assets/icons/editing-icon.svg" alt="edit icon">
-              </div>
-              <div class="">
-                <mat-slider
-                  class="example-margin"
-                  [max]="maxInitialPay"
-                  [min]="minInitialPay"
-                  [step]="step">
-                  <input matSliderThumb [(ngModel)]="pay" #slider2>
-                </mat-slider>
-                <div class="flex justify-between">
-                  <p class="b6 text-[#626262]">1 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                  <p class="b6 text-[#626262]">3 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                  <p class="b6 text-[#626262]">5 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col gap-[10px]">
-              <h3 class="b3">Срок кредита</h3>
-              <div class="h-auto flex items-center gap-[12px]">
-                <h3 class="h3">{{slider3.value }} {{"calculateCreditPage.slider2.smallYear.month" | transloco}} </h3>
-                <img src="./assets/icons/editing-icon.svg" alt="edit icon">
-              </div>
-              <div class="">
-                <mat-slider
-                  class="example-margin"
-                  [max]="maxYear"
-                  [min]="minYear"
-                  [step]="step">
-                  <input matSliderThumb [(ngModel)]="year" #slider3>
-                </mat-slider>
-                <div class="flex justify-between">
-                  <p class="b6 text-[#626262]">6 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
-                  <p class="b6 text-[#626262]">60 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
-                </div>
+            <div class="">
+              <mat-slider
+                class="example-margin"
+                [max]="maxPrice"
+                [min]="minPrice"
+                [step]="step">
+                <input matSliderThumb formControlName="amount" #slider (change)="onSliderChange()">
+              </mat-slider>
+              <div class="flex justify-between">
+                <p class="b6 text-[#626262]">1 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+                <p class="b6 text-[#626262]">3 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+                <p class="b6 text-[#626262]">5 000 000  {{"calculateCreditPage.slider1.sum" | transloco}}</p>
               </div>
             </div>
           </div>
-
-          <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-[100%] sm:w-full mobile:w-full
-                      flex 2xl:flex-col xl:flex-col lg:flex-col md:flex-row sm:flex-row mobile:flex-col
-                      2xl:px-[50px] xl:px-[50px] lg:px-[50px] md:px-0 sm:px-0 mobile:px-0
-                      lg:gap-[24px] md:gap-[300px] sm:gap-[100px] mobile:gap-[10px]">
-            <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px] pb-[10px]">
-              <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
-              <h2 class="h2 text-[#262626]">32 000 <span class="h3">UZS</span></h2>
+          <div class="flex flex-col gap-[10px]">
+            <h3 class="b3">{{'carDetailPage.calculator.initialPay' | transloco}}</h3>
+            <div class="h-auto flex items-center gap-[11px]">
+              <h3 class="h3">{{slider2.value | customCurrency}}</h3>
+              <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18">
             </div>
-            <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
-              <p class="b3 text-[#626262]">Процентная ставка </p>
-              <h2 class="h2 text-[#262626]">28.9% <span class="h3">годовых</span></h2>
+            <div class="">
+              <mat-slider
+                class="example-margin"
+                [max]="maxInitialPay"
+                [min]="minInitialPay"
+                [step]="step">
+                <input matSliderThumb formControlName="initialAmount" #slider2 (change)="onSliderChange()">
+              </mat-slider>
+              <div class="flex justify-between">
+                <p class="b6 text-[#626262]">1 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+                <p class="b6 text-[#626262]">3 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+                <p class="b6 text-[#626262]">5 000 000 {{"calculateCreditPage.slider1.sum" | transloco}}</p>
+              </div>
             </div>
+          </div>
+          <div class="flex flex-col gap-[10px]">
+            <h3 class="b3">{{'carDetailPage.calculator.creditDuration' | transloco}}</h3>
+            <div class="h-auto flex items-center gap-[12px]">
+              <h3 class="h3">{{slider3.value }} {{"calculateCreditPage.slider2.smallYear.month" | transloco}} </h3>
+              <img ngSrc="./assets/icons/editing-icon.svg" alt="edit icon" height="19" width="18">
+            </div>
+            <div class="">
+              <mat-slider
+                class="example-margin"
+                [max]="maxYear"
+                [min]="minYear"
+                [step]="step">
+                <input matSliderThumb formControlName="term" #slider3 (change)="onSliderChange()">
+              </mat-slider>
+              <div class="flex justify-between">
+                <p class="b6 text-[#626262]">6 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
+                <p class="b6 text-[#626262]">60 {{"calculateCreditPage.slider2.smallYear.month" | transloco}}</p>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-[100%] sm:w-full mobile:w-full
+                     flex 2xl:flex-col xl:flex-col lg:flex-col md:flex-row sm:flex-row mobile:flex-col
+                     2xl:px-[50px] xl:px-[50px] lg:px-[50px] md:px-0 sm:px-0 mobile:px-0
+                     lg:gap-[24px] md:gap-[300px] sm:gap-[100px] mobile:gap-[10px]">
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px] pb-[10px]">
+            <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
+            <h2 class="h2 text-[#262626]">{{monthlyPayment | customCurrency}}</h2>
+          </div>
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px] pb-[10px]">
+            <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
+            <h2 class="h2 text-[#262626]">{{totalPayment | customCurrency}}</h2>
+          </div>
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
+            <p class="b3 text-[#626262]">{{'carDetailPage.calculator.interest' | transloco}} </p>
+            <h2 class="h2 text-[#262626]">{{interest}} %</h2>
           </div>
         </div>
       </div>
+    </div>
 
-    <div class="2xl:px-[50px] xl:px-[50px] lg:px-[50px] flex flex-col gap-[24px]">
-      <h3 class="h3">Контактные данные</h3>
+    <form [formGroup]="applicationForm" (ngSubmit)="applicationSubmit()" class="2xl:px-[50px] xl:px-[50px] lg:px-[50px] flex flex-col gap-[24px]">
+      <h3 class="h3">{{'carDetailPage.calculator.application.title' | transloco}}</h3>
       <div class="w-full flex flex-col gap-[24px]">
-        <input class="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[70%] sm:w-full mobile:w-full py-[18px] px-[20px] rounded-[14px] focus:outline-none" placeholder="Фамилия, имя и отчество (как в паспорте)">
+        <input class="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[70%] sm:w-full mobile:w-full
+               py-[18px] px-[20px] rounded-[14px] focus:outline-none"
+               formControlName="fullName"
+               placeholder="Фамилия, имя и отчество (как в паспорте)">
         <div class="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[70%] sm:w-full mobile:w-full
                     flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row mobile:flex-col gap-[20px]">
-          <input class="w-[50%] mobile:w-full py-[18px] px-[20px] rounded-[14px] focus:outline-none" placeholder="Номер телефона">
-          <input class="w-[50%] mobile:w-full py-[18px] px-[20px] rounded-[14px] focus:outline-none" placeholder="Электронная почта">
+          <input class="w-[50%] mobile:w-full py-[18px] px-[20px] rounded-[14px] focus:outline-none" formControlName="phone" placeholder="Номер телефона">
+          <input class="w-[50%] mobile:w-full py-[18px] px-[20px] rounded-[14px] focus:outline-none" formControlName="email" placeholder="Электронная почта">
         </div>
       </div>
       <div class="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[70%] sm:w-full mobile:w-full
                   flex 2xl:flex-row xl:flex-row lg:flex-col md:flex-col sm:flex-col mobile:flex-col gap-[20px] items-center">
         <div class="w-full 2xl:w-2/3 xl:w-2/3 sm:w-full mobile:w-full b6">
-          Заполняя форму, я принимаю  <a class="underline underline-offset-1 text-[#060563]" href="#">условия передачи информации</a>   и даю согласие
-          на получение информации о продуктах и услугах Банка и партнеров
+          {{'carDetailPage.calculator.application.agreement.text1' | transloco}}
+          <a class="underline underline-offset-1 text-[#060563]" href="#">{{'carDetailPage.calculator.application.agreement.link' | transloco}} </a>
+          {{'carDetailPage.calculator.application.agreement.text2' | transloco}}
         </div>
-        <button class="w-full 2xl:w-1/3 xl:w-1/3 py-[18px] px-[28px] bg-[#27C5D0] link text-[#fff] rounded-[14px]">Отправить заявку</button>
+        <button type="submit" class="w-full 2xl:w-1/3 xl:w-1/3 py-[18px] px-[28px] bg-[#27C5D0] link text-[#fff] rounded-[14px]">
+          {{'carDetailPage.calculator.application.btn' | transloco}}
+        </button>
       </div>
-    </div>
-  </div>
-  <div class="">
-
+    </form>
   </div>
 </section>

@@ -1,8 +1,8 @@
 <section class="container mx-auto flex flex-col gap-[35px]">
   <div class="flex justify-between">
-    <h3 class="h3"> {{catalogCardsLength}} объявлений</h3>
+    <h3 class="h3"> {{catalogCardsLength}} {{'catalogPageItems.cardsLength' | transloco}}</h3>
     <button class="flex items-center gap-[16px] px-[20px] py-[8px] rounded-[10px] border border-solid border-[#E8E8E8] text-[#A1A1A1] b3">
-      Сортировать
+      {{'catalogPageItems.button' | transloco}}
       <img ngSrc="./assets/icons/arrow-down.svg" alt="Sort Icon" loading="lazy" height="16" width="16">
     </button>
   </div>
@@ -45,7 +45,7 @@
           class="2xl:w-[15%] xl:w-[20%] lg:w-[25%] px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link custom-button"
           [disabled]="displayedCards.length >= catalogCardsRes.items.length"
           (click)="loadMoreCards()">
-          Загрузить еще
+          {{"catalogPageItems.more_btn" | transloco}}
         </button>
       }
       <div class="pt-[24px] flex gap-[8px]">

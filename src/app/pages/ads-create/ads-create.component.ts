@@ -1,10 +1,8 @@
 import {AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgOptimizedImage} from "@angular/common";
 import {CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, OnInit, SimpleChanges, ViewChild, inject,} from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   NgForm,
@@ -15,7 +13,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import { Router, RouterLink } from "@angular/router";
 
 import { AddsService } from './services/ads.service';
-import { BreadcrumbComponent } from "../../core/components/breadcrumb/breadcrumb.component";
+// import { BreadcrumbComponent } from "../../core/components/breadcrumb/breadcrumb.component";
 import { CarSelectInfoResponse } from "./models/car-select-Info.model";
 import { ICarModelList } from './models/cars.model';
 import {MatCheckbox} from '@angular/material/checkbox';
@@ -42,7 +40,6 @@ interface Food {
     MatSelect,
     MatOption,
     UiSvgIconComponent,
-    BreadcrumbComponent,
     ReactiveFormsModule,
     AsyncPipe,
     JsonPipe,

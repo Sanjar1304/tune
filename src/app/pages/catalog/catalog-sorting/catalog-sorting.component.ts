@@ -20,6 +20,8 @@ import { SortingService } from './services/sorting.service';
 import { UiSvgIconComponent } from '../../../core/components/ui-svg-icon/ui-svg-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {MatInput} from "@angular/material/input";
+import {LanguageService} from "../../../core/services/utils/language.service";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-catalog-sorting',
@@ -36,7 +38,8 @@ import {MatInput} from "@angular/material/input";
     MatLabel,
     NgFor,
     NgIf,
-    MatInput
+    MatInput,
+    TranslocoPipe
   ],
   templateUrl: './catalog-sorting.component.html',
   styles: `
@@ -165,11 +168,14 @@ export class CatalogSortingComponent implements OnInit{
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = inject(DestroyRef);
   private sortingService = inject(SortingService);
+  private languageService = inject(LanguageService);
 
 
   public ngOnInit(): void {
-    this.getSortingModelFormSubscription();
-    this.validatePricingForm();
+    this.languageService.currentLanguage$.subscribe(() => {
+      this.getSortingModelFormSubscription();
+      this.validatePricingForm();
+    })
   }
 
   public validatePricingForm(){

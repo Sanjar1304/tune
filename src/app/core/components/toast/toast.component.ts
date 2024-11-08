@@ -1,13 +1,17 @@
-import {ChangeDetectionStrategy, Component } from '@angular/core';
-import {Toast, ToastPackage, ToastrService} from "ngx-toastr";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 import {UiSvgIconComponent} from "../ui-svg-icon/ui-svg-icon.component";
+import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
+import {CustomToasterService} from "../../services/utils/toast.service";
 
 @Component({
   selector: 'app-toast',
   standalone: true,
   imports: [
-    UiSvgIconComponent
+    UiSvgIconComponent,
+    NgClass,
+    NgIf,
+    NgOptimizedImage
   ],
   templateUrl: './toast.component.html',
   styles: [
@@ -16,6 +20,35 @@ import {UiSvgIconComponent} from "../ui-svg-icon/ui-svg-icon.component";
         display: block;
         padding: 0 !important;
         border:none;
+
+        .custom-toast {
+          display: flex;
+          gap: 15px;
+          padding: 16px;
+          border-radius: 12px;
+          color: #fff;
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          transition: opacity 0.6s ease-in-out;
+          z-index: 1000;
+        }
+
+        .success {
+          background-color: #4CAF50;
+        }
+
+        .error {
+          background-color: #F44336;
+        }
+
+        .info {
+          background-color: #2196F3;
+        }
+
+        .warning {
+          background-color: #FF9800;
+        }
       }
     `,
   ],
@@ -62,16 +95,26 @@ import {UiSvgIconComponent} from "../ui-svg-icon/ui-svg-icon.component";
   ],
   preserveWhitespaces: false
 })
-export class ToastComponent extends Toast {
+export class ToastComponent  implements OnInit{
+  toast: { message: string, type: 'success' | 'error' | 'info' | 'warning' } | null = null;
 
-  constructor(protected override toastrService:ToastrService,
-              public override toastPackage:ToastPackage) {
-    super(toastrService, toastPackage);
+  private cdr = inject(ChangeDetectorRef);
+  private toasterService = inject(CustomToasterService);
+
+
+  ngOnInit() {
+    this.toasterService.toast$.subscribe((toast) => {
+      this.toast = toast;
+      this.cdr.markForCheck();
+    });
   }
 
-  action(event: Event){
-    event.stopPropagation();
-    this.toastPackage.triggerAction(event);
-    return false;
+  getToastClass(type: string) {
+    return type;
+  }
+
+  public closeToast(){
+    this.toast = null;
+    this.cdr.markForCheck();
   }
 }

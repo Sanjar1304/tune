@@ -4,10 +4,17 @@ import { inject } from "@angular/core";
 import {TranslocoService} from "@jsverse/transloco";
 
 
+const langMapping: Record<string, string> = {
+  en: 'ENG',
+  uz: 'UZB',
+  ru: 'RUS'
+};
+
 export const requestInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(UserService);
   const translocoService = inject(TranslocoService);
-  const lang = translocoService.getActiveLang().toUpperCase();
+  const lang = translocoService.getActiveLang();
+  const mappedLang = langMapping[lang];
   const header = req.headers
     .set('Content-Type', 'application/json')
     .set('X-Device-Id', '42b6e24e2fc8df5b')
@@ -17,7 +24,7 @@ export const requestInterceptor: HttpInterceptorFn = (req, next) => {
     .set('X-App-Version', '1.0')
     .set('X-App-Build', '1.0')
     .set('X-Device-Model', 'samsung s 24')
-    .set('X-Lang', lang)
+    .set('X-Lang', mappedLang)
     .set('X-Auth-Token', String(token.getToken()) );
 
     const clonedReq = req.clone({headers: header});

@@ -6,6 +6,7 @@ import {CatalogCardsService} from "./services/catalog-cards.service";
 import {Router} from "@angular/router";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {LanguageService} from "../../../core/services/utils/language.service";
 
 @Component({
   selector: 'app-catalog-cards',
@@ -30,9 +31,14 @@ export class CatalogCardsComponent implements OnInit{
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private catalogCardsService = inject(CatalogCardsService);
+  private languageService = inject(LanguageService);
 
   public ngOnInit() {
-    this.getCatalogCardsSubscription();
+    this.languageService.currentLanguage$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe(() => {
+        this.getCatalogCardsSubscription();
+    })
   }
 
   private getCatalogCardsSubscription() {
@@ -40,7 +46,6 @@ export class CatalogCardsComponent implements OnInit{
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
-          console.log(typeof res)
           if (res) {
             this.catalogCardsRes = res;
             this.catalogCardsLength = this.catalogCardsRes.items.length;
