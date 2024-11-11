@@ -21,11 +21,13 @@ import {MatFormField} from "@angular/material/form-field";
 
 import {UiSvgIconComponent} from "../../core/components/ui-svg-icon/ui-svg-icon.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import {
+  DataUrl,
+  DOC_ORIENTATION,
+  NgxImageCaptureModule,
+  NgxImageCompressService,
+  UploadResponse } from "ngx-image-compress";
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-ads-create',
@@ -45,7 +47,8 @@ interface Food {
     JsonPipe,
     NgOptimizedImage,
     NgClass,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    NgxImageCaptureModule
   ],
   templateUrl: './ads-create.component.html',
   styles: `
@@ -145,7 +148,8 @@ interface Food {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  schemas:[CUSTOM_ELEMENTS_SCHEMA]
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
+  providers:[NgxImageCompressService]
 })
 export class AdsCreateComponent implements OnInit {
 
@@ -156,15 +160,17 @@ export class AdsCreateComponent implements OnInit {
   byAssetSelected = false;
   carId!: string;
 
+
   @ViewChild('carForm') form!: NgForm;
   @Input() mainPanel: null | CarSelectInfoResponse = null;
   @Input() extraPanel: null | CarSelectInfoResponse = null;
   @Input() optionalPanel: null | CarSelectInfoResponse = null;
   @Input() contactsPanel: null | CarSelectInfoResponse = null;
 
-  selectedFiles?: FileList;
+  selectedFiles?: FileList | null = null;
   message: string[] = [];
   previews: string[] = [];
+  imgResultAfterCompress: DataUrl = '';
 
 
   comment: string = '';
@@ -176,17 +182,18 @@ export class AdsCreateComponent implements OnInit {
   contactOptions: any[] = []
 
   private router = inject(Router);
+
   private cdr = inject(ChangeDetectorRef);
   private fb = inject(FormBuilder);
   private adsService = inject(AddsService);
   private destroy$ = inject(DestroyRef);
+  private ngxCompressService = inject(NgxImageCompressService);
 
 
   public ngOnInit(): void {
     this.getCarData();
     this.sendCarId(this.carSelectData);
   }
-
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes["mainPanel"] && this.mainPanel) {
@@ -202,7 +209,6 @@ export class AdsCreateComponent implements OnInit {
       this.updatePanelControls('contactsPanel', this.contactsPanel);
     }
   }
-
 
   private updatePanelControls(panelName: string, panelData: CarSelectInfoResponse) {
     const panelArray = this.carForm.get(panelName) as FormArray;
@@ -252,6 +258,23 @@ export class AdsCreateComponent implements OnInit {
     })
   }
 
+  // public compressFile() {
+  //   return this.ngxCompressService
+  //     .uploadFile()
+  //     .then(({ image, orientation }: UploadResponse) => {
+  //       console.warn('Size in bytes was:', this.ngxCompressService.byteCount(image));
+  //       this.ngxCompressService
+  //         .compressFile(image, orientation, 30, 30)
+  //         .then((result: DataUrl) => {
+  //           this.imgResultAfterCompress = result;
+  //           console.warn(
+  //             'Size in bytes is now:',
+  //             this.ngxCompressService.byteCount(result)
+  //           );
+  //         });
+  //     });
+  // }
+
 
   public selectFile(event: Event): void{
     const input = event.target as HTMLInputElement;
@@ -259,49 +282,81 @@ export class AdsCreateComponent implements OnInit {
     if (input.files) {
       this.selectedFiles = input.files;
       this.previews = [];
-      const length = this.selectedFiles.length;
 
-      for (let i = 0; i < length; i++) {
+      // const length = this.selectedFiles.length;
+      //
+      // for (let i = 0; i < length; i++) {
+      //   const reader = new FileReader();
+      //   reader.onload = (e: any) => {
+      //     this.previews.push(e.target.result);
+      //     this.cdr.detectChanges();
+      //   };
+      //   reader.readAsDataURL(this.selectedFiles[i]);
+      // }
+      // this.uploadFiles();
+
+      Array.from(this.selectedFiles).forEach((file, index) => {
         const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.previews.push(e.target.result);
+        reader.onload = async (e: any) => {
+          const compressedImage = await this.compressImage(e.target.result);
+          this.previews.push(compressedImage);
           this.cdr.detectChanges();
+
+          // Start upload after compression
+          this.sendImage(compressedImage, file.name); // Pass compressed data and file name
         };
-        reader.readAsDataURL(this.selectedFiles[i]);
-      }
-      this.uploadFiles();
+        reader.readAsDataURL(file);
+      });
     } else {
       this.selectedFiles = undefined;
     }
   }
 
-  public uploadFiles(): void{
-    if(this.selectedFiles){
-      for(let i = 0; i < this.selectedFiles.length; i++){
-        this.sendImage(this.selectedFiles[i]);
-        this.cdr.detectChanges()
-      }
-      this.selectedFiles = undefined;
-    } else {
-      this.message.push('No files selected for upload')
-    }
-  }
+  // public uploadFiles(): void{
+  //   if(this.selectedFiles){
+  //     for(let i = 0; i < this.selectedFiles.length; i++){
+  //       this.sendImage(this.selectedFiles[i]);
+  //       this.cdr.detectChanges()
+  //     }
+  //     this.selectedFiles = undefined;
+  //   } else {
+  //     this.message.push('No files selected for upload')
+  //   }
+  // }
 
-  public sendImage(file: File){
+  // public sendImage(file: File){
+  //   const formData = new FormData();
+  //   formData.append('file', file)
+  //   this.adsService.uploadImage(formData)
+  //     .pipe(takeUntilDestroyed(this.destroy$))
+  //     .subscribe({
+  //       next: res => {
+  //         this.carImageUrls.push(res?.url as unknown as string);
+  //         this.cdr.markForCheck()
+  //       },
+  //       error: err => {
+  //         console.log(err);
+  //         this.cdr.markForCheck()
+  //       }
+  //   })
+  // }
+
+  public sendImage(compressedDataUrl: DataUrl, originalFileName: string) {
+    const file = this.dataUrlToFile(compressedDataUrl, originalFileName);
     const formData = new FormData();
-    formData.append('file', file)
+    formData.append('file', file);
+
     this.adsService.uploadImage(formData)
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
-          this.carImageUrls.push(res?.url as unknown as string);
-          this.cdr.markForCheck()
+          this.carImageUrls.push(res?.url as string);
+          this.cdr.markForCheck();
         },
         error: err => {
-          console.log(err);
-          this.cdr.markForCheck()
+          console.error('Image upload failed:', err);
         }
-    })
+      });
   }
 
 
@@ -324,6 +379,19 @@ export class AdsCreateComponent implements OnInit {
       });
     }
   }
+
+  public resetForm(){
+    this.form.reset();
+    this.mainPanelSelects = [];
+    this.extraOptions = [];
+    this.optionalOptions = [];
+    this.contactOptions = [];
+    this.previews = [];
+    this.carImageUrls = [];
+    this.comment = '';
+    this.cdr.detectChanges();
+  }
+
 
   private generateProperties(): any[] {
     const mainPanelID = this.mainPanel?.items.map(val => val.id) || [];
@@ -410,15 +478,27 @@ export class AdsCreateComponent implements OnInit {
   }
 
 
-  public resetForm(){
-    this.form.reset();
-    this.mainPanelSelects = [];
-    this.extraOptions = [];
-    this.optionalOptions = [];
-    this.contactOptions = [];
-    this.previews = [];
-    this.carImageUrls = [];
-    this.comment = '';
-    this.cdr.detectChanges();
+  private async compressImage(imageDataUrl: DataUrl): Promise<DataUrl> {
+    const compressedImage = await this.ngxCompressService.compressFile(
+      imageDataUrl,
+      DOC_ORIENTATION.Up,
+      30, // Adjust quality for compression (50% here)
+      30 // Adjust size for compression (50% here)
+    );
+    console.warn('Compressed size:', this.ngxCompressService.byteCount(compressedImage));
+    return compressedImage;
   }
+
+  private dataUrlToFile(dataUrl: string, fileName: string): File {
+    const arr = dataUrl.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: mime });
+  }
+
 }
