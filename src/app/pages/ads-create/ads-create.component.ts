@@ -13,7 +13,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import { Router, RouterLink } from "@angular/router";
 
 import { AddsService } from './services/ads.service';
-// import { BreadcrumbComponent } from "../../core/components/breadcrumb/breadcrumb.component";
+import { BreadcrumbComponent } from "../../core/components/breadcrumb/breadcrumb.component";
 import { CarSelectInfoResponse } from "./models/car-select-Info.model";
 import { ICarModelList } from './models/cars.model';
 import {MatCheckbox} from '@angular/material/checkbox';
@@ -44,7 +44,8 @@ interface Food {
     AsyncPipe,
     JsonPipe,
     NgOptimizedImage,
-    NgClass
+    NgClass,
+    BreadcrumbComponent
   ],
   templateUrl: './ads-create.component.html',
   styles: `

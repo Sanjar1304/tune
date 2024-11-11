@@ -7,7 +7,7 @@ import {
   output,
   signal,
   ElementRef,
-  HostListener, DestroyRef
+  HostListener, DestroyRef, OnDestroy
 } from '@angular/core';
 import {CommonModule, NgIf, NgOptimizedImage} from "@angular/common";
 import {INavbarMenu, NAVBAR_MENUS} from "../../core/constants/navbar-menus";
@@ -31,7 +31,7 @@ import {TranslocoDirective, TranslocoPipe, TranslocoService} from "@jsverse/tran
 import {LocalStorageService} from "../../core/services/utils/storage.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {LanguageService} from "../../core/services/utils/language.service";
-import {delay} from "rxjs";
+import {delay, Subject, takeUntil} from "rxjs";
 
 
 @Component({
@@ -130,7 +130,7 @@ import {delay} from "rxjs";
     }
   `
 })
-export class HeaderComponent implements  OnInit {
+export class HeaderComponent implements  OnInit, OnDestroy {
 
 
   public bnwMode = false;
@@ -146,7 +146,7 @@ export class HeaderComponent implements  OnInit {
   private isLanguageChanging = false;
 
   private readonly router = inject(Router);
-  private destroy$ = inject(DestroyRef);
+  private destroy$ = new Subject<void>();
   private readonly cdr = inject(ChangeDetectorRef);
   private userService = inject(UserService);
   private translocoService = inject(TranslocoService);
@@ -157,16 +157,12 @@ export class HeaderComponent implements  OnInit {
 
   public ngOnInit(): void {
     this.applyAccessibility();
-    this.setSearchPlaceHolder();
 
-    const savedLocale = this.storageService.getItem('locale');
-    if (savedLocale) {
-      this.translocoService.setActiveLang(savedLocale);
-    }
-
-    this.userService.userLoginData$.subscribe((res) => {
-      this.isLoggedIn = !!res;
-    })
+    this.userService.userLoginData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.isLoggedIn = !!res;
+      })
   }
 
   @HostListener('document:click', ['$event'])
@@ -206,7 +202,7 @@ export class HeaderComponent implements  OnInit {
     this.translocoService.setActiveLang(locale);
     this.languageService.setLanguage(locale);
     this.translocoService.load(locale)
-      .pipe(takeUntilDestroyed(this.destroy$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.isLanguageChanging = false;
@@ -280,7 +276,10 @@ export class HeaderComponent implements  OnInit {
     this.logoutOpen = false
   }
 
-  private setSearchPlaceHolder(): void{
-    this.searchPlaceholder = this.translocoService.translate('headerMenu.searchPlaceholder')
+
+  public ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
+
 }

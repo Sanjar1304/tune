@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {DecimalPipe, NgClass, NgFor, NgIf, NgOptimizedImage} from "@angular/common";
 
-// import { BreadcrumbComponent } from "../../../../core/components/breadcrumb/breadcrumb.component";
+import { BreadcrumbComponent } from "../../../../core/components/breadcrumb/breadcrumb.component";
 import { BreadcrumbService } from "../../../../core/services/utils/breadcrumb.service";
 import {CalculateCreditComponent} from "../../../home/calculate-credit/calculate-credit.component";
 import {CardDetailCalculatorComponent} from "./card-detail-calculator/card-detail-calculator.component";
@@ -38,7 +38,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
     DecimalPipe,
     NgClass,
     NgOptimizedImage,
-    TranslocoPipe
+    TranslocoPipe,
+    BreadcrumbComponent
   ],
   templateUrl: './card-detail-page.component.html',
   styles: `
@@ -149,7 +150,7 @@ export class CardDetailPageComponent implements OnInit {
               valueTranslate: prop.valueTranslate
             }));
 
-            // this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
+            this.breadcrumbService.updateBreadCrumbLabel(`${this.brandName}/${this.carName}`);
 
             this.scrollToTop();
             this.cdr.detectChanges();

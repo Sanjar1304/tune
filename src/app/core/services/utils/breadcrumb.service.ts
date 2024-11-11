@@ -1,9 +1,10 @@
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {BehaviorSubject, filter,} from "rxjs";
+import {BehaviorSubject, combineLatest, filter, from, map, Observable, of, switchMap,} from "rxjs";
 
 import { BreadCrumb } from "../../models/breadcrumb.model";
 import {inject, Injectable} from "@angular/core";
 import {TranslocoService} from "@jsverse/transloco";
+import {LanguageService} from "./language.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,18 @@ export class BreadcrumbService {
 
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  private languageService = inject(LanguageService);
+  private translocoService = inject(TranslocoService);
 
 
   public constructor() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      const breadcrumbs = this.buildBreadcrumbs(this.activatedRoute.root);
-      this.breadcrumbsSubject.next(breadcrumbs);
+    combineLatest([
+      this.languageService.currentLanguage$,  // Track language changes
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd)) // Track navigation changes
+    ]).subscribe(() => {
+      this.buildBreadcrumbs(this.activatedRoute.root).subscribe(breadcrumbs => {
+        this.breadcrumbsSubject.next(breadcrumbs);
+      });
     });
   }
 
@@ -34,43 +39,44 @@ export class BreadcrumbService {
     }
   }
 
-  private buildBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: BreadCrumb[] = []): BreadCrumb[] {
-    const children: ActivatedRoute[] = route.children;
 
+  private buildBreadcrumbs(route: ActivatedRoute, url: string = "", breadcrumbs: BreadCrumb[] = []): Observable<BreadCrumb[]> {
+    const children = route.children;
+
+    // If there are no children, we return the current breadcrumbs
     if (children.length === 0) {
-      return breadcrumbs;
+      return of(breadcrumbs);
     }
 
-    for (const child of children) {
-      const routeUrl: string = child.snapshot.url.map(segment => segment.path).join('/');
-      if (routeUrl !== '') {
-        url += `/${routeUrl}`;
-      }
+    return from(children).pipe(
+      switchMap(child => {
+        const routeUrl = child.snapshot.url.map(segment => segment.path).join("/");
+        const fullUrl = routeUrl ? `${url} / ${routeUrl}` : url;
+        const breadcrumbKey = child.snapshot.data["breadcrumb"];
 
-      const breadcrumbLabel = child.snapshot.data['breadcrumb'];
-      const isHomeRoute = child.snapshot.data['breadcrumb'] === null && !routeUrl;
+        // Translate breadcrumb key if available
+        const breadcrumbLabel$ = breadcrumbKey
+          ? this.translocoService.selectTranslate(breadcrumbKey)
+          : of(null);
 
-      // Check if the current route is not the root (home), add "Home" at the beginning
-      if (!isHomeRoute && breadcrumbs.length === 0) {
-        breadcrumbs.push({ label: 'Home', url: '/' });
-      }
-
-      const hasDynamicId = !!child.snapshot.paramMap.get('id');
-
-      if (breadcrumbLabel !== null) {
-        if (hasDynamicId) {
-          // Add a placeholder for the dynamic ID route
-          breadcrumbs.push({ label: '', url });
-        } else if (breadcrumbLabel) {
-          // Add static breadcrumbs like 'Catalog'
-          breadcrumbs.push({ label: breadcrumbLabel, url });
+        return breadcrumbLabel$.pipe(
+          map(breadcrumbLabel => {
+            if (breadcrumbLabel) {
+              breadcrumbs.push({ label: breadcrumbLabel, url: fullUrl });
+            }
+            return breadcrumbs;
+          }),
+          switchMap(() => this.buildBreadcrumbs(child, fullUrl, breadcrumbs)) // Recursive call for child routes
+        );
+      }),
+      map(breadcrumbs => {
+        // If not on the home page, prepend the Home breadcrumb
+        if (breadcrumbs.length > 0 && breadcrumbs[0].url !== '/') {
+          const homeLabel = this.translocoService.translate('headerMenu.menuTab.home');
+          breadcrumbs.unshift({ label: homeLabel, url: '/' });
         }
-      }
-
-      // Recursively collect breadcrumbs for child routes
-      return this.buildBreadcrumbs(child, url, breadcrumbs);
-    }
-
-    return breadcrumbs;
+        return breadcrumbs;
+      })
+    );
   }
 }

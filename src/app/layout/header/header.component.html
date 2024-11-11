@@ -37,7 +37,7 @@
                     <div class="w-[40px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-2 lang-shadow">
                       @for(lang of locales; track lang){
                         <div (click)="localeSelect(lang)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px] lang_animation">
-                          {{ lang |uppercase | transloco }}
+                          {{ lang |uppercase }}
                         </div>
                       }
                     </div>
