@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {LanguageService} from "../../../core/services/utils/language.service";
+import {CatalogDataService} from "../services/catalog-data.service";
 
 @Component({
   selector: 'app-catalog-cards',
@@ -32,12 +33,21 @@ export class CatalogCardsComponent implements OnInit{
   private cdr = inject(ChangeDetectorRef);
   private catalogCardsService = inject(CatalogCardsService);
   private languageService = inject(LanguageService);
+  private catalogDataService = inject(CatalogDataService);
 
   public ngOnInit() {
     this.languageService.currentLanguage$
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe(() => {
-        this.getCatalogCardsSubscription();
+        this.catalogDataService.catalogData$.subscribe(data => {
+          if(data){
+            this.catalogCardsRes = data;
+            this.displayedCards = data.items; // Set displayedCards to the received data items
+            this.cdr.detectChanges();
+          } else {
+            this.getCatalogCardsSubscription();
+          }
+        })
     })
   }
 

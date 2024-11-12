@@ -40,6 +40,5 @@ export class SortingModelService {
       map(this.sessionService.handleResponse<CarCatalogRes>),
       catchError(this.sessionService.handleError)
     )
-
   }
 }

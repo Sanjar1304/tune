@@ -33,7 +33,6 @@ export class CatalogCardsService {
       map(this.sessionService.handleResponse<CarCatalogRes>),
       catchError(this.sessionService.handleError)
     )
-
   }
 
 

@@ -3,9 +3,14 @@
     <div class="flex 2xl:flex-row xl:flex-row lg:flex-col md:flex-col sm:flex-col mobile:flex-col gap-[24px]">
         <div class="2xl:w-3/4 xl:w-3/4 lg:w-full md:w-full p-[24px] flex flex-col gap-[20px] bg-[#F3F3F3] rounded-[16px]">
             <div class="2xl:w-[34%] xl:w-[45%] lg:w-[40%] md:w-[50%] sm:w-[60%] mobile:w-full flex gap-[2px] p-[6px] border border-solid border-[#E8E8E8] rounded-[12px]">
-                <button class="b2 py-[6px] px-[18px] bg-[#fff] rounded-[6px]">{{'catalogSortingSection.button.all' | transloco}}</button>
-                <button class="b2 py-[6px] px-[18px] rounded-[6px]">{{'catalogSortingSection.button.new' | transloco}}</button>
-                <button class="b2 py-[6px] px-[18px] rounded-[6px]">{{'catalogSortingSection.button.withMileage' | transloco}}</button>
+              @for(menu of carModelMenu; track menu){
+                <button
+                  class="b3 px-[18px] py-[10px] btn_animation"
+                  [ngClass]="{'bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]': menu === activeModel}"
+                  (click)="remainSelectedModel(menu)">
+                  {{ menu.valueTranslate | titlecase }}
+                </button>
+              }
             </div>
 
             <!--===== DESKTOP SCREEN SIZE FORM 1024 and larger =====-->
@@ -14,24 +19,26 @@
               <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
                 <div class="w-full flex flex-col gap-[12px] first-child">
                   <div class="grid grid-cols-3 gap-x-4 gap-y-8">
-                    <div class="" *ngFor="let select of sortingCategories; let i = index">
-                      <div class="flex flex-col gap-[8px]">
-                        @if (!select.values?.length) {
-                          <mat-form-field class="">
-                            <mat-label>{{select.title}}</mat-label>
-                            <input matInput type="text" [(ngModel)]="sortingFormSelections[i]" name="sortingFormSelections{{i}}">
-                          </mat-form-field>
-                        } @else {
-                          <mat-form-field class="relative">
-                            <mat-label class="">{{select.title}}</mat-label>
-                            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                            <mat-select [placeholder]="select.placeholder" [(ngModel)]="sortingFormSelections[i]" name="sortingFormSelections{{i}}">
-                              <mat-option *ngFor="let item of select.values" [value]="item.value">{{item.value}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        }
+                      <div class="" *ngFor="let select of sortingCategories; let i = index">
+                        <div class="flex flex-col gap-[8px]">
+                          @if (!select.values?.length) {
+                            <mat-form-field class="">
+                              <mat-label>{{select.title}}</mat-label>
+                              <input matInput [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}"  />
+                              <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                            </mat-form-field>
+                          } @else {
+                            <mat-form-field class="relative">
+                              <mat-label class="">{{select.title}}</mat-label>
+                              <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
+                              <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
+                                <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
+                              </mat-select>
+                              <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                            </mat-form-field>
+                          }
+                        </div>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>

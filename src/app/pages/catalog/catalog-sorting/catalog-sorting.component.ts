@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatLabel, MatOption, MatSelect} from "@angular/material/select";
-import { NgFor, NgIf } from '@angular/common';
+import {NgClass, NgFor, NgIf, TitleCasePipe} from '@angular/common';
 
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatFormField} from "@angular/material/form-field";
@@ -22,6 +22,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {MatInput} from "@angular/material/input";
 import {LanguageService} from "../../../core/services/utils/language.service";
 import {TranslocoPipe} from "@jsverse/transloco";
+import {CatalogDataService} from "../services/catalog-data.service";
+import {CarCatalogRes} from "../../../core/constants/carCatalogRes";
+import {SortingModel} from "../../home/sorting-models/models/sorting.model";
+
 
 @Component({
   selector: 'app-catalog-sorting',
@@ -39,7 +43,9 @@ import {TranslocoPipe} from "@jsverse/transloco";
     NgFor,
     NgIf,
     MatInput,
-    TranslocoPipe
+    TranslocoPipe,
+    TitleCasePipe,
+    NgClass
   ],
   templateUrl: './catalog-sorting.component.html',
   styles: `
@@ -157,11 +163,18 @@ export class CatalogSortingComponent implements OnInit{
   readonly indeterminate = model(false);
   labelPosition = model<'Торг есть' | 'Автосалон' | 'C фото'>('Торг есть');
   readonly disabled = model(false);
-  sortingCategories: null | SortingFormModel[] = null;
+  public carModels!:SortingModel[];
+  public sortingCategories!: SortingFormModel[];
+  public carModelMenu!: SortingModel[];
+  public carModelsInfo!: CarCatalogRes;
+  public selectedModelsInfo!: CarCatalogRes;
+  public isSelectedPressed: boolean = false;
+  public activeModel!: SortingModel;
 
-  @ViewChild('sortingForm') form!: NgForm;
-  sortingFormSelections: any[] = [];
   pricingFrom!: FormGroup;
+  @ViewChild('sortingForm') form!: NgForm;
+  sortingFormSelections: Array<{ filterId: number, value: string, componentType: string }> = [];
+
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -169,12 +182,15 @@ export class CatalogSortingComponent implements OnInit{
   private destroy$ = inject(DestroyRef);
   private sortingService = inject(SortingService);
   private languageService = inject(LanguageService);
+  private catalogDataService = inject(CatalogDataService);
 
 
   public ngOnInit(): void {
     this.languageService.currentLanguage$.subscribe(() => {
       this.getSortingModelFormSubscription();
       this.validatePricingForm();
+      this.getButtons();
+      this.getSortingFormButtons();
     })
   }
 
@@ -185,25 +201,134 @@ export class CatalogSortingComponent implements OnInit{
     })
   }
 
+  public getButtons(){
+    this.sortingService.getModels()
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.carModels = res as unknown as SortingModel[];
+          this.carModelMenu = this.carModels.filter(val => val.type === 'USING_STATE');
+          console.log(this.carModelMenu);
+          if(this.carModelMenu.length > 0){
+            const selectedModel = this.carModelMenu[0];
+            this.selectedActiveButton(selectedModel.type, selectedModel.value)
+          }
+          this.isSelectedPressed = false;
+          this.cdr.detectChanges();
+        },
+        error: err => console.log(err)
+      });
+  }
+
+  public getSortingFormButtons(isInitialLoad: boolean = false) {
+    const filterStatic = isInitialLoad ? { type: "USING_STATE", value: "-1" } : undefined;
+    this.sortingService.getButtonsName({ query: '', filterStatic }, { page: 0, size: 10 })
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.carModelMenu = this.carModels.filter(val => val.type === 'USING_STATE');
+          if (isInitialLoad) {
+            this.carModelsInfo = res as CarCatalogRes;
+          } else {
+            this.selectedModelsInfo = res as CarCatalogRes;
+            this.isSelectedPressed = true;
+          }
+          this.cdr.detectChanges();
+        },
+        error: err => console.log(err)
+      })
+
+  }
+
   public getSortingModelFormSubscription(){
     this.sortingService.getSortingForm()
     .pipe(takeUntilDestroyed(this.destroy$))
     .subscribe({
       next: res => {
-        this.sortingCategories = res as unknown  as SortingFormModel[];
+        this.sortingCategories = res as unknown as SortingFormModel[];
+        this.sortingFormSelections = this.sortingCategories.map((category) => ({
+          filterId: category.id,
+          value: '',
+          componentType: category.componentType
+        }));
+        this.cdr.detectChanges();
       },
       error: err => console.log(err),
-      complete:()=>{
-        this.cdr.detectChanges()
-      }
+
     })
   }
 
   public onSubmit(){
-    console.log(this.form.value);
+    const filters = this.sortingFormSelections
+      .filter(selection => selection.value)
+      .map(selection => {
+        const category = this.sortingCategories.find(cat => cat.id === selection.filterId);
+        if (!category) return null; // Skip if no matching category found
+
+        switch (category.componentType) {
+          case 'SELECT':
+            const selectedOption = category.values.find(val => val.value === selection.value);
+            return selectedOption ? { filterId: selection.filterId, value: selectedOption.id } : null;
+
+          case 'MULTI_SELECT':
+            const multiSelectedOptions = selection.value.split(',').map((val: string) => {
+              const option = category.values.find(opt => opt.value === val.trim());
+              return option ? option.id : null;
+            }).filter(id => id !== null);
+            return multiSelectedOptions.length ? { filterId: selection.filterId, multiValues: multiSelectedOptions } : null;
+
+          case 'TEXT':
+            return { filterId: selection.filterId, value: selection.value };
+
+          case 'ARRANGE':
+            const [from, to] = selection.value.split('-').map(Number);
+            if (!isNaN(from) && (isNaN(to) || from === to)) {
+              return { filterId: selection.filterId, from };
+            } else if (!isNaN(from) && !isNaN(to)) {
+              return { filterId: selection.filterId, from, to };
+            }
+            return null;
+
+          default:
+            return null;
+        }
+      })
+      .filter(filter => filter !== null);
+
+    const requestData = {
+      query: '',  // Add your query parameter here as needed
+      filters: filters,
+      facet: null,
+      paging: { page: 0, size: 10 }
+    };
+
+    this.sortingService.sortedCatalogCards(requestData)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          if(res){
+            this.catalogDataService.updateCatalogData(res);
+          }
+          this.cdr.detectChanges()
+        },
+        error: err => console.error(err)
+      });
   }
 
   public pricingSubmit(){
     console.log(this.pricingFrom.value)
+  }
+
+  public selectedActiveButton(type: string, value: string) {
+    const selectedModel = this.carModelMenu.find(model => model.type === type && model.value === value);
+    if (selectedModel) {
+      this.activeModel = selectedModel;
+      this.cdr.markForCheck();
+    }
+  }
+
+
+  public remainSelectedModel(menu: SortingModel) {
+    this.activeModel = menu;
   }
 }

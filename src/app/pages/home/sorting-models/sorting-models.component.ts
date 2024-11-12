@@ -7,6 +7,8 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {DecimalPipe, NgClass, NgForOf, NgIf, NgOptimizedImage, TitleCasePipe} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {LanguageService} from "../../../core/services/utils/language.service";
+import {CatalogDataService} from "../../catalog/services/catalog-data.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -44,10 +46,12 @@ export class SortingModelsComponent implements OnInit{
   public isSelectedPressed: boolean = false;
   public activeModel!: SortingModel;
 
+  private router = inject(Router);
   private destroy$ = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
   private sortingService = inject(SortingModelService);
   private languageService = inject(LanguageService);
+  private catalogDataService = inject(CatalogDataService)
 
   public ngOnInit() {
 
@@ -106,6 +110,7 @@ export class SortingModelsComponent implements OnInit{
       .subscribe(res => {
         this.selectedModelsInfo = res as CarCatalogRes;
         this.selectedModelsLength = this.selectedModelsInfo.items.length;
+        this.catalogDataService.updateCatalogData(this.selectedModelsInfo);
         this.isSelectedPressed = true;
         this.cdr.detectChanges();
       });
@@ -114,6 +119,7 @@ export class SortingModelsComponent implements OnInit{
   public remainSelectedModel(menu: SortingModel) {
     this.activeModel = menu;
     this.fetchModelNames(menu.type, menu.value);
+
   }
 
   public getImageValue(type: string, value: string) {
@@ -127,5 +133,9 @@ export class SortingModelsComponent implements OnInit{
       this.cdr.markForCheck();
     }
     this.fetchModelNames(type, value);
+  }
+
+  public openCatalogPage(){
+    this.router.navigate(['/catalog'])
   }
 }

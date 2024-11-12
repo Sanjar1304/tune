@@ -18,7 +18,7 @@
             <div class="h-[70px] px-[10px] flex items-center lg:gap-[10px] gap-[24px] overflow-x-scroll scrollbar-none">
               @for(model of carModelsImage; track model){
                 <img class="w-[50px] h-[50px] object-cover brand_icons"
-                     [src]="model.imageLink" alt="car icon image"
+                     [src]="model?.imageLink" alt="car icon image"
                      (click)="getImageValue(model.type, model.value)"
                      loading="lazy">
               }
@@ -58,6 +58,7 @@
               lg:w-[277px] md:w-full sm:w-full mobile:w-full
               md:py-[18px] md:px-[28px] sm:py-[28px] mobile:py-[18px]
               md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px]"
+                    (click)="openCatalogPage()"
             >{{"buttonTexts.sorting_btn_1" | transloco}} {{ selectedModelsLength }} {{"buttonTexts.sorting_btn_2" | transloco}}</button>
         </div>
     </div>

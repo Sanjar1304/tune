@@ -168,11 +168,7 @@ export class AdsCreateComponent implements OnInit {
   @Input() contactsPanel: null | CarSelectInfoResponse = null;
 
   selectedFiles?: FileList | null = null;
-  message: string[] = [];
   previews: string[] = [];
-  imgResultAfterCompress: DataUrl = '';
-
-
   comment: string = '';
   price: number = 0;
   currency: string = '';
@@ -258,43 +254,12 @@ export class AdsCreateComponent implements OnInit {
     })
   }
 
-  // public compressFile() {
-  //   return this.ngxCompressService
-  //     .uploadFile()
-  //     .then(({ image, orientation }: UploadResponse) => {
-  //       console.warn('Size in bytes was:', this.ngxCompressService.byteCount(image));
-  //       this.ngxCompressService
-  //         .compressFile(image, orientation, 30, 30)
-  //         .then((result: DataUrl) => {
-  //           this.imgResultAfterCompress = result;
-  //           console.warn(
-  //             'Size in bytes is now:',
-  //             this.ngxCompressService.byteCount(result)
-  //           );
-  //         });
-  //     });
-  // }
-
-
   public selectFile(event: Event): void{
     const input = event.target as HTMLInputElement;
 
     if (input.files) {
       this.selectedFiles = input.files;
       this.previews = [];
-
-      // const length = this.selectedFiles.length;
-      //
-      // for (let i = 0; i < length; i++) {
-      //   const reader = new FileReader();
-      //   reader.onload = (e: any) => {
-      //     this.previews.push(e.target.result);
-      //     this.cdr.detectChanges();
-      //   };
-      //   reader.readAsDataURL(this.selectedFiles[i]);
-      // }
-      // this.uploadFiles();
-
       Array.from(this.selectedFiles).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = async (e: any) => {
@@ -311,35 +276,6 @@ export class AdsCreateComponent implements OnInit {
       this.selectedFiles = undefined;
     }
   }
-
-  // public uploadFiles(): void{
-  //   if(this.selectedFiles){
-  //     for(let i = 0; i < this.selectedFiles.length; i++){
-  //       this.sendImage(this.selectedFiles[i]);
-  //       this.cdr.detectChanges()
-  //     }
-  //     this.selectedFiles = undefined;
-  //   } else {
-  //     this.message.push('No files selected for upload')
-  //   }
-  // }
-
-  // public sendImage(file: File){
-  //   const formData = new FormData();
-  //   formData.append('file', file)
-  //   this.adsService.uploadImage(formData)
-  //     .pipe(takeUntilDestroyed(this.destroy$))
-  //     .subscribe({
-  //       next: res => {
-  //         this.carImageUrls.push(res?.url as unknown as string);
-  //         this.cdr.markForCheck()
-  //       },
-  //       error: err => {
-  //         console.log(err);
-  //         this.cdr.markForCheck()
-  //       }
-  //   })
-  // }
 
   public sendImage(compressedDataUrl: DataUrl, originalFileName: string) {
     const file = this.dataUrlToFile(compressedDataUrl, originalFileName);
@@ -454,7 +390,6 @@ export class AdsCreateComponent implements OnInit {
       images: this.carImageUrls
     };
   }
-
 
   private generateFormDataWithAssetID(properties: any[]): any {
     return {
