@@ -19,54 +19,100 @@
               <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
                 <div class="w-full flex flex-col gap-[12px] first-child">
                   <div class="grid grid-cols-3 gap-x-4 gap-y-8">
-                      <div class="" *ngFor="let select of sortingCategories; let i = index">
-                        <div class="flex flex-col gap-[8px]">
-                          @if (!select.values?.length) {
-                            <mat-form-field class="">
-                              <mat-label>{{select.title}}</mat-label>
-                              <input matInput [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}"  />
-                              <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
-                            </mat-form-field>
-                          } @else {
-                            <mat-form-field class="relative">
-                              <mat-label class="">{{select.title}}</mat-label>
-                              <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px] "></app-ui-svg-icon>
-                              <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
-                                <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
-                              </mat-select>
-                              <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
-                            </mat-form-field>
-                          }
+
+                    <div *ngFor="let select of sortingCategories; let i = index" class="flex flex-col gap-[8px]">
+                      <!-- Condition for TEXT componentType -->
+                      <ng-container *ngIf="select.componentType === 'TEXT'">
+                        <mat-form-field>
+                          <mat-label>{{ select.title }}</mat-label>
+                          <input matInput [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}" />
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                        </mat-form-field>
+                      </ng-container>
+
+                      <ng-container *ngIf="select.componentType === 'MULTI_SELECT'">
+                        <mat-form-field class="relative">
+                          <mat-label>{{ select.title }}</mat-label>
+                          <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                          <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
+                            <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
+                          </mat-select>
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}"/>
+                        </mat-form-field>
+                      </ng-container>
+
+                      <ng-container *ngIf="select.componentType === 'ARRANGE'">
+                        <!-- WITH pairFilter -->
+                        <div *ngIf="select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
+                          <mat-form-field>
+                            <mat-label>{{ select.title }} from</mat-label>
+                            <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                          </mat-form-field>
+                          <mat-form-field>
+                            <mat-label>{{ select.title }} to</mat-label>
+                            <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                          </mat-form-field>
+
+                          <!-- Dropdown for SELECT type inside pairFilter -->
+                          <mat-form-field *ngIf="sortingFormSelections[i].pairFilter?.values">
+                            <mat-label>{{ sortingFormSelections[i].pairFilter?.title }}</mat-label>
+                            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                            <mat-select [(ngModel)]="sortingFormSelections[i].value" name="pairFilter{{i}}">
+                              <mat-option *ngFor="let item of sortingFormSelections[i].pairFilter?.values" [value]="item.id">
+                                {{ item.value }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
                         </div>
-                      </div>
+
+                        <!-- If no pairFilter, display only the range inputs -->
+                        <div *ngIf="!select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
+                          <mat-form-field>
+                            <mat-label>{{ select.title }} from</mat-label>
+                            <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                          </mat-form-field>
+                          <mat-form-field>
+                            <mat-label>{{ select.title }} to</mat-label>
+                            <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+
+                      <!-- Condition for SELECT componentType with no pairFilter -->
+                      <ng-container *ngIf="select.componentType === 'SELECT'">
+                        <mat-form-field class="relative">
+                          <mat-label>{{ select.title }}</mat-label>
+                          <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                          <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
+                            <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
+                          </mat-select>
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}"/>
+                        </mat-form-field>
+                      </ng-container>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div class="w-full flex flex-col gap-[32px] pt-[10px]">
                 <div class="2xl:w-2/3 xl:w-2/3 mobile:w-full">
-<!--                  <mat-radio-group class="w-full flex justify-between" [(ngModel)]="labelPosition">-->
-<!--                    <mat-radio-button class="b4" value="after">Торг есть</mat-radio-button>-->
-<!--                    <mat-radio-button class="b4" value="before">Автосалон</mat-radio-button>-->
-<!--                    <mat-radio-button class="b4" value="before">C фото</mat-radio-button>-->
-<!--                  </mat-radio-group>-->
                 </div>
                 <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col justify-between">
                   <div class="flex items-center gap-[16px] py-[10px] px-[4px]">
-<!--                    <span class="link text-[#A1A1A1]">Расширенный поиск</span>-->
-<!--                    <img src="/assets/icons/arrow-down.svg" alt="">-->
                   </div>
 
                   <div class="flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
-                    <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]">{{'catalogSortingSection.button.clear' | transloco}}</button>
-                    <button class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">{{'catalogSortingSection.button.show' | transloco}}</button>
+                    <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]" (click)="clearSortingForm()">{{'catalogSortingSection.button.clear' | transloco}}</button>
+                    <button type="submit" class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">{{'catalogSortingSection.button.show' | transloco}}</button>
                   </div>
                 </div>
               </div>
             </div>
           </form>
         </div>
-
 
         <div class="2xl:w-1/4 xl:w-1/4 lg:w-full md:w-full p-[24px] bg-[#E3FBFC] rounded-[16px]">
             <h4 class="h4 pb-[16px]">{{'catalogSortingSection.sideForm.title' | transloco}}</h4>

@@ -417,8 +417,8 @@ export class AdsCreateComponent implements OnInit {
     const compressedImage = await this.ngxCompressService.compressFile(
       imageDataUrl,
       DOC_ORIENTATION.Up,
-      30, // Adjust quality for compression (50% here)
-      30 // Adjust size for compression (50% here)
+      40, // Adjust quality for compression (50% here)
+      40 // Adjust size for compression (50% here)
     );
     console.warn('Compressed size:', this.ngxCompressService.byteCount(compressedImage));
     return compressedImage;

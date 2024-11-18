@@ -54,7 +54,7 @@ export class RecommendationCardsComponent implements OnInit{
   }
 
   public getCatalogCardsSubscription(){
-    this.catalogCardsService.getCatalogCards({ query: '' }, { page: 0, size: 10 })
+    this.catalogCardsService.getCatalogCards({ query: '', paging: { page: 0, size: 10 } })
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {

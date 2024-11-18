@@ -224,7 +224,8 @@
     "orderPhoneBtn": "Qo'ng'iroqni qiling",
     "calculateCreditBtn": "To'lovga o'ting",
     "createAds": "E'lon berish",
-    "logout": "Chiqish"
+    "logout": "Chiqish",
+    "load_more": "Ko'proq yuklash"
   },
   "catalogSortingSection": {
     "title": "Toshkentda mashina sotib oling",

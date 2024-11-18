@@ -222,7 +222,8 @@
     "orderPhoneBtn": "Request a call",
     "calculateCreditBtn": "Proceed to checkout",
     "createAds": "Submit an ad",
-    "logout": "Log out"
+    "logout": "Log out",
+    "load_more": "Load more"
   },
   "catalogSortingSection": {
     "title": "Buy a car in Tashkent",

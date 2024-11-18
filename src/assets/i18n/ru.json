@@ -222,7 +222,8 @@
     "orderPhoneBtn": "Заказать звонок",
     "calculateCreditBtn": "Перейти к оформлению",
     "createAds": "Подать объявление",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "load_more": "Загрузить больше"
   },
   "catalogSortingSection": {
     "title": "Купить автомобиль в Ташкенте",

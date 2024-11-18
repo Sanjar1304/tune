@@ -16,24 +16,21 @@ export class CatalogCardsService {
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
 
-
-  public getCatalogCards(data:{query:string}, paging: { page: number, size: number }): Observable <CarCatalogRes | null>{
-
+  public getCatalogCards(data: { query: string, paging: { page: number, size: number } }): Observable<CarCatalogRes | null> {
     const requestBody = {
       query: data.query,
       facet: null,
       filters: [],
-      paging: {
-        page: paging.page,
-        size: paging.size
-      }
+      paging: { page: data.paging.page, size: data.paging.size },
     };
 
-    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}/product/search/basic`, JSON.stringify(requestBody)).pipe(
-      map(this.sessionService.handleResponse<CarCatalogRes>),
-      catchError(this.sessionService.handleError)
-    )
+    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}/product/search/basic`, requestBody)
+      .pipe(
+        map(this.sessionService.handleResponse<CarCatalogRes>),
+        catchError(this.sessionService.handleError)
+      );
   }
+
 
 
   public getCarById(id:any): Observable<ICarDetailRes | null>{

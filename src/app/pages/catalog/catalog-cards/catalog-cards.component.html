@@ -1,58 +1,174 @@
 <section class="container mx-auto flex flex-col gap-[35px]">
-  <div class="flex justify-between">
-    <h3 class="h3"> {{catalogCardsLength}} {{'catalogPageItems.cardsLength' | transloco}}</h3>
-    <button class="flex items-center gap-[16px] px-[20px] py-[8px] rounded-[10px] border border-solid border-[#E8E8E8] text-[#A1A1A1] b3">
-      {{'catalogPageItems.button' | transloco}}
+  <!-- Header Section -->
+  <div class="flex justify-between items-center">
+    <h3 class="h3">
+      {{ catalogCardsLength }} {{ 'catalogPageItems.cardsLength' | transloco }}
+    </h3>
+    <button
+      class="flex items-center gap-[16px] px-[20px] py-[8px] rounded-[10px] border border-solid border-[#E8E8E8] text-[#A1A1A1] b3"
+      aria-label="Sort Options">
+      {{ 'catalogPageItems.button' | transloco }}
       <img ngSrc="./assets/icons/arrow-down.svg" alt="Sort Icon" loading="lazy" height="16" width="16">
     </button>
   </div>
-  <div class="w-full flex flex-col">
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 lg:gap-[24px] md:gap-[16px] sm:gap-[16px] mobile:gap-[16px] pb-[32px]">
-      @if(catalogCardsRes && catalogCardsRes.items.length > 0){
-        @for(car of displayedCards; track car.productId){
-          <div class="rounded-[30px] bg-[#F7F7F7]" (click)="openCardContent(car.productId)">
-            <div class="relative z-[1]">
-              <img class="absolute top-[18px] right-[18px] z-[100]" ngSrc="./assets/icons/star.svg" alt="star icon" loading="lazy" height="24" width="24"/>
-              <div class="rounded-[30px] overflow-hidden">
-                <img class="w-auto h-auto image object-cover"
-                     [src]="car?.imageLink ? car?.imageLink : 'assets/images/missing-img.png'"
-                     [class.bg_color]="bg_color"
-                     alt="" loading="lazy">
-              </div>
-            </div>
-            <div class="lg:pt-[24px] lg:pb-[28px] lg:px-[28px] md:p-[20px] sm:p-[20px] mobile:p-[20px]">
-              <h2 class="b1 pb-[8px] text[#262626]">{{ car?.name }}</h2>
-              <h3 class="static-h3 pb-[4px] text-[#262626]">{{ car?.price?.amount }} {{ car?.price?.currency }}</h3>
-              <h3 class="b4 pb-[12px] text-[#27C5D0]">{{ "recommendationPage.monthlyPay.from" | transloco }} 3 587 300 UZS/{{"recommendationPage.monthlyPay.monthly" | transloco }}</h3>
-              <div class="w-full flex gap-[8px] sm:gap-[16px]">
-                <p class="b6 text-[#262626]">{{getCarDetail(car.resProperties, 'YEAR')}} {{"recommendationPage.year" | transloco}},</p>
-                <p class="b6 text-[#262626]">{{getCarDetail(car.resProperties, 'MILEAGE')}} {{"recommendationPage.km" | transloco}},</p>
-                <p class="b6 text-[#262626]">{{getCarDetail(car.resProperties, 'FUEL_TYPE')}},</p>
-                <p class="b6 text-[#262626]">{{getCarDetail(car.resProperties, 'TRANSMISSION')}}</p>
-              </div>
-            </div>
+
+  <!-- Cards Grid -->
+  <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-[24px] pb-[32px]">
+    <ng-container *ngIf="catalogCardsRes?.items?.length; else noDataTemplate">
+      <div
+        *ngFor="let car of displayedCards;"
+        class="rounded-[30px] bg-[#F7F7F7]"
+        (click)="openCardContent(car.productId)"
+        tabindex="0"
+        role="button">
+        <div class="relative z-[1]">
+          <img
+            class="absolute top-[18px] right-[18px] z-[100]"
+            ngSrc="./assets/icons/star.svg"
+            alt="Favorite"
+            loading="lazy"
+            height="24"
+            width="24">
+          <div class="rounded-[30px] overflow-hidden">
+            <img
+              class="w-auto h-auto object-cover"
+              [src]="car?.imageLink || 'assets/images/missing-img.png'"
+              [alt]="car?.name || 'Car image'"
+              loading="lazy">
           </div>
-        }
-      }
-    </div>
-    <div class="flex flex-col items-center">
-      @if(displayedCards.length && catalogCardsRes.items.length){
-        <button
-          class="2xl:w-[15%] xl:w-[20%] lg:w-[25%] px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link custom-button"
-          [disabled]="displayedCards.length >= catalogCardsRes.items.length"
-          (click)="loadMoreCards()">
-          {{"catalogPageItems.more_btn" | transloco}}
-        </button>
-      }
-      <div class="pt-[24px] flex gap-[8px]">
-        <button *ngFor="let pageNumber of visiblePageNumbers;"
-                (click)="loadPage(pageNumber)"
-                [class.bg-[#EEE]]="pageNumber === currentPage"
-                class="w-[40px] p-[10px] rounded-[12px]"
-                [disabled]="pageNumber === currentPage || pageNumber === -1">
-          {{ pageNumber !== -1 ? pageNumber + 1 : '...' }}
-        </button>
+        </div>
+        <div class="p-[20px] lg:p-[28px]">
+          <h2 class="b1 pb-[8px] text-[#262626]">{{ car?.name }}</h2>
+          <h3 class="static-h3 pb-[4px] text-[#262626]">{{ car?.price?.amount || 'N/A' }} {{ car?.price?.currency || '' }}</h3>
+          <h3 class="b4 pb-[12px] text-[#27C5D0]">
+            {{ 'recommendationPage.monthlyPay.from' | transloco }}
+            3 587 300 UZS/{{ 'recommendationPage.monthlyPay.monthly' | transloco }}
+          </h3>
+          <div class="w-full flex flex-wrap gap-[8px]">
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'YEAR') || '-' }} {{ 'recommendationPage.year' | transloco }}</p>
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'MILEAGE') || '-' }} {{ 'recommendationPage.km' | transloco }}</p>
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'FUEL_TYPE') || '-' }}</p>
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'TRANSMISSION') || '-' }}</p>
+          </div>
+        </div>
       </div>
+    </ng-container>
+  </div>
+
+  <!-- Pagination and Load More -->
+  <div class="flex flex-col items-center">
+    <button
+      *ngIf="!isLastPage()"
+      class="px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link"
+      (click)="openMore()">
+      {{ 'buttonTexts.load_more' | transloco }}
+    </button>
+    <div class="pagination" role="navigation">
+      <button
+        *ngFor="let page of pagesArray; let i = index"
+        (click)="onCustomPageChange(i)"
+        [class.active]="i === _currentPage"
+        class="page-button">
+        {{ i + 1 }}
+      </button>
     </div>
   </div>
+
+  <!-- No Data Template -->
+  <ng-template #noDataTemplate>
+    <p class="text-center text-[#A1A1A1]">{{ 'catalogPageItems.noData' | transloco }}</p>
+  </ng-template>
 </section>
+
+
+<!--<section class="container mx-auto flex flex-col gap-[35px]">-->
+<!--  &lt;!&ndash; Header Section &ndash;&gt;-->
+<!--  <div class="flex justify-between items-center">-->
+<!--    <h3 class="h3">-->
+<!--      {{ catalogCardsLength() }} {{ 'catalogPageItems.cardsLength' | transloco }}-->
+<!--    </h3>-->
+<!--    <button-->
+<!--      class="flex items-center gap-[16px] px-[20px] py-[8px] rounded-[10px] border border-solid border-[#E8E8E8] text-[#A1A1A1] b3"-->
+<!--      aria-label="Sort Options">-->
+<!--      {{ 'catalogPageItems.button' | transloco }}-->
+<!--      <img ngSrc="./assets/icons/arrow-down.svg" alt="Sort Icon" loading="lazy" height="16" width="16">-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Cards Grid &ndash;&gt;-->
+<!--  <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-[24px] pb-[32px]">-->
+<!--    <ng-container *ngIf="displayedCards()?.length; else noDataTemplate">-->
+<!--      <div-->
+<!--        *ngFor="let car of displayedCards()"-->
+<!--        class="rounded-[30px] bg-[#F7F7F7]"-->
+<!--        (click)="openCardContent(car.productId)"-->
+<!--        tabindex="0"-->
+<!--        role="button">-->
+<!--        <div class="relative z-[1]">-->
+<!--          <img-->
+<!--            class="absolute top-[18px] right-[18px] z-[100]"-->
+<!--            ngSrc="./assets/icons/star.svg"-->
+<!--            alt="Favorite"-->
+<!--            loading="lazy"-->
+<!--            height="24"-->
+<!--            width="24">-->
+<!--          <div class="rounded-[30px] overflow-hidden">-->
+<!--            <img-->
+<!--              class="w-auto h-auto object-cover"-->
+<!--              [src]="car?.imageLink || 'assets/images/missing-img.png'"-->
+<!--              [alt]="car?.name || 'Car image'"-->
+<!--              loading="lazy">-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="p-[20px] lg:p-[28px]">-->
+<!--          <h2 class="b1 pb-[8px] text-[#262626]">{{ car?.name }}</h2>-->
+<!--          <h3 class="static-h3 pb-[4px] text-[#262626]">-->
+<!--            {{ car?.price?.amount || 'N/A' }} {{ car?.price?.currency || '' }}-->
+<!--          </h3>-->
+<!--          <h3 class="b4 pb-[12px] text-[#27C5D0]">-->
+<!--            {{ 'recommendationPage.monthlyPay.from' | transloco }}-->
+<!--            3 587 300 UZS/{{ 'recommendationPage.monthlyPay.monthly' | transloco }}-->
+<!--          </h3>-->
+<!--          <div class="w-full flex flex-wrap gap-[8px]">-->
+<!--            <p class="b6 text-[#262626]">-->
+<!--              {{ getCarDetail(car.resProperties, 'YEAR') || '-' }} {{ 'recommendationPage.year' | transloco }}-->
+<!--            </p>-->
+<!--            <p class="b6 text-[#262626]">-->
+<!--              {{ getCarDetail(car.resProperties, 'MILEAGE') || '-' }} {{ 'recommendationPage.km' | transloco }}-->
+<!--            </p>-->
+<!--            <p class="b6 text-[#262626]">-->
+<!--              {{ getCarDetail(car.resProperties, 'FUEL_TYPE') || '-' }}-->
+<!--            </p>-->
+<!--            <p class="b6 text-[#262626]">-->
+<!--              {{ getCarDetail(car.resProperties, 'TRANSMISSION') || '-' }}-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Pagination and Load More &ndash;&gt;-->
+<!--  <div class="flex flex-col items-center">-->
+<!--    <button-->
+<!--      *ngIf="!isLastPage()"-->
+<!--      class="px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link"-->
+<!--      (click)="openMore()">-->
+<!--      {{ 'buttonTexts.load_more' | transloco }}-->
+<!--    </button>-->
+<!--    <div class="pagination" role="navigation">-->
+<!--      <button-->
+<!--        *ngFor="let page of pagesArray(); let i = index"-->
+<!--        (click)="onCustomPageChange(i)"-->
+<!--        [class.active]="i === _currentPage()"-->
+<!--        class="page-button">-->
+<!--        {{ i + 1 }}-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; No Data Template &ndash;&gt;-->
+<!--  <ng-template #noDataTemplate>-->
+<!--    <p class="text-center text-[#A1A1A1]">{{ 'catalogPageItems.noData' | transloco }}</p>-->
+<!--  </ng-template>-->
+<!--</section>-->
