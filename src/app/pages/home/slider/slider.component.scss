@@ -1,0 +1,76 @@
+
+:host {
+  @keyframes borderAnimation {
+    0% {
+      border-color: transparent;
+    }
+    25% {
+      border-color: #27c5d0 transparent transparent transparent;
+    }
+    50% {
+      border-color: #27c5d0 #27c5d0 transparent transparent;
+    }
+    75% {
+      border-color: #27c5d0 #27c5d0 #27c5d0 transparent;
+    }
+    100% {
+      border-color: #27c5d0;
+    }
+  }
+
+  .active-card {
+    position: relative;
+    border-radius: 16px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    animation: borderAnimation 5s ease-in-out infinite;
+    overflow: hidden;
+
+    /* Fix width and height to prevent resizing */
+    width: 100%;
+    height: auto;
+    max-width: 648px;
+  }
+
+  .active-card .inner {
+    position: relative;
+    background-color: #27c5d0;
+    border-radius: 14px;
+    z-index: 1;
+    padding: 16px;
+    transition: background-color 0.5s ease-in-out;
+  }
+
+  .active-card h3 {
+    color: #fff;
+    z-index: 2;
+  }
+
+  .inactive-card {
+    border-radius: 16px;
+    color: #262626;
+    width: 100%;
+    height: auto;
+    max-width: 648px;
+  }
+
+  .inactive-card h3 {
+    color: #626262;
+  }
+
+  .outer {
+    position: relative;
+  }
+
+  .inner {
+    position: relative;
+    background-color: #e3fbfc;
+    border-radius: 14px;
+    transition: background-color 0.5s ease-in-out;
+  }
+
+  .active-card .inner {
+    background-color: #27c5d0;
+  }
+}

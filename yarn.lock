@@ -197,7 +197,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^18.0.0", "@angular/common@^18.0.0 || ^19.0.0", "@angular/common@^18.0.0-rc.0", "@angular/common@^18.1.0", "@angular/common@>=16.0.0-0", "@angular/common@>=6.0.0", "@angular/common@18.1.1", "@angular/common@x.x.x":
+"@angular/common@^18.0.0", "@angular/common@^18.0.0 || ^19.0.0", "@angular/common@^18.0.0-rc.0", "@angular/common@^18.1.0", "@angular/common@>=14.0.0", "@angular/common@>=16.0.0-0", "@angular/common@>=6.0.0", "@angular/common@18.1.1", "@angular/common@x.x.x":
   version "18.1.1"
   resolved "https://registry.npmjs.org/@angular/common/-/common-18.1.1.tgz"
   integrity sha512-qNfYAapvIi8JyQToSqbg3O5dRXaElv/yNp2evvBGn4UO/liHjdNV/DzgCdyKP7uVbYrR0W3bzj++SxVR3mrATQ==
@@ -225,14 +225,14 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^18.0.0", "@angular/core@^18.0.0 || ^19.0.0", "@angular/core@^18.0.0-rc.0", "@angular/core@^18.1.0", "@angular/core@>=16.0.0", "@angular/core@>=16.0.0-0", "@angular/core@>=6.0.0", "@angular/core@18.1.1", "@angular/core@x.x.x":
+"@angular/core@^18.0.0", "@angular/core@^18.0.0 || ^19.0.0", "@angular/core@^18.0.0-rc.0", "@angular/core@^18.1.0", "@angular/core@>=14.0.0", "@angular/core@>=16.0.0", "@angular/core@>=16.0.0-0", "@angular/core@>=6.0.0", "@angular/core@18.1.1", "@angular/core@x.x.x":
   version "18.1.1"
   resolved "https://registry.npmjs.org/@angular/core/-/core-18.1.1.tgz"
   integrity sha512-/JFQ49fVIthZzdggl7FOCYAjaynbkRcCyiri85kAyTIvJ6aMSIiEKwJCw45WI5ICf2HtC9kz6dr0OKhMR6SeiA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/forms@^18.0.0 || ^19.0.0", "@angular/forms@^18.1.0":
+"@angular/forms@^18.0.0 || ^19.0.0", "@angular/forms@^18.1.0", "@angular/forms@>=14.0.0":
   version "18.1.1"
   resolved "https://registry.npmjs.org/@angular/forms/-/forms-18.1.1.tgz"
   integrity sha512-CceH57IKeH2Zq8QFFkcJMvBbjxVRCtqzAqSETfShWzrt+ITrz4c6EnUMbj30iz+ntn/R+qGAp3n/t0D7HtTS6Q==
@@ -4814,6 +4814,13 @@ ngx-image-compress@^18.1.5:
   integrity sha512-g/k6fK3mTPB5ZQ13KiYrOHdKXgXXZ0/rkXdgP0jQaroXLGu7sGlmvJqSseq/B+1d/6IsBo1wT5oeAzxymuwkfw==
   dependencies:
     tslib "^2.6.3"
+
+ngx-mask@^18.0.4:
+  version "18.0.4"
+  resolved "https://registry.npmjs.org/ngx-mask/-/ngx-mask-18.0.4.tgz"
+  integrity sha512-ji6bpXCNMjEISMdvvZ2T+iMZUqiVluVJ8aywWi59//TR6G6VWs3bmlr1f+OKunjFPgvUGf7/kIdKoMbrF1++aA==
+  dependencies:
+    tslib "^2.3.0"
 
 ngx-toastr@^19.0.0:
   version "19.0.0"

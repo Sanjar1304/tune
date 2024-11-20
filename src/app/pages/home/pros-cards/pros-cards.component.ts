@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {ProsService} from "./services/pros.service";
-import {Router} from "@angular/router";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {ProductModel, ProsModel} from "./models/pros.model";
 import {LanguageService} from "../../../core/services/utils/language.service";
+import {catchError, Observable, of, switchMap, tap} from "rxjs";
+import {ProsModel} from "./models/pros.model";
 
 @Component({
   selector: 'app-pros-cards',
@@ -17,33 +17,24 @@ import {LanguageService} from "../../../core/services/utils/language.service";
 })
 export class ProsCardsComponent implements OnInit{
 
-  productList: ProsModel | null = null;
-  product: ProductModel[] = [];
+  productList = signal<ProsModel | null>(null);
 
-  private router = inject(Router);
   private destroy$ = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
   private prosService = inject(ProsService);
   private languageService = inject(LanguageService);
 
   public ngOnInit() {
-    this.languageService.currentLanguage$
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe(() =>{
-        this.gettingProsData();
-      })
+    this.subscriptionWithLang().subscribe();
   }
 
-  public gettingProsData(){
-    this.prosService.getProsCards()
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe({
-        next: res => {
-          this.productList = res as unknown as ProsModel;
-          this.product = this.productList.items.map(val => val.banner);
-          this.cdr.detectChanges();
-        },
-        error: err => console.log(err)
-      })
+  private subscriptionWithLang(): Observable<ProsModel | null>{
+    return this.languageService.currentLanguage$
+      .pipe(
+        takeUntilDestroyed(this.destroy$),
+        switchMap(() => this.prosService.getProsCards()),
+        tap(res => this.productList.set(res)),
+        catchError(err => of(err))
+      );
   }
+
 }

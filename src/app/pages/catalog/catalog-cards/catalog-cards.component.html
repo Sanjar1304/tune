@@ -15,38 +15,29 @@
   <!-- Cards Grid -->
   <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-[24px] pb-[32px]">
     <ng-container *ngIf="catalogCardsRes?.items?.length; else noDataTemplate">
-      <div
-        *ngFor="let car of displayedCards;"
-        class="rounded-[30px] bg-[#F7F7F7]"
-        (click)="openCardContent(car.productId)"
-        tabindex="0"
-        role="button">
+      <div *ngFor="let car of displayedCards;" class="rounded-[30px] bg-[#F7F7F7]"
+        (click)="openCardContent(car.productId)" tabindex="0" role="button">
         <div class="relative z-[1]">
-          <img
-            class="absolute top-[18px] right-[18px] z-[100]"
-            ngSrc="./assets/icons/star.svg"
-            alt="Favorite"
-            loading="lazy"
-            height="24"
-            width="24">
+          <img class="absolute top-[18px] right-[18px] z-[100]" ngSrc="./assets/icons/star.svg" alt="Favorite"
+            loading="lazy" height="24" width="24">
           <div class="rounded-[30px] overflow-hidden">
-            <img
-              class="w-auto h-auto object-cover"
-              [src]="car?.imageLink || 'assets/images/missing-img.png'"
-              [alt]="car?.name || 'Car image'"
-              loading="lazy">
+            <img class="w-full h-[260px] object-cover" [src]="car?.imageLink || 'assets/images/missing-img.png'"
+              [alt]="car?.name || 'Car image'" loading="lazy">
           </div>
         </div>
         <div class="p-[20px] lg:p-[28px]">
           <h2 class="b1 pb-[8px] text-[#262626]">{{ car?.name }}</h2>
-          <h3 class="static-h3 pb-[4px] text-[#262626]">{{ car?.price?.amount || 'N/A' }} {{ car?.price?.currency || '' }}</h3>
-          <h3 class="b4 pb-[12px] text-[#27C5D0]">
+          <h3 class="static-h3 pb-[4px] text-[#262626]">{{ car?.price?.amount || 'N/A' }} {{ car?.price?.currency || ''
+            }}</h3>
+          <h6 class="b4 pb-[12px] text-[#27C5D0]">
             {{ 'recommendationPage.monthlyPay.from' | transloco }}
             3 587 300 UZS/{{ 'recommendationPage.monthlyPay.monthly' | transloco }}
-          </h3>
+          </h6>
           <div class="w-full flex flex-wrap gap-[8px]">
-            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'YEAR') || '-' }} {{ 'recommendationPage.year' | transloco }}</p>
-            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'MILEAGE') || '-' }} {{ 'recommendationPage.km' | transloco }}</p>
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'YEAR') || '-' }} {{
+              'recommendationPage.year' | transloco }}</p>
+            <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'MILEAGE') || '-' }} {{
+              'recommendationPage.km' | transloco }}</p>
             <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'FUEL_TYPE') || '-' }}</p>
             <p class="b6 text-[#262626]">{{ getCarDetail(car.resProperties, 'TRANSMISSION') || '-' }}</p>
           </div>
@@ -57,18 +48,12 @@
 
   <!-- Pagination and Load More -->
   <div class="flex flex-col items-center">
-    <button
-      *ngIf="!isLastPage()"
-      class="px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link"
-      (click)="openMore()">
+    <button *ngIf="!isLastPage()" class="px-[28px] py-[10px] rounded-[14px] bg-[#EEEEEE] link" (click)="openMore()">
       {{ 'buttonTexts.load_more' | transloco }}
     </button>
     <div class="pagination" role="navigation">
-      <button
-        *ngFor="let page of pagesArray; let i = index"
-        (click)="onCustomPageChange(i)"
-        [class.active]="i === _currentPage"
-        class="page-button">
+      <button *ngFor="let page of pagesArray; let i = index" (click)="onCustomPageChange(i)"
+        [class.active]="i === _currentPage" class="page-button">
         {{ i + 1 }}
       </button>
     </div>

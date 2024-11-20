@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable, catchError, map } from "rxjs";
 import { Injectable, inject } from "@angular/core";
-import { LoginResponseModel, UserCheckResponseModel, UserVerifyResponseModel } from "../models/auth.model";
+import { UserCheckResponseModel, UserVerifyResponseModel } from "../models/auth.model";
 
 import { BackendResponseModel } from "../../../core/models/backend-response.model";
 import { HttpClient } from "@angular/common/http";

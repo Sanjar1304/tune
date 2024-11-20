@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {MatExpansionModule} from "@angular/material/expansion";
 import {FaqsService} from "./services/faqs.service";
 import {FaqsModel} from "./models/faqs.model";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {LanguageService} from "../../../core/services/utils/language.service";
+import {catchError, Observable, of, switchMap, tap} from "rxjs";
 
 @Component({
   selector: 'app-faqs',
@@ -86,33 +87,33 @@ import {LanguageService} from "../../../core/services/utils/language.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FaqsComponent implements OnInit{
-  readonly panelOpenState = signal(false);
 
-  faqList!: FaqsModel
+  readonly panelOpenState = signal(false);
+  page = signal<number>(0);
+  size = signal<number>(10);
+  faqList = signal<FaqsModel | null>(null)
 
   private destroy$ = inject(DestroyRef);
   private faqService = inject(FaqsService);
-  private cdr = inject(ChangeDetectorRef);
   private languageService = inject(LanguageService);
 
 
   public ngOnInit() {
-    this.languageService.currentLanguage$
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe(() => {
-        this.faqSubscription();
-      })
+    this.subscriptionWithLang().subscribe()
   }
 
-  public  faqSubscription(){
-    this.faqService.getFaqsData({page: 0, size: 10, filter: {productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6', faqProductType: 'ALL', }})
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe({
-        next: res => {
-          this.faqList = res as unknown as FaqsModel;
-          this.cdr.detectChanges();
-        },
-        error: err => console.log(err)
-      })
+  public subscriptionWithLang(): Observable<FaqsModel | null>{
+    return this.languageService.currentLanguage$
+      .pipe(
+        takeUntilDestroyed(this.destroy$),
+        switchMap(() => this.faqService.getFaqsData({
+            page: this.page(),
+            size: this.size(),
+            filter: {productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6', faqProductType: 'ALL', }
+          })
+        ),
+        tap(res => this.faqList.set(res)),
+        catchError(err => of(err))
+      )
   }
 }

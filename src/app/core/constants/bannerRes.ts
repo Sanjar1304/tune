@@ -26,5 +26,6 @@ export interface Banner {
   btnColors: [string],
   indicatorBorderColors: [string],
   bannerProductType: string
+  imgBuffer?: string
 }
 

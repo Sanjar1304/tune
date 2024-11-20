@@ -9,29 +9,30 @@ import {
   ElementRef,
   HostListener, DestroyRef, OnDestroy
 } from '@angular/core';
-import {CommonModule, NgIf, NgOptimizedImage} from "@angular/common";
-import {INavbarMenu, NAVBAR_MENUS} from "../../core/constants/navbar-menus";
+import { CommonModule, NgIf, NgOptimizedImage } from "@angular/common";
+import { INavbarMenu, NAVBAR_MENUS } from "../../core/constants/navbar-menus";
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import {Router, RouterLink, RouterLinkActive} from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 
 
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from '@angular/material/menu';
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from '@angular/material/menu';
 import { UiSvgIconComponent } from "../../core/components/ui-svg-icon/ui-svg-icon.component";
+import { UserDataDto } from '../../core/models/user.model';
 import { UserService } from '../../core/services/root/user.service';
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
-import {ReactiveFormsModule} from "@angular/forms";
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from "@jsverse/transloco";
-import {LocalStorageService} from "../../core/services/utils/storage.service";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {LanguageService} from "../../core/services/utils/language.service";
-import {delay, Subject, takeUntil} from "rxjs";
+import { MatOption } from "@angular/material/core";
+import { MatSelect } from "@angular/material/select";
+import { ReactiveFormsModule } from "@angular/forms";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { LocalStorageService } from "../../core/services/utils/storage.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { LanguageService } from "../../core/services/utils/language.service";
+import { delay, Subject, takeUntil } from "rxjs";
 
 
 @Component({
@@ -63,10 +64,22 @@ import {delay, Subject, takeUntil} from "rxjs";
         text-decoration: none;
         padding: 3px;
         color: black;
+        position: relative;
       }
 
-      .nav-item a.active {
-        border-bottom: 1px solid #27C5D0;
+      .nav-item a::after {
+       position: absolute;
+       content: '';
+       height: 2px;
+       left: 0;
+       bottom: 0;
+       width: 0;
+       background: #27C5D0;
+       transition: width .5s ease-in-out;
+      }
+
+      .nav-item a:hover::after {
+        width: 100%;
       }
 
       .custom-size {
@@ -91,8 +104,10 @@ import {delay, Subject, takeUntil} from "rxjs";
       }
 
       .lang_animation {
-        transition: .6s ease-in-out;
+        transition: .3s ease-in-out;
       }
+
+
 
       ::ng-deep {
         .cdk-overlay-connected-position-bounding-box{
@@ -130,7 +145,7 @@ import {delay, Subject, takeUntil} from "rxjs";
     }
   `
 })
-export class HeaderComponent implements  OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
 
 
   public bnwMode = false;
@@ -168,7 +183,7 @@ export class HeaderComponent implements  OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     if ((this.dropdownOpen && !this.elementRef.nativeElement.contains(event.target)) ||
-        (this.logoutOpen && !this.elementRef.nativeElement.contains(event.target))) {
+      (this.logoutOpen && !this.elementRef.nativeElement.contains(event.target))) {
       this.dropdownOpen = false;
       this.logoutOpen = false;
     }
@@ -210,7 +225,7 @@ export class HeaderComponent implements  OnInit, OnDestroy {
         error: () => {
           this.isLanguageChanging = false;
         }
-    });
+      });
   }
 
   public toggleDropdown(): void {
@@ -242,7 +257,7 @@ export class HeaderComponent implements  OnInit, OnDestroy {
     this.logoutOpen = !this.logoutOpen
   }
 
-  public applyAccessibility(): void {}
+  public applyAccessibility(): void { }
 
   public linkPress(): void {
     this.closeTrigger.emit(!this.burgerMenuOpened())
@@ -252,12 +267,12 @@ export class HeaderComponent implements  OnInit, OnDestroy {
     this.closeTrigger.emit(!this.burgerMenuOpened())
   }
 
-  public navigateToMain(){
+  public navigateToMain() {
     this.router.navigate(['/']);
   }
 
-  public navigateToAdsCreatePage(){
-    if(this.isLoggedIn){
+  public navigateToAdsCreatePage() {
+    if (this.isLoggedIn) {
       this.router.navigate(['/adds-create'])
     } else {
       this.router.navigate(['/auth'])
@@ -269,7 +284,7 @@ export class HeaderComponent implements  OnInit, OnDestroy {
     this.router.navigate(['/auth']);  // Navigate to AuthComponent
   }
 
-  public logoutUser(){
+  public logoutUser() {
     this.userService.logout();
     this.router.navigate(['/'])
     this.isLoggedIn = false;

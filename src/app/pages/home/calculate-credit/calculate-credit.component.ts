@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {MatSliderModule} from "@angular/material/slider";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
@@ -92,26 +92,24 @@ import {CalculateModel} from "./models/calculate.model";
 })
 export class CalculateCreditComponent implements OnInit{
 
-  step:number = 1;
-  maxPrice: number = 100000000;
-  minPrice: number = 1000000;
-  price: number = 1000000;
-  minYear: number = 3;
-  maxYear: number = 60;
-  maxPercent: number = 100000000;
-  minPercent: number = 0;
-
-  calcResults!: CalculateModel;
-
-  interest: number | undefined = 0;
-  totalPayment: number | undefined = 0;
-  monthlyPayment: number | undefined = 0;
-
   calculatorForm!: FormGroup;
+
+  step = signal<number>(1);
+  maxPrice = signal<number>(100000000) ;
+  minPrice = signal<number>(1000000) ;
+  price = signal<number>(1000000);
+  minYear = signal<number>(3);
+  maxYear = signal<number>(60);
+  maxPercent = signal<number>(100000000);
+  minPercent = signal<number>(0);
+  calcResults = signal<CalculateModel | null>(null);
+  interest = signal<number | undefined>(0) ;
+  totalPayment = signal<number | undefined>(0);
+  monthlyPayment = signal<number | undefined>(0);
+
 
   private fb = inject(FormBuilder);
   private destroy$ = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
   private calculateService = inject(CalculateService);
 
   public ngOnInit() {
@@ -127,18 +125,15 @@ export class CalculateCreditComponent implements OnInit{
   }
 
   onSliderChange(): void {
-    console.log('Current Form Values:', this.calculatorForm.value);
-
     if (this.calculatorForm.valid) {
       this.calculateService.calculateData(this.calculatorForm.value)
         .pipe(takeUntilDestroyed(this.destroy$))
         .subscribe({
           next: res => {
-            this.calcResults = res as unknown as CalculateModel;
-            this.interest = res?.interest;
-            this.monthlyPayment =  res?.monthlyAmount.amount;
-            this.totalPayment = res?.totalPaymentAmount.amount;
-            this.cdr.detectChanges();
+            this.calcResults.set(res);
+            this.interest.set(res?.interest) ;
+            this.monthlyPayment.set(res?.monthlyAmount.amount);
+            this.totalPayment.set(res?.totalPaymentAmount.amount);
           },
           error: err => console.error('Error in calculation:', err)
         });

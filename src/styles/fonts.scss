@@ -168,10 +168,17 @@
 
 .b4 {
   font-family: Geologica-regular, serif !important;
-  font-size: 14px !important;
+  font-size: 14px;
   font-weight: 400 !important;
   line-height: 14px !important;
   margin: 0 !important;
+}
+
+@media screen and (min-width: 1280px) and (max-width: 1390px) {
+  .b4 {
+    font-size: 11px !important;
+    font-weight: 300 !important;
+  }
 }
 
 .b5 {

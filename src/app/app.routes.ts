@@ -1,6 +1,6 @@
 import { NotAuthorizedGuard } from './core/guards/auth.guard';
 import { Routes } from '@angular/router';
-import {HomeComponent} from "./pages/home/home.component";
+import { HomeComponent } from "./pages/home/home.component";
 
 export const routes: Routes = [
   {
@@ -13,7 +13,7 @@ export const routes: Routes = [
     data: { breadcrumb: 'headerMenu.menuTab.catalog' },
     children: [
       {
-        path:'',
+        path: '',
         data: { breadcrumb: null },
         loadComponent: () => import('./pages/catalog/catalog.component').then(m => m.CatalogComponent),
       },
@@ -47,7 +47,7 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    data: { breadcrumb: null},
+    data: { breadcrumb: null },
     loadComponent: () => import('./pages/auth/auth.component').then(m => m.AuthComponent),
   },
   {

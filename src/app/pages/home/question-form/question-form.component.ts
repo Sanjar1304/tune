@@ -1,30 +1,53 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {NgIf, NgOptimizedImage} from "@angular/common";
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
 import {QuestionService} from "./services/question.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
-  ReactiveFormsModule, ValidationErrors,
+  ReactiveFormsModule,
   Validators
 } from "@angular/forms";
 import {TranslocoPipe} from "@jsverse/transloco";
 
-import {BackendResponseModel} from "../../../core/models/backend-response.model";
+
 import {CustomToasterService} from "../../../core/services/utils/toast.service";
 import {ToastComponent} from "../../../core/components/toast/toast.component";
 import {MatInput} from "@angular/material/input";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {NgxMaskDirective} from "ngx-mask";
+import {finalize} from "rxjs";
+import {MatIcon} from "@angular/material/icon";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-question-form',
   standalone: true,
-  imports: [NgOptimizedImage, ReactiveFormsModule, FormsModule, TranslocoPipe, ToastComponent, NgIf, MatInput, MatCheckbox],
+  imports: [
+    NgOptimizedImage,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslocoPipe,
+    ToastComponent,
+    NgIf,
+    MatInput,
+    MatCheckbox,
+    NgxMaskDirective,
+    MatIcon,
+    MatProgressSpinner,
+    MatButton,
+    NgClass,
+  ],
   templateUrl: './question-form.component.html',
   styles: `
      :host {
+
+       .inactive-btn {
+         color: #626262;
+       }
+
        ::ng-deep {
          .mdc-checkbox__background {
            border-radius: 4px;
@@ -56,6 +79,31 @@ import {MatCheckbox} from "@angular/material/checkbox";
            background-color: #060563;
            border-color: #060563;
          }
+
+         .mat-mdc-button {
+           width: 250px;
+           border-radius: 10px;
+           background-color: #fff;
+         }
+
+         .mat-mdc-button>.mat-icon {
+           overflow: visible;
+         }
+
+         .mat-mdc-button .mdc-button__label {
+           display: flex;
+           color: #000;
+           font-size: 16px;
+           font-weight: 400;
+         }
+
+         .mat-mdc-button>.mat-icon {
+           display: flex;
+         }
+
+         .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+           stroke: #27C5D0;
+         }
        }
      }
   `,
@@ -64,98 +112,30 @@ import {MatCheckbox} from "@angular/material/checkbox";
 export class QuestionFormComponent implements OnInit{
 
   questionForm!: FormGroup;
-  isButtonChecked: boolean = false;
-  phoneNumberValue: string = '998 '; // Starting format
-  phoneNumberHasError: boolean = false;
-  phoneNumberError: string = '';
+  callBtnLoading = signal<boolean>(false)
+
 
   private fb = inject(FormBuilder);
   private destroy$ = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
   private toasterService = inject(CustomToasterService);
   private questionService = inject(QuestionService);
 
 
   public ngOnInit(){
     this.questionForm = this.fb.group({
-      fullName: ['',[ Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-      phoneNumber: ['', [Validators.required, this.phoneValidator()]],
+      fullName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      phoneNumber: ['', [Validators.required]], // Ensure required validator
       isChecked: [false, Validators.requiredTrue]
-    })
-    this.isCheckboxClicked();
+    });
   }
 
-  public phoneValidator() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value && !/^998\d{9}$/.test(control.value.replace(/\D/g, ''))) {
-        return { invalidPhone: true };
-      }
-      return null;
-    };
-  }
-
-  public isCheckboxClicked() {
-    this.isButtonChecked = !this.isButtonChecked;
-  }
-
-  public onPhoneKeyup(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let value = input.value;
-
-    if (value.length < 5) {
-      value = '998 ';
-    }
-    this.phoneNumberValue = value;
-    this.questionForm.get('phoneNumber')?.setValue(value, { emitEvent: false });
-  }
-
-  public setInitialPhoneValue() {
-    const phoneControl = this.questionForm.get('phoneNumber');
-    if (phoneControl && !phoneControl.value) {
-      this.phoneNumberValue = '998 ';
-      phoneControl.setValue(this.phoneNumberValue);
-    }
-  }
-
-  public onPhoneBlur() {
-    const phoneControl = this.questionForm.get('phoneNumber');
-    if (!phoneControl) return;
-
-    let digitsOnly = phoneControl.value.replace(/\D/g, '').substring(3); // Remove "+998 " prefix
-    const formattedValue = '998 ' +
-      (digitsOnly.slice(0, 2) || '') + ' ' +
-      (digitsOnly.slice(2, 5) || '') + '-' +
-      (digitsOnly.slice(5, 7) || '') + '-' +
-      (digitsOnly.slice(7, 9) || '');
-
-    this.phoneNumberValue = formattedValue;
-    phoneControl.setValue(formattedValue, { emitEvent: false });
-
-    this.phoneNumberHasError = digitsOnly.length < 9;
-    this.phoneNumberError = this.phoneNumberHasError ? 'Phone number must be fully completed.' : '';
-  }
 
   public subscribeQuestion(form: FormGroup) {
-    console.log('Form Valid:', form.valid);
-    console.log('isChecked Valid:', form.get('isChecked')?.valid);
-    console.log('isChecked Touched:', form.get('isChecked')?.untouched);
-
-    // if (this.questionForm.get('fullName')?.touched &&
-    //     this.questionForm.get('phoneNumber')?.touched &&
-    //     this.questionForm.get('isChecked')?.untouched) {
-    //   this.toasterService.showToast('Checkbox is not pressed', 'error')
-    //   this.isButtonChecked = false
-    // }
 
     if (this.questionForm.valid) {
+      this.callBtnLoading.set(true);
       const fullName = this.questionForm.get('fullName')?.value;
       let phoneNumber = this.questionForm.get('phoneNumber')?.value;
-      const digitsOnly = phoneNumber.replace(/\D/g, '');
-      if (digitsOnly.startsWith('998')) {
-        phoneNumber = digitsOnly;
-      } else {
-        phoneNumber = `998${digitsOnly.slice(3)}`;
-      }
 
       this.questionService.sendQuestion({
         fullName,
@@ -164,13 +144,12 @@ export class QuestionFormComponent implements OnInit{
         productId: null,
         productType: 'ALL'
       })
-        .pipe(takeUntilDestroyed(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroy$), finalize(() => this.callBtnLoading.set(false)))
         .subscribe({
           next: res => {
             if (res.success) {
               this.toasterService.showToast('Successfully sent application', 'success');
               this.questionForm.reset();
-              this.cdr.detectChanges();
             }
           },
           error: err => this.toasterService.showToast(err,'error')

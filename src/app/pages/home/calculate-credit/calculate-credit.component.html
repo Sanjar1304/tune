@@ -31,9 +31,9 @@
         <div class="">
           <mat-slider
             class="example-margin"
-            [max]="maxPrice"
-            [min]="minPrice"
-            [step]="step">
+            [max]="maxPrice()"
+            [min]="minPrice()"
+            [step]="step()">
             <input matSliderThumb #slider formControlName="amount" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
@@ -52,9 +52,9 @@
         <div class="">
           <mat-slider
             class="example-margin"
-            [max]="maxYear"
-            [min]="minYear"
-            [step]="step">
+            [max]="maxYear()"
+            [min]="minYear()"
+            [step]="step()">
             <input matSliderThumb #slider2 formControlName="term" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
@@ -73,9 +73,9 @@
         <div class="">
           <mat-slider
             class="example-margin"
-            [max]="maxPercent"
-            [min]="minPercent"
-            [step]="step">
+            [max]="maxPercent()"
+            [min]="minPercent()"
+            [step]="step()">
             <input matSliderThumb #slider3 formControlName="initialAmount" (change)="onSliderChange()">
           </mat-slider>
           <div class="flex justify-between">
@@ -94,23 +94,16 @@
                 rounded-[30px] bg-[#fff]">
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{monthlyPayment | customCurrency}}</h2>
+        <h2 class="h2 text-[#262626]">{{monthlyPayment() | customCurrency}}</h2>
       </div>
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{totalPayment | customCurrency}}</h2>
+        <h2 class="h2 text-[#262626]">{{totalPayment() | customCurrency}}</h2>
       </div>
       <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
         <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title3" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{interest}} %</h2>
+        <h2 class="h2 text-[#262626]">{{interest()}} %</h2>
       </div>
-<!--      <div class="flex lg:items-center md:items-center-->
-<!--                  2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-col mobile:flex-col-->
-<!--                  lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px] sm:pt-[8px] mobile:pt-[8px]-->
-<!--                  ">-->
-<!--        <button class="b4 py-[16px] px-[28px] rounded-[14px] bg-[#27C5D0] text-[#fff]">{{"buttonTexts.calculateCreditBtn" | transloco}}</button>-->
-<!--        <p class="b6 text-[#262626]">{{"calculateCreditPage.sideCard.condition" | transloco}}</p>-->
-<!--      </div>-->
     </div>
   </div>
 </section>

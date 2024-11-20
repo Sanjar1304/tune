@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {AsyncPipe, NgOptimizedImage} from "@angular/common";
 import {TranslocoPipe} from "@jsverse/transloco";
 import {GettingCreditService} from "./services/getting-credit.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {GettingCreditModel} from "./models/getting-credit.model";
 import {LanguageService} from "../../../core/services/utils/language.service";
+import {catchError, Observable, of, switchMap, tap} from "rxjs";
 
 @Component({
   selector: 'app-getting-credit',
@@ -43,30 +44,24 @@ import {LanguageService} from "../../../core/services/utils/language.service";
 })
 export class GettingCreditComponent implements OnInit{
 
-  gettingCreditsList!: GettingCreditModel;
+  gettingCreditsList= signal<GettingCreditModel | null>(null) ;
 
   private destroy$ = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
   private gettingCreditService = inject(GettingCreditService);
   private languageService = inject(LanguageService);
 
   public ngOnInit() {
-    this.languageService.currentLanguage$
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe(() => {
-        this.gettingCreditSubscription();
-      })
+   this.subscriptionWithLang().subscribe()
   }
 
-  public gettingCreditSubscription(){
-    this.gettingCreditService.getCreditInfos()
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe({
-        next: res => {
-          this.gettingCreditsList = res as unknown as GettingCreditModel;
-          this.cdr.detectChanges();
-        },
-        error: err => console.log(err)
-      })
+  public subscriptionWithLang(): Observable<GettingCreditModel | null>{
+    return this.languageService.currentLanguage$
+      .pipe(
+        takeUntilDestroyed(this.destroy$),
+        switchMap(() => this.gettingCreditService.getCreditInfos()),
+        tap(res => this.gettingCreditsList.set(res)),
+        catchError( err => of(err))
+      )
+
   }
 }

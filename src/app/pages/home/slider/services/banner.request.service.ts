@@ -1,12 +1,12 @@
-import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import {catchError, map, Observable, of} from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, of } from "rxjs";
 
-import {environment} from "../../../../../environments/environment";
-import {BannerRes} from "../../../../core/constants/bannerRes";
-import {SessionService} from "../../../../core/services/root/sessionService";
-import {BackendResponseModel} from "../../../../core/models/backend-response.model";
+import { environment } from "../../../../../environments/environment";
+import { Banner, BannerRes } from "../../../../core/constants/bannerRes";
+import { SessionService } from "../../../../core/services/root/sessionService";
+import { BackendResponseModel } from "../../../../core/models/backend-response.model";
 
 
 @Injectable({
@@ -17,6 +17,9 @@ export class BannerRequestService {
   private API_URL = `${environment.API_BASE}/api/v1`;
   private http = inject(HttpClient);
   private sessionService = inject(SessionService)
+  private _bannerList$ = new BehaviorSubject<Banner[]>([])
+  public bannerList$ = this._bannerList$.asObservable();
+
 
   public getBanner(page: number, size: number): Observable<BannerRes | null> {
     const requestBody = {
@@ -31,5 +34,9 @@ export class BannerRequestService {
           return of(null as unknown as BannerRes)
         })
       );
+  }
+
+  setBannerList(bannerList: Banner[]): void {
+    this._bannerList$.next(bannerList)
   }
 }

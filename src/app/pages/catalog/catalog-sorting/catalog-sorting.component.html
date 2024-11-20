@@ -45,12 +45,12 @@
                         <!-- WITH pairFilter -->
                         <div *ngIf="select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
                           <mat-form-field>
-                            <mat-label>{{ select.title }} from</mat-label>
+                            <mat-label>{{ select.title }}</mat-label>
                             <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
                             <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
                           <mat-form-field>
-                            <mat-label>{{ select.title }} to</mat-label>
+                            <mat-label>{{ select.title }}</mat-label>
                             <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
                             <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
@@ -70,12 +70,12 @@
                         <!-- If no pairFilter, display only the range inputs -->
                         <div *ngIf="!select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
                           <mat-form-field>
-                            <mat-label>{{ select.title }} from</mat-label>
+                            <mat-label>{{ select.title }}</mat-label>
                             <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
                             <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
                           <mat-form-field>
-                            <mat-label>{{ select.title }} to</mat-label>
+                            <mat-label>{{ select.title }}</mat-label>
                             <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
                           </mat-form-field>
                         </div>

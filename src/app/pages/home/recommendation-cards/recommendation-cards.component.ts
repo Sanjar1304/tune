@@ -1,95 +1,136 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   DestroyRef,
   EventEmitter,
   OnInit,
   Output,
-  inject
+  inject, signal, computed,
+  output
 } from '@angular/core';
-import {AsyncPipe, DecimalPipe, JsonPipe, NgFor, NgIf, NgOptimizedImage, SlicePipe} from "@angular/common";
+import { DecimalPipe, NgOptimizedImage } from "@angular/common";
 
 import { CarCatalogRes } from '../../../core/constants/carCatalogRes';
-import {CatalogCardsService} from "../../catalog/catalog-cards/services/catalog-cards.service";
-import {Router} from "@angular/router";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {TranslocoPipe} from "@jsverse/transloco";
-import {LanguageService} from "../../../core/services/utils/language.service";
+import { CatalogCardsService } from "../../catalog/catalog-cards/services/catalog-cards.service";
+import { Router } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { TranslocoPipe } from "@jsverse/transloco";
+import { LanguageService } from "../../../core/services/utils/language.service";
+import { catchError, EMPTY, Observable, of, switchMap, tap } from "rxjs";
+import { FavouriteApiService } from './favourite.api.service';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../auth/services/auth.service';
 
 
 @Component({
   selector: 'app-recommendation-cards',
   standalone: true,
-  imports: [SlicePipe, NgIf, NgFor, JsonPipe, DecimalPipe, NgOptimizedImage, AsyncPipe, TranslocoPipe],
+  imports: [
+    DecimalPipe,
+    NgOptimizedImage,
+    TranslocoPipe
+  ],
   templateUrl: './recommendation-cards.component.html',
   styles: `
     .custom {
       margin: 0 auto !important;
     }
   `,
+  providers: [FavouriteApiService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecommendationCardsComponent implements OnInit{
-
-  bg_color = 'green';
-  cardsPerPage: number = 6;
-  carCards!: CarCatalogRes;
-  displayedCards: any[] = [];
-
-  @Output() cardSelected: EventEmitter<string> = new EventEmitter<string>();
-
+export class RecommendationCardsComponent implements OnInit {
   private destroy$ = inject(DestroyRef);
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
   private catalogCardsService = inject(CatalogCardsService);
   private languageService = inject(LanguageService);
+  private favouriteApiService = inject(FavouriteApiService)
+  private toastrService = inject(ToastrService);
+
+
+  bg_color = signal<string>('green');
+  page = signal<number>(0);
+  size = signal<number>(10);
+  cardsPerPage = signal<number>(6);
+  carCards = signal<CarCatalogRes | null>(null);
+
+
+  displayedCards = computed(() => {
+    const cards = this.carCards()?.items ?? [];
+    return cards.slice(0, this.cardsPerPage());
+  });
+
+
+  cardSelected = output<string>();
 
   public ngOnInit() {
-    this.languageService.currentLanguage$
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe(() => {
-        this.getCatalogCardsSubscription();
+    this.subscriptionWithLang().subscribe();
+  }
+
+  public subscriptionWithLang(): Observable<CarCatalogRes | null> {
+    return this.languageService.currentLanguage$
+      .pipe(
+        takeUntilDestroyed(this.destroy$),
+        switchMap(() => this.catalogCardsService.getCatalogCards({
+          query: '', paging: { page: this.page(), size: this.size() }
+        })),
+        tap(res => this.carCards.set(res)),
+        catchError(err => EMPTY)
+      )
+  }
+
+  public changeFavorite(event: Event, isFavorite: boolean, productId: string): void {
+    event.stopPropagation();
+    const request$ = isFavorite ? this.favouriteApiService.removeProductFromFavourite(productId) : this.favouriteApiService.addProductToFavourite(productId);
+    request$.pipe(
+      tap((res) => {
+        console.log(res)
+
+        this.changeIsFavouriteCustom(productId, isFavorite)
       })
+    ).subscribe()
+
   }
 
-  public getCatalogCardsSubscription(){
-    this.catalogCardsService.getCatalogCards({ query: '', paging: { page: 0, size: 10 } })
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe({
-        next: res => {
-          this.carCards = res as unknown as CarCatalogRes;
-          this.loadInitialCards();
-          this.cdr.markForCheck();
-        },
-        error: err => console.log(err)
-      })
-  }
 
-  private loadInitialCards() {
-    this.displayedCards = this.carCards.items.slice(0, this.cardsPerPage);
-  }
 
-  public openCardContent(id: string){
+  public openCardContent(id: string) {
     this.router.navigate(['/catalog', id]);
   }
 
-  public navigateToCatalogPage(){
+  public navigateToCatalogPage() {
     this.router.navigate(['/catalog']);
   }
 
   public getCarDetail(properties: any[], slug: string): string {
     const detail = properties.find(prop => prop.slug === slug);
-    if (detail) {
-      if (Array.isArray(detail.valueTranslate)) {
-        return detail.valueTranslate.join(', ');
-      } else if (detail.valueTranslate) {
-        return detail.valueTranslate;
-      } else if (detail.value) {
-        return detail.value;
-      }
+    if (!detail) return '';
+    const { valueTranslate, value } = detail;
+
+    if (Array.isArray(valueTranslate)) {
+      return valueTranslate.join(', ');
     }
-    return '';
+    return valueTranslate || value || '';
   }
+
+  private changeIsFavouriteCustom(productId: string, isFavorite: boolean): void {
+    const carCards = this.carCards();
+
+    if (!carCards || !carCards.items) {
+      return;
+    }
+
+    const updatedCards = {
+      ...carCards,
+      items: carCards.items.map((item) =>
+        item.productId === productId
+          ? { ...item, isFavorite: !isFavorite }
+          : item
+      ),
+    };
+
+    this.carCards.set(updatedCards);
+  }
+
 
 }
