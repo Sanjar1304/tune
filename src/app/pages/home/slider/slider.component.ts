@@ -123,11 +123,11 @@ export class SliderComponent implements OnInit, OnDestroy {
   }
 
   private startAutoSlide() {
-    // this.autoSlideSubscription = interval(this.transitionDuration)
-    //   .pipe(takeWhile(() => this.bannerList().length > 1))
-    //   .subscribe(() => {
-    //     this.nextSlide();
-    //   });
+    this.autoSlideSubscription = interval(this.transitionDuration)
+      .pipe(takeWhile(() => this.bannerList().length > 1))
+      .subscribe(() => {
+        this.nextSlide();
+      });
   }
 
   private nextSlide() {
