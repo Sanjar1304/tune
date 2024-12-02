@@ -1,8 +1,7 @@
 import { HttpInterceptorFn } from "@angular/common/http";
+import { TranslocoService } from "@jsverse/transloco";
 import { UserService } from "../services/root/user.service";
 import { inject } from "@angular/core";
-import { TranslocoService } from "@jsverse/transloco";
-
 
 const langMapping: Record<string, string> = {
   en: 'ENG',

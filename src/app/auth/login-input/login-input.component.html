@@ -21,11 +21,7 @@
                 <div class="flex flex-col gap-[8px] ">
                     <label>Hомер телефона</label>
                     <input type="tel" class="py-[12px] px-[8px] border border-[#E5E7EB] rounded-[10px] focus:outline-none " formControlName="phone" mask="000 00 000 00 00" placeholder="998 (--) --- -- --" [ngClass]="{'wrong-number':notExistingNumber(), 'right-number':!notExistingNumber()}"
-                        (input)="onInputChange()"> @if(notExistingNumber()){
-                    <p class="error-message">
-                        Invalid number format or non-existing number.
-                    </p>
-                    }
+                        (input)="onInputChange()">
                 </div>
             </div>
         </div>
