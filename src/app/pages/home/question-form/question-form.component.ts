@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
-import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
+import {NgClass, NgIf, NgOptimizedImage, NgStyle} from "@angular/common";
 import {QuestionService} from "./services/question.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {
@@ -39,11 +39,11 @@ import {MatButton} from "@angular/material/button";
     MatProgressSpinner,
     MatButton,
     NgClass,
+    NgStyle,
   ],
   templateUrl: './question-form.component.html',
   styles: `
      :host {
-
        .inactive-btn {
          color: #626262;
        }
@@ -56,6 +56,16 @@ import {MatButton} from "@angular/material/button";
 
          .mat-internal-form-field>label {
            color: #fff;
+         }
+
+         .active.mat-mdc-button .mdc-button__label {
+           color: #000;
+           opacity: 1;
+         }
+
+         .inactive.mat-mdc-button .mdc-button__label {
+           color: #ccc;
+           opacity: .5;
          }
 
          .mdc-checkbox:hover .mdc-checkbox__ripple {

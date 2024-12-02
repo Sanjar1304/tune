@@ -1,0 +1,137 @@
+
+:host {
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &__icon {
+      cursor: pointer;
+    }
+
+    input {
+      width: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: width 500ms ease-in-out, padding 500ms ease-in-out, border-radius 500ms ease-in-out, opacity 500ms ease-in-out;
+    }
+
+    &-open input {
+      width: 10rem;
+      opacity: 1;
+      visibility: visible;
+      padding: 0.7rem 1rem;
+    }
+
+    &__input--hidden {
+      display: none;
+    }
+
+    &__close {
+      cursor: pointer;
+      right: 0;
+      transition: fill 500ms ease-in;
+    }
+
+    &__delete {
+      cursor: pointer;
+      margin-left: 8px;
+    }
+  }
+
+
+  .nav-item a {
+    text-decoration: none;
+    padding: 3px;
+    color: black;
+    position: relative;
+  }
+
+  .nav-item a::after {
+    position: absolute;
+    content: '';
+    height: 2px;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    background: #27C5D0;
+    transition: width .5s ease-in-out;
+  }
+
+  .nav-item a:hover::after {
+    width: 100%;
+  }
+
+  .custom-size {
+    max-width: none;
+    width: auto;
+  }
+
+  .header-shadow {
+    box-shadow: 0 0 10px 0 rgba(255, 85, 61, 0.15);
+  }
+
+  .bottom-header-shadow {
+    box-shadow: 0 0 10px 0 rgba(255, 85, 61, 0.15);
+  }
+
+  .lang-shadow {
+    box-shadow: 0 0 15px 0 rgba(255, 85, 61, 0.20);
+  }
+
+  ul.custom-bullets {
+    list-style: none;
+  }
+
+  .lang_animation {
+    transition: .3s ease-in-out;
+  }
+
+
+
+  ::ng-deep {
+    .cdk-overlay-connected-position-bounding-box{
+      top: 55px !important;
+    }
+
+    .mat-expansion-panel {
+      display: flex !important;
+      flex-direction: column !important;
+      box-shadow: none !important;
+      background: #FFF !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+    }
+
+    .mat-expansion-panel-header {
+      padding: 0 5px 0 0;
+      height: auto;
+    }
+
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+
+    .mat-expansion-indicator svg {
+      width: 34px !important;
+      height: 34px !important;
+      fill: #262626 !important;
+    }
+
+    .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+      background: #fff !important;
+    }
+  }
+
+
+  @media (min-width: 1280px) and (max-width: 1540px) {
+    .search-open + .nav-item a:nth-child(n+4) {
+      display: none; // Hide all nav items starting from the 4th one
+    }
+  }
+}

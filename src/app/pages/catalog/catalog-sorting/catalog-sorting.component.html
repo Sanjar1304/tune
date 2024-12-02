@@ -3,10 +3,10 @@
     <div class="flex 2xl:flex-row xl:flex-row lg:flex-col md:flex-col sm:flex-col mobile:flex-col gap-[24px]">
         <div class="2xl:w-3/4 xl:w-3/4 lg:w-full md:w-full p-[24px] flex flex-col gap-[20px] bg-[#F3F3F3] rounded-[16px]">
             <div class="2xl:w-[34%] xl:w-[45%] lg:w-[40%] md:w-[50%] sm:w-[60%] mobile:w-full flex gap-[2px] p-[6px] border border-solid border-[#E8E8E8] rounded-[12px]">
-              @for(menu of carModelMenu; track menu){
+              @for(menu of carModelMenu(); track menu){
                 <button
                   class="b3 px-[18px] py-[10px] btn_animation"
-                  [ngClass]="{'bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]': menu === activeModel}"
+                  [ngClass]="{'bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]': menu === activeModel()}"
                   (click)="remainSelectedModel(menu)">
                   {{ menu.valueTranslate | titlecase }}
                 </button>
@@ -15,18 +15,18 @@
 
             <!--===== DESKTOP SCREEN SIZE FORM 1024 and larger =====-->
           <form #sortingForm="ngForm" (ngSubmit)="onSubmit()">
-            <div class="2xl:block xl:block lg:hidden md:hidden sm:hidden mobile:block">
-              <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
+            <div class="2xl:block xl:block lg:block md:block sm:block mobile:block">
+              <div class="w-full flex 2xl:flex-row xl:flex-row lg:flex-row mobile:flex-col gap-[12px]">
                 <div class="w-full flex flex-col gap-[12px] first-child">
-                  <div class="grid grid-cols-3 gap-x-4 gap-y-8">
+                  <div class="grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mobile:grid-cols-1 gap-x-4 gap-y-8">
 
-                    <div *ngFor="let select of sortingCategories; let i = index" class="flex flex-col gap-[8px]">
+                    <div *ngFor="let select of sortingCategories(); let i = index" class="flex flex-col gap-[8px]">
                       <!-- Condition for TEXT componentType -->
                       <ng-container *ngIf="select.componentType === 'TEXT'">
                         <mat-form-field>
                           <mat-label>{{ select.title }}</mat-label>
-                          <input matInput [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}" />
-                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                          <input matInput [(ngModel)]="sortingFormSelections()[i].value" name="sortingFormSelections{{i}}"/>
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}"/>
                         </mat-form-field>
                       </ng-container>
 
@@ -34,33 +34,34 @@
                         <mat-form-field class="relative">
                           <mat-label>{{ select.title }}</mat-label>
                           <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
-                          <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
+                          <mat-select [(ngModel)]="sortingFormSelections()[i].value" name="sortingFormSelections{{i}}">
                             <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
                           </mat-select>
-                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}"/>
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}"/>
                         </mat-form-field>
                       </ng-container>
 
                       <ng-container *ngIf="select.componentType === 'ARRANGE'">
                         <!-- WITH pairFilter -->
-                        <div *ngIf="select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
+                        <div *ngIf="select.pairFilter" class="flex justify-between items-center gap-[10px] bg-[#fff] rounded-[10px]">
                           <mat-form-field>
                             <mat-label>{{ select.title }}</mat-label>
-                            <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
-                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                            <input matInput [(ngModel)]="sortingFormSelections()[i].from" name="sortingFormFrom{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
-                          <mat-form-field>
+                          <mat-divider [vertical]="true"></mat-divider>
+                          <mat-form-field class="next-form-field">
                             <mat-label>{{ select.title }}</mat-label>
-                            <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
-                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                            <input matInput [(ngModel)]="sortingFormSelections()[i].to" name="sortingFormTo{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
-
+                          <mat-divider [vertical]="true"></mat-divider>
                           <!-- Dropdown for SELECT type inside pairFilter -->
-                          <mat-form-field *ngIf="sortingFormSelections[i].pairFilter?.values">
-                            <mat-label>{{ sortingFormSelections[i].pairFilter?.title }}</mat-label>
-                            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
-                            <mat-select [(ngModel)]="sortingFormSelections[i].value" name="pairFilter{{i}}">
-                              <mat-option *ngFor="let item of sortingFormSelections[i].pairFilter?.values" [value]="item.id">
+                          <mat-form-field class="next-form-field" *ngIf="sortingFormSelections()[i].pairFilter?.values">
+                            <mat-label>{{ sortingFormSelections()[i].pairFilter?.title }}</mat-label>
+                            <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-5px] top-[18px]"></app-ui-svg-icon>
+                            <mat-select [(ngModel)]="sortingFormSelections()[i].value" name="pairFilter{{i}}">
+                              <mat-option *ngFor="let item of sortingFormSelections()[i].pairFilter?.values" [value]="item.id">
                                 {{ item.value }}
                               </mat-option>
                             </mat-select>
@@ -68,15 +69,16 @@
                         </div>
 
                         <!-- If no pairFilter, display only the range inputs -->
-                        <div *ngIf="!select.pairFilter" class="flex items-center gap-[10px] bg-[#fff] rounded-[10px]">
+                        <div *ngIf="!select.pairFilter" class="flex justify-between items-center gap-[10px] bg-[#fff] rounded-[10px]">
                           <mat-form-field>
                             <mat-label>{{ select.title }}</mat-label>
-                            <input matInput [(ngModel)]="sortingFormSelections[i].from" name="sortingFormFrom{{i}}" />
-                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}" />
+                            <input matInput [(ngModel)]="sortingFormSelections()[i].from" name="sortingFormFrom{{i}}" />
+                            <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}" />
                           </mat-form-field>
-                          <mat-form-field>
+                          <mat-divider [vertical]="true"></mat-divider>
+                          <mat-form-field class="next-form-field">
                             <mat-label>{{ select.title }}</mat-label>
-                            <input matInput [(ngModel)]="sortingFormSelections[i].to" name="sortingFormTo{{i}}" />
+                            <input matInput class="next-input" [(ngModel)]="sortingFormSelections()[i].to" name="sortingFormTo{{i}}" />
                           </mat-form-field>
                         </div>
                       </ng-container>
@@ -86,10 +88,10 @@
                         <mat-form-field class="relative">
                           <mat-label>{{ select.title }}</mat-label>
                           <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
-                          <mat-select [(ngModel)]="sortingFormSelections[i].value" name="sortingFormSelections{{i}}">
+                          <mat-select [(ngModel)]="sortingFormSelections()[i].value" name="sortingFormSelections{{i}}">
                             <mat-option *ngFor="let item of select.values" [value]="item.value">{{ item.value }}</mat-option>
                           </mat-select>
-                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections[i].filterId" name="filterId{{i}}"/>
+                          <input type="hidden" [value]="select.id" [(ngModel)]="sortingFormSelections()[i].filterId" name="filterId{{i}}"/>
                         </mat-form-field>
                       </ng-container>
                     </div>
@@ -101,10 +103,7 @@
                 <div class="2xl:w-2/3 xl:w-2/3 mobile:w-full">
                 </div>
                 <div class="w-full flex 2xl:flex-row xl:flex-row mobile:flex-col justify-between">
-                  <div class="flex items-center gap-[16px] py-[10px] px-[4px]">
-                  </div>
-
-                  <div class="flex 2xl:flex-row xl:flex-row mobile:flex-col gap-[12px]">
+                  <div class="2xl:w-full xl:w-full lg:w-1/3 md:w-1/2 sm:w-1/2 mobile:w-full flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row mobile:flex-col gap-[12px] ">
                     <button class="py-[10px] px-[63px] border border-solid border-[#27C5D0] text-[#27C5D0] rounded-[14px]" (click)="clearSortingForm()">{{'catalogSortingSection.button.clear' | transloco}}</button>
                     <button type="submit" class="py-[10px] px-[63px] bg-[#27C5D0] rounded-[14px] text-[#fff]">{{'catalogSortingSection.button.show' | transloco}}</button>
                   </div>

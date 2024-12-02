@@ -3,7 +3,7 @@
                 flex flex-col justify-left gap-[40px]">
   <h1 class="h1 text-[#262626]">{{"sortingModelsPage.title" | transloco}}</h1>
   <div class="w-full flex flex-col justify-start gap-[32px]">
-    <div class="w-[320px] p-[8px] rounded-[20px] bg-[#EEEEEE] flex justify-between">
+    <div class="w-fit p-[8px] rounded-[20px] bg-[#EEEEEE] flex justify-between">
       @for(menu of carModelMenu; track menu){
       <button class="b3 px-[18px] py-[10px] btn_animation"
         [ngClass]="{'bg-[#fff] lg:rounded-[16px] md:rounded-[12px] mobile:rounded-[12px]': menu === activeModel}"
@@ -21,31 +21,30 @@
         }
       </div>
 
-
-      <div class="grid lg:grid-cols-6 md:grid-cols-4
+      <div class="w-full">
+        <div class="grid lg:grid-cols-6 md:grid-cols-4
                         sm:grid-cols-3 mobile:grid-cols-2
                         gap-x-[24px] gap-y-[10px]">
-        <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">
           @if(!isSelectedPressed){
-          @if (carModelsInfo) {
-          @for(modelName of carModelsInfo.facets; track modelName.id){
-          <p class="b4 text-[#000]">{{modelName.id}}</p>
-          <p class="b4 text-[#B1B1B1]">{{modelName.value}}</p>
-          }
-          }@else {
-          <div>there is no value</div>
-          }
-
+            @if (carModelsInfo) {
+              @for(modelName of carModelsInfo.facets; track modelName.id){
+                <span class="b4 text-[#000]">{{modelName.id}}</span>
+                <span class="b4 text-[#B1B1B1]">{{modelName.value}}</span>
+              }
+            }@else {
+              <div>there is no value</div>
+            }
           } @else {
-          @if (selectedModelsInfo) {
-          @for(modelName of selectedModelsInfo.facets; track modelName.id){
-          <p class="b4 text-[#000]">{{modelName.id}}</p>
-          <p class="b4 text-[#B1B1B1]">{{modelName.value}}</p>
-          }
-          }@else {
-          <div>there is no value</div>
-          }
-
+            @if (selectedModelsInfo) {
+              @for(modelName of selectedModelsInfo.facets; track modelName.id){
+                <div class="flex items-center gap-[8px]">
+                  <p class="b4 text-[#000]">{{modelName.id}}</p>
+                  <p class="b4 text-[#B1B1B1]">{{modelName.value}}</p>
+                </div>
+              }
+            }@else {
+              <div>there is no value</div>
+            }
           }
         </div>
         <div class="w-full lg:w-[180px] px-[12px] py-[4px] flex gap-[8px]">

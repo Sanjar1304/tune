@@ -11,13 +11,12 @@ const langMapping: Record<string, string> = {
 };
 
 export const requestInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('simple')
   const token = inject(UserService);
   const translocoService = inject(TranslocoService);
   const lang = translocoService.getActiveLang();
   const mappedLang = langMapping[lang];
   const header = req.headers
-    .set('Content-Type', 'application/json')
+    // .set('Content-Type', 'application/json')
     // .set('X-Device-Id', '42b6e24e2fc8df5b')
     // .set('X-Device-Type', 'phone')
     // .set('X-OS', 'android')
@@ -34,16 +33,24 @@ export const requestInterceptor: HttpInterceptorFn = (req, next) => {
 
 
 export const authRequestCheckInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('auth')
 
   const isUserCheckRequest = req.url.includes('/auth/v1/external/sign/user/check');
   const issendOtpCode = req.url.includes('/auth/v1/external/sign/user/verify');
+  const resendOtpCode = req.url.includes('auth/v1/external/sign/code/resend')
+
   const isSendEncryptedLoginPassword = req.url.includes('/auth/v1/external/sign/up-in');
-  if (isUserCheckRequest || issendOtpCode || isSendEncryptedLoginPassword) {
+  if (isUserCheckRequest || issendOtpCode || resendOtpCode || isSendEncryptedLoginPassword) {
     const headers = req.headers.set(
       'Authorization',
       'Basic dXNlcl9mb3JfbWFya2V0X2NsaWVudDptYXJLZXRDTGlFblRVU2Vy'
-    );
+    ).set('Content-Type', 'application/json')
+      // .set('X-Device-Id', '42b6e24e2fc8df5b')
+      .set('X-Device-Type', 'WEB')
+      // .set('X-OS', 'android')
+      // .set('X-App-version', '1.0.0')
+      // .set('X-App-Version', '1.0')
+      // .set('X-App-Build', '1.0')
+      // .set('X-Device-Model', 'samsung s 24')
     const clonedReq = req.clone({ headers });
     return next(clonedReq);
   }
@@ -52,7 +59,6 @@ export const authRequestCheckInterceptor: HttpInterceptorFn = (req, next) => {
 
 
 export const fileUploadInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('file')
 
   const isFileUploadRequest = req.url.includes('/file/upload/general/car');
 

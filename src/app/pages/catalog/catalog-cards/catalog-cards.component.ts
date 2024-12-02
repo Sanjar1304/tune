@@ -3,7 +3,7 @@ import { CommonModule, NgOptimizedImage } from "@angular/common";
 
 import { CarCatalogRes } from "../../../core/constants/carCatalogRes";
 import { CatalogCardsService } from "./services/catalog-cards.service";
-import { Router } from "@angular/router";
+import {Router, RouterOutlet} from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { TranslocoPipe } from "@jsverse/transloco";
 import { LanguageService } from "../../../core/services/utils/language.service";
@@ -12,7 +12,7 @@ import { CatalogDataService } from "../services/catalog-data.service";
 @Component({
   selector: 'app-catalog-cards',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, TranslocoPipe],
+  imports: [CommonModule, NgOptimizedImage, TranslocoPipe, RouterOutlet],
   templateUrl: './catalog-cards.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
@@ -58,7 +58,7 @@ export class CatalogCardsComponent implements OnInit {
   public displayedCards: CarCatalogRes['items'] = [];
   public catalogCardsRes!: CarCatalogRes;
   public catalogCardsLength: number = 0;
-  public _currentPage: number = 0;  // Default page 0
+  public _currentPage: number = 0;
   public pagesLength: number = 0;
   cardsPerPage: number = 10;
   pagesArray: number[] = [];

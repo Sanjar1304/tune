@@ -1,4 +1,5 @@
 <section class="container mx-auto flex flex-col lg:gap-[40px] md:gap-[32px] sm:gap-[32px] mobile:gap-[32px]">
+  <app-toast></app-toast>
   <h2 class="lg:block md:hidden sm:hidden mobile:hidden h2 text-[#262626]">{{"calculateCreditPage.title1" | transloco}}</h2>
   <h2 class="lg:hidden md:block h2 text-[#262626]">{{"calculateCreditPage.title2" | transloco}}</h2>
   <div class="md:hidden sm:hidden mobile:hidden lg:w-full lg:flex justify-between gap-[24px]">
@@ -31,8 +32,8 @@
         <div class="">
           <mat-slider
             class="example-margin"
-            [max]="maxPrice()"
-            [min]="minPrice()"
+            [max]="maxLoanAmount()"
+            [min]="minLoanAmount()"
             [step]="step()">
             <input matSliderThumb #slider formControlName="amount" (change)="onSliderChange()">
           </mat-slider>
@@ -73,8 +74,8 @@
         <div class="">
           <mat-slider
             class="example-margin"
-            [max]="maxPercent()"
-            [min]="minPercent()"
+            [max]="maxInitialPayment()"
+            [min]="minInitialPayment()"
             [step]="step()">
             <input matSliderThumb #slider3 formControlName="initialAmount" (change)="onSliderChange()">
           </mat-slider>
@@ -89,21 +90,28 @@
 
     <div class="lg:w-[50%] md:w-[100%]
                 py-[100px] px-[50px] lg:pb-[87px] md:pb-[50px] sm:p-[24px] mobile:p-[24px]
-                flex flex-col justify-between
-                lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px]
-                rounded-[30px] bg-[#fff]">
-      <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
-        <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{monthlyPayment() | customCurrency}}</h2>
-      </div>
-      <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
-        <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{totalPayment() | customCurrency}}</h2>
-      </div>
-      <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
-        <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title3" | transloco}}</p>
-        <h2 class="h2 text-[#262626]">{{interest()}} %</h2>
-      </div>
+                flex flex-col lg:gap-[24px] md:gap-[24px] sm:gap-[16px] mobile:gap-[16px]
+                rounded-[30px] bg-[#fff]"
+                [ngClass]="isPaymentExceeded() ? 'w-[100%], justify-center, items-center':'justify-between'">
+      @if(!isPaymentExceeded()){
+        <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
+          <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
+          <h2 class="h2 text-[#262626]">{{monthlyPayment() | customCurrency}}</h2>
+        </div>
+        <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
+          <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
+          <h2 class="h2 text-[#262626]">{{totalPayment() | customCurrency}}</h2>
+        </div>
+        <div class="flex flex-col lg:gap-[12px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
+          <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title3" | transloco}}</p>
+          <h2 class="h2 text-[#262626]">{{interest()}} %</h2>
+        </div>
+      } @else {
+        <div class="w-1/2 p-[15px] flex flex-col gap-[10px] items-center justify-center bg-[#ED6356] rounded-[16px] ">
+          <p class="b2 w-[30px] h-[30px] p-[10px] flex items-center justify-center bg-[#fff] rounded-[50%] opacity-50 text-[#ED6356] text-[30px]">!</p>
+          <p class="b2 text-[#fff] text-center">Decrease initial payment amount !!! <br> Initial payment amount exceeded than loan amount. </p>
+        </div>
+      }
     </div>
   </div>
 </section>

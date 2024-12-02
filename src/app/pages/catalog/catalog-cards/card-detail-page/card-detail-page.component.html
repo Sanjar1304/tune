@@ -90,21 +90,21 @@
                     flex flex-col gap-[24px]">
                 <h3 class="h3 text-[#262626]">{{carDetails?.cardCardDetails?.description?.title}}</h3>
                 <div class="w-[100%] flex flex-col gap-[24px]">
-                    <p class="b2 text-[#000]">
-                        {{carFromBackend.description}}
-                    </p>
+<!--                    <p class="b2 text-[#000]">-->
+<!--                        {{carFromBackend.description}}-->
+<!--                    </p>-->
                 </div>
             </div>
             <div class="2xl:w-[40%] xl:w-[40%] lg:w-[40%] md:w-full sm:w-full mobile:w-full
                   flex 2xl:flex-col xl:flex-col lg:flex-col md:flex-row-reverse sm:flex-row-reverse mobile:flex-col
                   2xl:gap-[40px] xl:gap-[40px] lg:gap-[40px] md:gap-[16px] sm:gap-[16px] mobile:gap-[16px]">
-                <div class="2xl:w-[100%] xl:w-[100%] lg:w-[100%] md:w-[40%] sm:w-[40%] mobile:w-full
+                <div class="w-full
                     flex flex-col justify-center gap-[12px]">
                     <div class="p-[24px] flex justify-center items-center gap-[16px] bg-[#27C5D0] rounded-[24px]">
                         <img ngSrc="./assets/icons/chat.svg" alt="" loading="lazy" height="24" width="25">
                         <p class="b3 text-[#fff]">{{"carDetailPage.createdAtItems.btn_write" | transloco}}</p>
                     </div>
-                    <div class="p-[24px] flex justify-center items-center gap-[16px] border border-solid border-[#27C5D0] rounded-[24px]">
+                    <div class=" p-[24px] flex justify-center items-center gap-[16px] border border-solid border-[#27C5D0] rounded-[24px]">
                         <img ngSrc="./assets/icons/phone.svg" alt="" height="24" width="24" loading="lazy">
                         <p class="b3 text-[#000]">{{ "carDetailPage.createdAtItems.btn_tel" | transloco}}</p>
                     </div>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-[12px] p-[32px] bg-[#F7F7F7] rounded-[24px]">
+                <div class="w-full flex flex-col gap-[12px] p-[32px] bg-[#F7F7F7] rounded-[24px]">
                     <h4 class="h4 text-[#262626]">{{sellerName}}</h4>
                     <div class="flex items-center gap-[8px]">
                         <img ngSrc="./assets/icons/location.svg" alt="" height="24" width="24" loading="lazy">

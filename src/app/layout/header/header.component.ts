@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnInit,
   inject,
@@ -7,7 +6,7 @@ import {
   output,
   signal,
   ElementRef,
-  HostListener, DestroyRef, OnDestroy
+  HostListener, OnDestroy, Input
 } from '@angular/core';
 import { CommonModule, NgIf, NgOptimizedImage } from "@angular/common";
 import { INavbarMenu, NAVBAR_MENUS } from "../../core/constants/navbar-menus";
@@ -17,22 +16,21 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from '@angular/material/menu';
-import { UiSvgIconComponent } from "../../core/components/ui-svg-icon/ui-svg-icon.component";
-import { UserDataDto } from '../../core/models/user.model';
 import { UserService } from '../../core/services/root/user.service';
-import { MatOption } from "@angular/material/core";
-import { MatSelect } from "@angular/material/select";
+import {FormsModule, } from "@angular/forms";
+import { TranslocoDirective, } from "@jsverse/transloco";
 import { ReactiveFormsModule } from "@angular/forms";
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
-import { LocalStorageService } from "../../core/services/utils/storage.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { TranslocoPipe, TranslocoService } from "@jsverse/transloco";
 import { LanguageService } from "../../core/services/utils/language.service";
-import { delay, Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
+import { StorageService } from '../../shared/services/storage.service';
+import { Constants, LanguageKeys } from '../../core/constants';
+import { AuthService } from '../../auth/services/auth.service';
 
 
 @Component({
@@ -48,106 +46,28 @@ import { delay, Subject, takeUntil } from "rxjs";
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     NgIf,
-    UiSvgIconComponent,
     NgOptimizedImage,
-    MatOption,
-    MatSelect,
     ReactiveFormsModule,
     TranslocoPipe,
-    RouterLinkActive,
-    TranslocoDirective
+    TranslocoDirective,
+    FormsModule
   ],
   templateUrl: './header.component.html',
-  styles: `
-    :host {
-      .nav-item a {
-        text-decoration: none;
-        padding: 3px;
-        color: black;
-        position: relative;
-      }
-
-      .nav-item a::after {
-       position: absolute;
-       content: '';
-       height: 2px;
-       left: 0;
-       bottom: 0;
-       width: 0;
-       background: #27C5D0;
-       transition: width .5s ease-in-out;
-      }
-
-      .nav-item a:hover::after {
-        width: 100%;
-      }
-
-      .custom-size {
-        max-width: none;
-        width: auto;
-      }
-
-      .header-shadow {
-        box-shadow: 0 0 10px 0 rgba(255, 85, 61, 0.15);
-      }
-
-      .bottom-header-shadow {
-        box-shadow: 0 0 10px 0 rgba(255, 85, 61, 0.15);
-      }
-
-      .lang-shadow {
-        box-shadow: 0 0 15px 0 rgba(255, 85, 61, 0.20);
-      }
-
-      ul.custom-bullets {
-        list-style: none;
-      }
-
-      .lang_animation {
-        transition: .3s ease-in-out;
-      }
-
-
-
-      ::ng-deep {
-        .cdk-overlay-connected-position-bounding-box{
-          top: 55px !important;
-        }
-
-        .mat-expansion-panel {
-          display: flex !important;
-          flex-direction: column !important;
-          box-shadow: none !important;
-          background: #FFF !important;
-          border-radius: 0 !important;
-          padding: 0 !important;
-        }
-
-        .mat-expansion-panel-header {
-          padding: 0 5px 0 0;
-          height: auto;
-        }
-
-        .mat-expansion-panel-body {
-          padding: 0;
-        }
-
-        .mat-expansion-indicator svg {
-          width: 34px !important;
-          height: 34px !important;
-          fill: #262626 !important;
-        }
-
-        .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
-          background: #fff !important;
-        }
-      }
-    }
-  `
+  styleUrls:['header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  private readonly router = inject(Router);
+  private destroy$ = new Subject<void>()
+  private userService = inject(UserService);
+  private translocoService = inject(TranslocoService);
+  private languageService = inject(LanguageService);
+  private elementRef: ElementRef = inject(ElementRef);
+  private storageService = inject(StorageService)
+  public authService = inject(AuthService)
 
+  public isOpen = false;
+  public searchText = '';
   public bnwMode = false;
   public dropdownOpen = false;
   public highlightMode = false;
@@ -160,24 +80,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public readonly panelOpenState = signal(false);
   private isLanguageChanging = false;
 
-  private readonly router = inject(Router);
-  private destroy$ = new Subject<void>();
-  private readonly cdr = inject(ChangeDetectorRef);
-  private userService = inject(UserService);
-  private translocoService = inject(TranslocoService);
-  private storageService = inject(LocalStorageService);
-  private languageService = inject(LanguageService);
-  private elementRef: ElementRef = inject(ElementRef);
-
+  navbarMenusList  = signal<{ label: string; path: string, id: string }[]>([]);
 
   public ngOnInit(): void {
+    this.navbarMenusList.set(NAVBAR_MENUS);
     this.applyAccessibility();
-
-    this.userService.userLoginData$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.isLoggedIn = !!res;
-      })
   }
 
   @HostListener('document:click', ['$event'])
@@ -189,25 +96,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  public get navbarMenus(): INavbarMenu[] {
-    return NAVBAR_MENUS;
-  }
 
   public isActive(path: string): boolean {
     return this.router.url === path;
   }
 
-  public get locales(): string[] {
+  public get locales(): LanguageKeys {
     return this.translocoService
       .getAvailableLangs()
-      .map(lang => typeof lang === 'string' ? lang : lang.label);
+      .map(lang => typeof lang === 'string' ? lang : lang.label) as LanguageKeys;
   }
 
   public get currentLocale(): string {
     return this.translocoService.getActiveLang();
   }
 
-  public localeSelect(locale: string): void {
+  public localeSelect(locale: typeof Constants.DEFAULT_LANGUAGE): void {
+    this.storageService.language = locale;
     this.dropdownOpen = false;
     if (this.isLanguageChanging) {
       return;
@@ -267,16 +172,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.closeTrigger.emit(!this.burgerMenuOpened())
   }
 
+
+
   public navigateToMain() {
     this.router.navigate(['/']);
   }
 
   public navigateToAdsCreatePage() {
-    if (this.isLoggedIn) {
-      this.router.navigate(['/adds-create'])
-    } else {
-      this.router.navigate(['/auth'])
-    }
+    // if (this.isLoggedIn) {
+    //   this.router.navigate(['/adds-create'])
+    // } else {
+    //   this.router.navigate(['/auth'])
+    // }
+
+    this.router.navigate(['/adds-create'])
   }
 
 
@@ -285,10 +194,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public logoutUser() {
+    this.authService.logout()
     this.userService.logout();
     this.router.navigate(['/'])
     this.isLoggedIn = false;
     this.logoutOpen = false
+  }
+
+
+  openSearch(): void {
+    if (!this.isOpen) {
+      this.isOpen = true; // Open the search field
+    }
+  }
+
+  closeSearch(event: Event): void {
+    event.stopPropagation(); // Prevents triggering openSearch on click
+    this.isOpen = false; // Close the search field
+    this.searchText = ''; // Clear input field
+  }
+
+  clearSearch(): void {
+    this.searchText = ''; // Clear only the text
+  }
+
+  isWithinScreenSize(): boolean {
+    return window.innerWidth >= 1280 && window.innerWidth <= 1440;
   }
 
 

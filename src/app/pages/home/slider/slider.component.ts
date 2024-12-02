@@ -7,7 +7,7 @@ import { BannerRequestService } from "./services/banner.request.service";
 import { Banner, BannerRes } from "../../../core/constants/bannerRes";
 import { Router } from "@angular/router";
 import { environment } from "../../../../environments/environment";
-import { BehaviorSubject, catchError, EMPTY, filter, finalize, forkJoin, interval, map, Observable, Subscription, switchMap, take, takeWhile, tap } from "rxjs";
+import { BehaviorSubject, catchError, distinctUntilChanged, EMPTY, filter, finalize, forkJoin, interval, map, Observable, of, share, Subscription, switchMap, take, takeWhile, tap } from "rxjs";
 import { LanguageService } from "../../../core/services/utils/language.service";
 import { FileService } from '../../../shared/services';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -17,7 +17,7 @@ import { LoaderComponent } from '../../../shared/components';
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [NgClass, SlicePipe, NgOptimizedImage, NgIf, AsyncPipe, LoaderComponent],
+  imports: [NgClass, LoaderComponent],
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss'
 })
@@ -63,29 +63,31 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.resetAutoSlide();
   }
 
-  private getBannersSubscription(): Observable<BannerRes | null> {
+  private getBannersSubscription(language: string): Observable<BannerRes | null> {
     return this.bannerService.getBanner(this.page(), this.size()).pipe(
       switchMap((res) => {
         if (res?.items) {
-          this.bannerList.set(res.items.map(val => val.banner))
+          this.bannerList.set(res.items.map((item) => item.banner));
+          this.isLoading.set(true);
           const banners$: Observable<any>[] = res.items.map((item) =>
-            this.fileService.getImage(this.getFileIdFromURL(item.banner.imageUrl)).pipe(
+            this.fileService.getFileAsBase64(item.banner.imageUrl).pipe(
               map((imgUrl) => ({
                 ...item,
-                imgBuffer: imgUrl
+                imgBuffer: this.getSafeImageUrl(imgUrl)
               }))
             )
-          )
+          );
+
           return forkJoin(banners$).pipe(
             map((banners) =>
               banners.map((banner) => ({
                 ...banner.banner,
-                imgBuffer: this.getSafeImageUrl(banner.imgBuffer)
+                imgBuffer: banner.imgBuffer
               }))
             ),
             tap((banners) => {
+              this.bannerService.setBannerList(banners, language);
               this.bannerList.set(banners);
-              this.bannerService.setBannerList(banners)
               this.isLoading.set(false);
               this.startAutoSlide();
             }),
@@ -93,10 +95,10 @@ export class SliderComponent implements OnInit, OnDestroy {
             finalize(() => this.isLoading.set(false))
           );
         }
-        return [res];
+        return of(res);
       }),
       catchError((err) => {
-        console.error('Error fetching banners: ', err);
+        this.isLoading.set(false);
         return EMPTY;
       })
     );
@@ -105,16 +107,6 @@ export class SliderComponent implements OnInit, OnDestroy {
   getSafeImageUrl(base64: string): SafeUrl {
     return this.domSanitizer.bypassSecurityTrustUrl(base64);
   }
-
-  private getFileIdFromURL(url: string): string {
-    const lastSlashIndex = url.split('').lastIndexOf('/');
-    if (lastSlashIndex != -1) {
-      return url.slice(lastSlashIndex, url.length - 4)
-    } else {
-      return ''
-    }
-  }
-
 
   private stopAutoSlide() {
     if (this.autoSlideSubscription) {
@@ -144,20 +136,20 @@ export class SliderComponent implements OnInit, OnDestroy {
   private initalSetup(): void {
     this.languageService.currentLanguage$
       .pipe(
-        switchMap(() =>
-          this.bannerService.bannerList$.pipe(
-            tap((banners) => {
-              if (banners.length) {
-                this.bannerList.set(banners)
-                this.isLoading.set(false);
-                this.startAutoSlide();
-              }
-            }),
-            filter((bannerList) => !bannerList.length),
-            switchMap(() => this.getBannersSubscription())
-          )),
-        takeUntilDestroyed(this.destroy$))
-      .subscribe()
+        distinctUntilChanged(),
+        switchMap((currentLanguage) => {
+          const cachedBanners = this.bannerService.getCachedBannerList(currentLanguage);
+          if (cachedBanners.length) {
+            this.bannerList.set(cachedBanners);
+            this.isLoading.set(false);
+            return EMPTY;
+          } else {
+            return this.getBannersSubscription(currentLanguage);
+          }
+        }),
+        takeUntilDestroyed(this.destroy$)
+      )
+      .subscribe();
   }
 
 }

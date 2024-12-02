@@ -1,0 +1,56 @@
+<div class="flex flex-col gap-[40px] 2xl:px-[130px] xl:px-[130px] lg:px-[50px] md:px-0 sm:px-0 mobile:px-0">
+    <div class="w-full flex gap-[8px] p-[8px] bg-[#ECECEC] rounded-[20px]">
+        <button class="w-1/2 py-[10px] px-[18px] bg-[#fff] rounded-[12px]">Войти</button>
+        <button class="w-1/2 py-[10px] px-[18px]">QR-код</button>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-[40px]">
+        <div class="flex flex-col gap-[40px]">
+            <p class="text-[#626262]">Для полноценного использования сайта вам необходимо войти в свой профиль</p>
+            <div class="flex flex-col gap-[24px]">
+                <div class="flex flex-col gap-[8px] ">
+                    <label>Тип продажи</label>
+                    <mat-form-field class="relative">
+                        <app-ui-svg-icon path="./assets/icons/icons.svg#arrow-down" svgClass="w-6 h-6 absolute right-[-10px] top-[18px]"></app-ui-svg-icon>
+                        <mat-select formControlName="userType">
+                          @for(food of userTypes(); track food.value){
+                            <mat-option [value]="food.value">{{ food.viewValue }}</mat-option>
+                          }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col gap-[8px] ">
+                    <label>Hомер телефона</label>
+                    <input type="tel" class="py-[12px] px-[8px] border border-[#E5E7EB] rounded-[10px] focus:outline-none "
+                           formControlName="phone"
+                           mask="000 00 000 00 00"
+                           placeholder="998 (--) --- -- --"
+                           [ngClass]="{'wrong-number':notExistingNumber(), 'right-number':!notExistingNumber()}"
+                           (input)="onInputChange()">
+
+                  @if(notExistingNumber()){
+                    <p class="error-message">
+                      Invalid number format or non-existing number.
+                    </p>
+                  }
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-[16px] ">
+            <button mat-button type="submit" class="py-[10px] px-[24px] rounded-[10px]"
+                    [disabled]="!loginForm.valid || callBtnLoading()"
+                    [ngClass]="{'active': loginForm.valid, 'inactive': !loginForm.valid}">
+              @if (callBtnLoading()){
+                <mat-icon>
+                  <mat-spinner diameter="20"></mat-spinner>
+                </mat-icon>
+              } @else {
+                Продолжить
+              }
+            </button>
+            <button class=" py-[10px] px-[24px] rounded-[10px] border border-[#27C5D0] flex justify-center gap-[16px] " (click)="navigateToHomePage()">
+            <span>Вернуться на главную</span>
+            <img ngSrc="../../../assets/icons/back-square.svg" alt height="24" width="25" loading="lazy">
+      </button>
+        </div>
+    </form>
+</div>

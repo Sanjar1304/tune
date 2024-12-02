@@ -10,7 +10,6 @@ import {LanguageService} from "../../../core/services/utils/language.service";
 import {CatalogDataService} from "../../catalog/services/catalog-data.service";
 import {Router} from "@angular/router";
 
-
 @Component({
   selector: 'app-sorting-models',
   standalone: true,

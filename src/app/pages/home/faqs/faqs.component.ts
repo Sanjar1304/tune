@@ -71,7 +71,7 @@ import {catchError, Observable, of, switchMap, tap} from "rxjs";
       }
 
       .mat-panel-title {
-        width: 830px !important;
+        //width: 830px !important;
       }
 
       .mat-typography p {

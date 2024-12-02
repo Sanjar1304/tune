@@ -1,11 +1,12 @@
-import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../../environments/environment";
-import {SessionService} from "../../../../core/services/root/sessionService";
-import {catchError, map, Observable} from "rxjs";
-import {BackendResponseModel} from "../../../../core/models/backend-response.model";
+import { inject, Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../../../environments/environment";
+import { SessionService } from "../../../../core/services/root/sessionService";
+import { catchError, map, Observable } from "rxjs";
+import { BackendResponseModel } from "../../../../core/models/backend-response.model";
 import { SortingModel } from "../models/sorting.model";
 import { CarCatalogRes } from "../../../../core/constants/carCatalogRes";
+import { ENDPOINTS } from "../../../../core/constants";
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +17,15 @@ export class SortingModelService {
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
 
-  public getModels(): Observable<SortingModel | null>{
-    return this.http.post<BackendResponseModel<SortingModel>>(`${this.API_URL}filter/static/list`,  { types: ["USING_STATE", "MARK"] })
+  public getModels(): Observable<SortingModel | null> {
+    return this.http.post<BackendResponseModel<SortingModel>>(`${this.API_URL}filter/static/list`, { types: ["USING_STATE", "MARK"] })
       .pipe(
         map(this.sessionService.handleResponse<SortingModel>),
         catchError(this.sessionService.handleError)
       )
   }
 
-
-  public getModelsName(data:{query:string, filterStatic?: {type: string, value: string}}, paging: { page: number, size: number }): Observable <CarCatalogRes | null>{
+  public getModelsName(data: { query: string, filterStatic?: { type: string, value: string } }, paging: { page: number, size: number }): Observable<CarCatalogRes | null> {
     const requestBody = {
       query: data.query,
       facet: 'MARK',
@@ -36,9 +36,10 @@ export class SortingModelService {
         size: paging.size
       }
     };
-    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}product/search/basic`, JSON.stringify(requestBody)).pipe(
+    return this.http.post<BackendResponseModel<CarCatalogRes>>(ENDPOINTS.PRODUCT.SEARCH_BASIC, JSON.stringify(requestBody)).pipe(
       map(this.sessionService.handleResponse<CarCatalogRes>),
       catchError(this.sessionService.handleError)
     )
   }
+
 }

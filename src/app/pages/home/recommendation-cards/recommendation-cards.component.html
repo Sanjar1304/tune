@@ -7,6 +7,7 @@
             @for(car of displayedCards(); track car){
             <div class="rounded-[30px] bg-[#F7F7F7]" (click)="openCardContent(car.productId)">
                 <div class="relative z-[1]">
+                    @if (authService.isAuthenticated()) {
                     @if (car.isFavorite) {
                     <img (click)="changeFavorite($event,car.isFavorite,car.productId)"
                         class="absolute top-[18px] right-[18px] z-[100]" ngSrc="./assets/icons/star-yellow.svg"
@@ -16,7 +17,7 @@
                         class="absolute top-[18px] right-[18px] z-[100] " ngSrc="./assets/icons/star.svg"
                         alt="star icon" loading="lazy" height="24" width="24" />
                     }
-
+                    }
                     <div class="rounded-[30px] overflow-hidden">
                         <img class="w-full h-[260px] sm:w-full image object-cover"
                             [src]="car.imageLink ? car.imageLink : 'assets/images/missing-img.png'"
@@ -28,10 +29,10 @@
                         {{getCarDetail(car.resProperties, 'MARK_MODEL_CAR')}}</h2>
                     <h3 class="static-h3 pb-[4px] text-[#262626]">{{car.price.amount | number:'1.0-0'}}
                         {{car.price.currency}}</h3>
-                    <h6 class="b4 pb-[12px] text-[#27C5D0]">
+                    <p class="b4 pb-[12px] text-[#27C5D0]">
                         {{"recommendationPage.monthlyPay.from" | transloco}} 3 587 300
                         UZS/{{"recommendationPage.monthlyPay.monthly" | transloco}}
-                    </h6>
+                    </p>
                     <div class="w-full flex gap-[8px] sm:gap-[16px]">
                         <p class="b6 text-[#262626]">{{getCarDetail(car.resProperties, 'YEAR')}}
                             {{"recommendationPage.year" | transloco}},</p>
@@ -47,7 +48,7 @@
             }
             }
         </div>
-        <button class=" custom b4 bg-[#27C5D0] 2xl:w-1/5l xl:w-1/5 lg:w-1/5 md:w-full sm:w-full mobile:w-full lg:rounded-[15px] md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px] lg:py-[16px] md:py-[18px] sm:py-[18px] mobile:py-[18px] lg:px-[28px]
+        <button class="custom b5 bg-[#27C5D0] 2xl:w-1/5l xl:w-1/5 lg:w-1/5 md:w-full sm:w-full mobile:w-full lg:rounded-[15px] md:rounded-[14px] sm:rounded-[14px] mobile:rounded-[14px] lg:py-[16px] md:py-[18px] sm:py-[18px] mobile:py-[18px] lg:px-[28px]
                 md:px-[28px] sm:px-[28px] mobile:px-[28px] text-[#fff] "
             (click)="navigateToCatalogPage()">{{"buttonTexts.recommendationBtn" | transloco}}</button>
     </div>

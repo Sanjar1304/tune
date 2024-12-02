@@ -18,19 +18,28 @@
     }
   }
 
-  .active-card {
-    position: relative;
-    border-radius: 16px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: transparent;
-    animation: borderAnimation 5s ease-in-out infinite;
-    overflow: hidden;
+  @keyframes fillToBlue {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
 
-    /* Fix width and height to prevent resizing */
+  .active-card,
+  .inactive-card {
     width: 100%;
-    height: auto;
     max-width: 648px;
+    height: auto;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .active-card {
+    border: 2px solid transparent;
+    animation: borderAnimation 5s ease-in-out infinite;
   }
 
   .active-card .inner {
@@ -47,12 +56,37 @@
     z-index: 2;
   }
 
+  .active-tap,
+  .inactive-tap {
+    width: 95%;
+    height: 6px;
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+    background-color: #eeeeee;
+  }
+
+
+  .active-tap {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+      background-color: #27c5d0;
+      animation: fillToBlue 5s linear forwards;
+    }
+  }
+
+  .inactive-tap {
+    background-color: #eeeeee;
+  }
+
   .inactive-card {
     border-radius: 16px;
     color: #262626;
-    width: 100%;
-    height: auto;
-    max-width: 648px;
   }
 
   .inactive-card h3 {
@@ -72,5 +106,13 @@
 
   .active-card .inner {
     background-color: #27c5d0;
+  }
+
+  .shortened-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
   }
 }

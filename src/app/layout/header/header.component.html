@@ -5,9 +5,11 @@
       <img class="logo hover:cursor-pointer" ngSrc="./assets/icons/header-logo.svg" alt="logo"
         (click)="navigateToMain()" height="44" width="135" priority="priority" />
       <ul class="xl:flex gap-[24px] hidden">
-        @for(routes of navbarMenus; track routes.id){
+        @for(routes of navbarMenusList(); track routes.id){
         <li class="nav-item">
-          <a class="b4 text-[#262626]" [ngClass]="{ 'active': isActive(routes.path) }"
+          <a class="b4 text-[#262626]"
+             [ngClass]="{ 'active': isActive(routes.path),
+                        'hidden': isOpen && isWithinScreenSize() && $index >= navbarMenusList().length / 2 }"
             [routerLink]="routes.path">{{routes.label | transloco}}</a>
         </li>
         }
@@ -16,13 +18,16 @@
     <div class="flex items-center lg:gap-[21px] gap-[12px]">
       <div class="lg:flex md:flex items-center gap-[10px] hidden">
         <div
-          class="h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8] p-[12px] rounded-[12px] xl:hidden">
-          <img class="" ngSrc="./assets/icons/lupe.svg" alt="lupe icon" height="18" width="18">
-          <input class="h-[18px] focus:outline-none" placeholder="Поиск">
+          class="h-[38px] flex items-center gap-[8px] border border-1 border-[#C8C8C8]
+          p-[12px] rounded-[12px] xl:hidden cursor-pointer search"
+          [ngClass]="{ 'search-open': isOpen }"
+          (click)="openSearch()"
+        >
+          <img class="search__icon" ngSrc="./assets/icons/lupe.svg" alt="lupe icon" height="18" width="18" [ngClass]="{ 'search-open': isOpen }" (click)="openSearch()">
+          <input  type="text" class="h-[18px] focus:outline-none search__input" autofocus placeholder="Поиск" [class.search__input--hidden]="!isOpen" [(ngModel)]="searchText">
+          <img *ngIf="isOpen" class="search__close" ngSrc="./assets/icons/close.svg" height="18" width="18" alt="" (click)="closeSearch($event)">
+          <img *ngIf="searchText" class="search__delete" ngSrc="./assets/icons/remove_icon.svg" height="18" width="18" alt="" (click)="clearSearch()">
         </div>
-        <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px] hidden xl:block">
-          <img class="" ngSrc="./assets/icons/lupe.svg" alt="" height="18" width="18" />
-        </button>
         <button class="border border-solid border-[#E8E8E8] h-[38px] w-[38px] px-[10px] rounded-[10px]">
           <img class="" ngSrc="./assets/icons/eye.svg" alt="" height="18" width="18" />
         </button>
@@ -48,30 +53,33 @@
           }
         </div>
       </div>
-      <button *ngIf="!isLoggedIn"
-        class="nav-menu text-[#fff] bg-[#27C5D0] h-[38px] px-[24px] rounded-[12px] flex items-center"
-        (click)="navigateToLoginPage()">{{"buttonTexts.enter" | transloco}}</button>
-      <button *ngIf="isLoggedIn" class="pr-[8px] bg-[#EEEEEE] rounded-[10px] flex items-center gap-[4px]"
-        (click)="toggleUserMenu()">
-        <div class="h-[38px] p-[4px] bg-[#27C5D0] rounded-[10px] flex items-center justify-center">
-          <img ngSrc="./assets/icons/user-square.svg" class="custom-size " alt="user icon" height="24" width="24">
-        </div>
-        <img ngSrc="./assets/icons/arrow-down.svg" class="" alt="arrow down icon" height="16" width="16">
-      </button>
-      @if(logoutOpen){
-      <div
-        class="w-[80px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-[100px] ml-[152px] lang-shadow">
-        <div (click)="logoutUser()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
-          {{'buttonTexts.logout' | transloco}}
-        </div>
-      </div>
+      @if (authService.isAuthenticated()) {
+        <button class="pr-[8px] bg-[#EEEEEE] rounded-[10px] flex items-center gap-[4px]" (click)="toggleUserMenu()">
+          <div class="h-[38px] p-[4px] bg-[#27C5D0] rounded-[10px] flex items-center justify-center">
+            <img ngSrc="./assets/icons/user-square.svg" class="custom-size " alt="user icon" height="24" width="24">
+          </div>
+          <img ngSrc="./assets/icons/arrow-down.svg" class="" alt="arrow down icon" height="16" width="16">
+        </button>
+      }@else {
+        <button class="nav-menu text-[#fff] bg-[#27C5D0] h-[38px] px-[24px] rounded-[12px] flex items-center"
+          (click)="navigateToLoginPage()">{{"buttonTexts.enter" | transloco}}
+        </button>
       }
-      <button
-        class="b4 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:block xl:block lg:block md:hidden sm:block mobile:hidden"
-        (click)="navigateToAdsCreatePage()">{{'buttonTexts.createAds' | transloco}}</button>
+      @if(logoutOpen){
+        <div
+          class="w-[80px] absolute z-[9999] bg-white border border-solid border-[#E8E8E8] rounded-[10px] mt-[100px] ml-[152px] lang-shadow">
+          <div (click)="logoutUser()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-[10px]">
+            {{'buttonTexts.logout' | transloco}}
+          </div>
+        </div>
+      }
+      <button class="b5 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0]
+                     bg-[#fff] 2xl:block xl:block lg:block md:hidden sm:block mobile:hidden"
+        (click)="navigateToAdsCreatePage()">{{'buttonTexts.createAds' | transloco}}
+      </button>
       <button class="h-[38px] w-[38px] flex justify-center items-center p-[5px !important]
                      border border-1 border-[#C8C8C8] rounded-[12px] xl:hidden"
-        [ngClass]="{ 'bg-[#FF553D]': burgerMenuOpen, 'bg-white': !burgerMenuOpen, 'border': !burgerMenuOpen, 'border-0':burgerMenuOpen }"
+        [ngClass]="{ 'bg-[#FF553D]': burgerMenuOpen, 'bg-white': !burgerMenuOpen, 'border': !burgerMenuOpen, 'border-0': burgerMenuOpen }"
         (click)="toggleBurgerMenu()">
         <img class="burger-menu"
           [src]="burgerMenuOpen ? './assets/icons/exit-icon.svg' : './assets/icons/hamburger.svg'" alt="menu icon" />
@@ -86,11 +94,11 @@
     [ngClass]="{ 'bottom-header-shadow': !isScreenSmall() }">
     <ul class="w-full">
       <li class="w-full lg:flex md:flex sm:hidden mobile:hidden flex-col gap-[30px] justify-between pb-[30px]">
-        @for(routes of navbarMenus; track routes.id){
+        @for(routes of navbarMenusList(); track routes.id){
         <a class="b4 text-[#262626]" [routerLink]="routes.path">{{ routes.label | transloco }}</a> }
       </li>
       <button
-        class="nav-menu h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:block sm:hidden mobile:hidden"
+        class="b5 h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:block sm:hidden mobile:hidden"
         (click)="navigateToAdsCreatePage()">Подать объявление</button>
 
       <mat-accordion class="lg:hidden md:hidden sm:flex mobile:flex flex-col pb-[15px]">
@@ -124,29 +132,30 @@
           </div>
         </div>
 
-        <hr class="border solid border-[#E8E8E8] sm:mb-[12px] mobile:my-[12px]"> @for(route of navbarMenus; track
-        route.id){
-        <mat-expansion-panel class="" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="h3 text-[#262626]">
-              <a [routerLink]="route.path">{{route.label | transloco}}</a>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="sm:w-full mobile:w-full flex flex-col gap-[16px]">
-            <ul class="custom-bullets flex flex-col gap-[16px]">
-              <li class="b3 text-[#5C5C5C]"> <a class="pt-[27px]" href="">{{"footerPage.menuItems.aboutCompany" |
-                  transloco}}</a></li>
-              <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.news" | transloco}}</a></li>
-              <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.vacancy" | transloco}}</a></li>
-              <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.contacts" | transloco}}</a>
-              </li>
-            </ul>
-          </div>
-        </mat-expansion-panel>
-        <hr class="border solid border-[#E8E8E8] sm:my-[12px] mobile:my-[12px]"> }
+        <hr class="border solid border-[#E8E8E8] sm:mb-[12px] mobile:my-[12px]">
+        @for(route of navbarMenusList(); track route.id){
+          <mat-expansion-panel class="" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="h3 text-[#262626]">
+                <a [routerLink]="route.path">{{route.label | transloco}}</a>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="sm:w-full mobile:w-full flex flex-col gap-[16px]">
+              <ul class="custom-bullets flex flex-col gap-[16px]">
+                <li class="b3 text-[#5C5C5C]"> <a class="pt-[27px]" href="">{{"footerPage.menuItems.aboutCompany" |
+                    transloco}}</a></li>
+                <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.news" | transloco}}</a></li>
+                <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.vacancy" | transloco}}</a></li>
+                <li class="b3 text-[#5C5C5C]"> <a class="" href="">{{"footerPage.menuItems.contacts" | transloco}}</a>
+                </li>
+              </ul>
+            </div>
+          </mat-expansion-panel>
+          <hr class="border solid border-[#E8E8E8] sm:my-[12px] mobile:my-[12px]">
+        }
       </mat-accordion>
       <button
-        class="nav-menu w-full h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:hidden sm:hiden mobile:block"
+        class="b5 w-full h-[38px] px-[24px] rounded-[12px] border border-solid border-[#27C5D0] bg-[#fff] 2xl:hidden xl:hidden lg:hidden md:hidden sm:hiden mobile:block"
         (click)="navigateToAdsCreatePage()">{{'buttonTexts.createAds' | transloco}}</button>
     </ul>
     <div class="flex lg:flex-col md:flex-col sm:flex-row mobile:flex-col rounded-[30px] bg-header-ads-gradient ">

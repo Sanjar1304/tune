@@ -4,15 +4,19 @@ import { BehaviorSubject } from "rxjs";
 import { Router } from "@angular/router";
 import { UserDataDto } from "../../models/user.model";
 import { UtilsService } from "../utils/utils.service";
+import { StorageService } from "../../../shared/services/storage.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
+  private storageService = inject(StorageService);
+
   private userLoginData$$ = new BehaviorSubject<UserDataDto | null>(null);
   userInfo$ = new BehaviorSubject(null);
   userLoginData$ = this.userLoginData$$.asObservable();
   userInfo = this.userInfo$.asObservable();
+
 
   private router = inject(Router);
   private utilService = inject(UtilsService);
@@ -26,7 +30,6 @@ export class UserService {
   }
 
   public getUserSpecificData(type: any): string {
-    console.log('type', type)
     const value: UserDataDto | null = this.userLoginData$$.getValue()
     if (value?.user && type in value.user) {
       return (value as any).user[type];
@@ -42,11 +45,12 @@ export class UserService {
   }
 
   public setToken = (token: string): void => {
-    localStorage.setItem('token', token);
+    this.storageService.accessToken = token
+    // localStorage.setItem('token', token);
   }
 
   public getToken(): string | null {
-    return localStorage.getItem('token');
+    return this.storageService.accessToken
   }
 
   public setUserLocalData(data: UserDataDto): void {
@@ -59,7 +63,7 @@ export class UserService {
 
 
   public logout() {
-    localStorage.removeItem('token');
+    this.storageService.removeAccessToken()
     localStorage.removeItem('x-fcm-token');
     localStorage.removeItem('user');
     this.utilService.menuState$.next('main')

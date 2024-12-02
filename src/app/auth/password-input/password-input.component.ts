@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+  input,
+  DestroyRef, signal
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, distinctUntilChanged } from 'rxjs';
 
@@ -6,9 +16,10 @@ import { AuthService } from '../services/auth.service';
 import { JSEncrypt } from 'jsencrypt';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { UiSvgIconComponent } from "../../../core/components/ui-svg-icon/ui-svg-icon.component";
-import { UserDataDto } from '../../../core/models/user.model';
-import { UserService } from '../../../core/services/root/user.service';
+import { UiSvgIconComponent } from "../../core/components/ui-svg-icon/ui-svg-icon.component";
+import { UserDataDto } from '../../core/models/user.model';
+import { UserService } from '../../core/services/root/user.service';
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-password-input',
@@ -24,29 +35,31 @@ import { UserService } from '../../../core/services/root/user.service';
 })
 export class PasswordInputComponent implements OnInit {
 
-  showPassword: boolean = false; // To toggle visibility for the password field
-  showConfirmPassword: boolean = false; // To toggle visibility for the confirm password field
-  isReg: Observable<boolean>;
-  passwordForm!: FormGroup;
-
-  @Output() passwordSubmit = new EventEmitter<void>();
-
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
 
+  passwordForm!: FormGroup;
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
+  isReg = signal(false);
+  @Output() passwordSubmit = new EventEmitter<void>();
 
   constructor() {
-    this.isReg = this.authService.isRegCheck$
+    // Set the initial value of isReg based on authService.isRegCheck$
+    this.authService.isRegCheck$.pipe(distinctUntilChanged()).subscribe(value => {
+      this.isReg.set(value);
+      this.validatePasswordForm(); // Re-validate form based on isReg
+    });
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.validatePasswordForm();
   }
 
-  public validatePasswordForm() {
-    if (this.isReg) {
+  validatePasswordForm(): void {
+    if (this.isReg()) {
       this.passwordForm = this.fb.group({
         password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]]
       });
@@ -58,20 +71,20 @@ export class PasswordInputComponent implements OnInit {
     }
   }
 
-  public onSubmit(): void {
+  onSubmit(): void {
     if (this.passwordForm.valid) {
       this.passwordSubmit.emit();
       const password = this.passwordForm.getRawValue().password;
       const hashedKey = this.authService.hashedKey;
       const identity = this.authService.identity;
-      if(hashedKey && identity){
+      if (hashedKey && identity) {
         const jsEncrypt = new JSEncrypt();
         jsEncrypt.setPublicKey(hashedKey);
         const encryptedPassword = jsEncrypt.encrypt(password);
-        if(encryptedPassword){
+        if (encryptedPassword) {
           this.authService.sendEncryptedLoginPassword(identity, encryptedPassword).subscribe({
             next: (res: UserDataDto | null) => {
-              if(res){
+              if (res) {
                 this.userService.setToken(res.access.accessToken);
                 this.userService.setUserLocalData(res);
                 this.userService.setUserData(res);
@@ -79,25 +92,25 @@ export class PasswordInputComponent implements OnInit {
               }
             },
             error: err => console.log(err)
-          })
+          });
         } else {
-          console.log('Encryption failed')
+          console.log('Encryption failed');
         }
       }
     }
   }
 
-  public togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-    // Ensure confirm password visibility is tied to registration state
-    if (!this.isReg) {
-      this.showConfirmPassword = false; // Reset confirm password visibility if registering
+  togglePasswordVisibility(): void {
+    this.showPassword.update(value => !value);
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    if (!this.isReg()) {
+      this.showConfirmPassword.update(value => !value);
     }
   }
 
-  public toggleConfirmPasswordVisibility(): void {
-    if (!this.isReg) {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    }
+  public navigateToOtp(){
+      this.router.navigate(['auth/otp'])
   }
 }

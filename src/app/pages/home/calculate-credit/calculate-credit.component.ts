@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {MatSliderModule} from "@angular/material/slider";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
@@ -7,6 +7,8 @@ import {TranslocoPipe} from "@jsverse/transloco";
 import {CalculateService} from "./services/calculate.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CalculateModel} from "./models/calculate.model";
+import {CustomToasterService} from "../../../core/services/utils/toast.service";
+import {ToastComponent} from "../../../core/components/toast/toast.component";
 
 @Component({
   selector: 'app-calculate-credit',
@@ -18,7 +20,8 @@ import {CalculateModel} from "./models/calculate.model";
     CustomCurrencyPipe,
     NgOptimizedImage,
     TranslocoPipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastComponent
   ],
   templateUrl: './calculate-credit.component.html',
   styles: `
@@ -95,22 +98,24 @@ export class CalculateCreditComponent implements OnInit{
   calculatorForm!: FormGroup;
 
   step = signal<number>(1);
-  maxPrice = signal<number>(100000000) ;
-  minPrice = signal<number>(1000000) ;
+  maxLoanAmount = signal<number>(100000000) ;
+  minLoanAmount = signal<number>(1000000) ;
   price = signal<number>(1000000);
   minYear = signal<number>(3);
   maxYear = signal<number>(60);
-  maxPercent = signal<number>(100000000);
-  minPercent = signal<number>(0);
+  maxInitialPayment = signal<number>(100000000);
+  minInitialPayment = signal<number>(0);
   calcResults = signal<CalculateModel | null>(null);
   interest = signal<number | undefined>(0) ;
   totalPayment = signal<number | undefined>(0);
   monthlyPayment = signal<number | undefined>(0);
+  isPaymentExceeded = signal<boolean>(false);
 
 
   private fb = inject(FormBuilder);
   private destroy$ = inject(DestroyRef);
   private calculateService = inject(CalculateService);
+  private toastService = inject(CustomToasterService)
 
   public ngOnInit() {
     this.validateCalculatorForm();
@@ -130,10 +135,16 @@ export class CalculateCreditComponent implements OnInit{
         .pipe(takeUntilDestroyed(this.destroy$))
         .subscribe({
           next: res => {
-            this.calcResults.set(res);
-            this.interest.set(res?.interest) ;
-            this.monthlyPayment.set(res?.monthlyAmount.amount);
-            this.totalPayment.set(res?.totalPaymentAmount.amount);
+            if(res){
+              this.isPaymentExceeded.set(false);
+              this.calcResults.set(res);
+              this.interest.set(res?.interest) ;
+              this.monthlyPayment.set(res?.monthlyAmount.amount);
+              this.totalPayment.set(res?.totalPaymentAmount.amount);
+            } else  {
+              this.isPaymentExceeded.set(true)
+              this.toastService.showToast('Initial payment exceeded from loan amount !!!', 'error')
+            }
           },
           error: err => console.error('Error in calculation:', err)
         });

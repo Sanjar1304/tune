@@ -1,7 +1,7 @@
 <section class="container mx-auto lg:pb-[40px]">
   <div class="flex flex-col lg:gap-[24px] sm:gap-[12px] mobile:gap-[8px]">
     <div class="flex justify-between rounded-[30px] bg-custom-gradient
-             relative mobile:h-[430px] mobile:relative overflow-hidden
+             relative mobile:h-[430px] mobile:relative z-[1] overflow-hidden
              hover:cursor-pointer bg-banner-gradient">
       <div class="lg:py-[50px] lg:pl-[50px]
                         md:py-[40px] md:pl-[40px]
@@ -9,8 +9,8 @@
                         flex flex-col justify-between">
         <div class="flex flex-col lg:gap-[24px] sm:gap-[20px] mobile:gap-[16px] 2xl:z-[1] xl:z-index[1] z-[9999]">
           @if(bannerList() && bannerList()[currentIndex()]){
-            <h1 class="h1 w-[50%] text-left text-[#fff]">{{bannerList()[currentIndex()].title}}</h1>
-            <h3 class="b2 w-[40%] text-left text-[#fff]">{{bannerList()[currentIndex()].description}}</h3>
+            <h1 class="h1 2xl:w-1/2 xl:w-1/2 w-full text-[#fff]">{{bannerList()[currentIndex()].title}}</h1>
+            <h3 class="b2 2xl:w-1/2 xl:w-1/2 w-full text-[#fff]">{{bannerList()[currentIndex()].description}}</h3>
           }
         </div>
         @if(bannerList() && bannerList()[currentIndex()]){
@@ -23,7 +23,7 @@
         @if (isLoading()) {
           <app-loader [width]="50" [height]="50" classes="absolute top-1/2 right-[20%]"></app-loader>
         }@else {
-          <img class="absolute mobile:absolute lg:right-[0px] md:right-[-320px] md:bottom-0 mobile:bottom-0 mobile:z-[1]"
+          <img class="absolute mobile:absolute lg:right-[0px] md:right-[-320px] md:bottom-0 mobile:bottom-0"
             [src]="bannerList()[currentIndex()].imgBuffer" alt="Slide">
         }
       }
@@ -32,18 +32,20 @@
       @if(bannerList() && bannerList()[currentIndex()]){
         @for(slide of bannerList(); track slide.id; let index = $index){
           <div class="w-[648px] flex justify-center lg:hidden">
-            <div class="w-[95%] h-[6px] rounded-[100px] cursor-pointer bg-[#EEEEEE]"
+            <div
+              class="w-[95%] h-[6px] rounded-[100px] cursor-pointer bg-[#EEEEEE]"
               [ngClass]="{'active-tap': currentIndex() === index, 'inactive-tap': currentIndex() !== index}"
-              (click)="setCurrentIndex(index)"></div>
+              (click)="setCurrentIndex(index)"
+            ></div>
           </div>
           <div
-            class="lg:w-1/3 lg:flex p-[2px] border border-solid md:hidden sm:hidden mobile:hidden outer hover:cursor-pointer"
+            class="card w-full lg:flex p-[2px] md:hidden sm:hidden mobile:hidden outer hover:cursor-pointer"
             [ngClass]="{'active-card': currentIndex() === index, 'inactive-card': currentIndex() !== index}"
             (click)="setCurrentIndex(index)">
             <div class="w-[100%] p-[10px] flex relative overflow-hidden inner rounded-[16px]">
-              <div class="flex flex-col items-start justify-center gap-[8px] z-[111]">
+              <div class="w-full lg:w-[80%] flex flex-col items-start justify-center gap-[8px] px-[5px] z-[111]">
                 <h3 class="b1">{{slide.title}}</h3>
-                <h3 class="b5">{{slide.description}}</h3>
+                <h3 class="b5 shortened-text w-1/2">{{slide.description}}...</h3>
               </div>
               @if (isLoading()) {
                 <app-loader [width]="30" [height]="30" classes="absolute top-1/2 right-[20px]"></app-loader>

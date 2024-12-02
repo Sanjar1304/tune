@@ -1,24 +1,26 @@
 <footer class="lg:h-[615px] bg-[#F3F3F3] pt-[28px] pb-[24] lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
     <div class="container mx-auto">
-        <div class="flex lg:flex-row lg:items-center lg:justify-between md:flex-col sm:flex-col mobile:flex-col
+        <div class="w-full flex lg:flex-row lg:items-center justify-between md:flex-col sm:flex-col mobile:flex-col
                 md:gap-[32px] sm:gap-[24px] mobile:gap-[16px]">
-            <div class="w-[560px] flex lg:flex-row lg:justify-between md:flex-col sm:flex-col mobile:flex-col
+            <div class="2xl:w-2/4 xl:w-2/4 lg:w-2/4 flex lg:flex-row lg:justify-between md:flex-col sm:flex-col mobile:flex-col
                   md:gap-[32px] sm:gap-[24px] mobile:gap-[16px]">
                 <img class="hover:cursor-pointer" ngSrc="./assets/icons/header-logo.svg" alt="footer logo" height="44"
                     width="135" loading="lazy">
-                <div class="sm:flex-col mobile:flex-col sm:gap-0 mobile:gap-0">
+                <div class="w-full sm:flex-col mobile:flex-col sm:gap-0 mobile:gap-0">
                     <a class="h3 text[#262626]" href="998555204444">+998 55 520 44 44</a>
                     <p class="b3 text-[#5C5C5C]">{{"footerPage.callCenter" | transloco}}</p>
                 </div>
             </div>
-            <ul class="w-[250px] flex gap-[18px]">
+            <ul class="2xl:w-1/4 xl:w-1/4 lg:w-1/3 sm:w-full mobile:w-full flex
+                       2xl:justify-center xl:justify-center lg:justify-center
+                       md:justify-start sm:justify-start mobile:justify-start gap-[18px]">
                 <li class="flex gap-[18px]">
                     @if(socialList && socialList.items){
-                    @for(socials of socialList.items; track socials.id){
-                    <a [href]="socials.url" target="_blank" class="">
-                        <img class="" [src]="socials.imageUrl" alt="" loading="lazy">
-                    </a>
-                    }
+                      @for(socials of socialList.items; track socials.id){
+                        <a [href]="socials.url" target="_blank" class="">
+                            <img class="" [src]="socials.imageUrl" alt="" loading="lazy">
+                        </a>
+                      }
                     }
                 </li>
             </ul>

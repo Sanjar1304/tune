@@ -13,4 +13,5 @@ export interface Result {
 
 export interface File {
     file: string
+    contentType: string
 }

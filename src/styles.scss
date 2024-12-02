@@ -4,7 +4,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-$main-content-height: calc(99.5vh - 70px - 615px);
 
 *,
 *::after,
@@ -14,43 +13,23 @@ $main-content-height: calc(99.5vh - 70px - 615px);
   box-sizing: border-box;
 }
 
-body,
-html {
-  min-height: 100vh;
-  min-width: 100vw;
-  margin: 0;
-  height: 100%;
-}
-
 a {
   color: black;
   text-decoration: none;
   cursor: pointer;
+  padding: 0;
 }
 
 button {
   cursor: pointer;
 }
 
-.main-content-height {
-  min-height: $main-content-height;
-}
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .app {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 100%;
-}
-
-/* Ensure all child components also respect the width */
-
-.router-outlet,
-app-header,
-app-footer {
-  width: 100%;
 }

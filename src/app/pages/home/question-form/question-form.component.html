@@ -22,7 +22,7 @@
             sm:bg-[#FFFFFF40] mobile:bg-[#FFFFFF40] md:border-0
             rounded-[14px] placeholder:text-[#fff] focus:outline-none"
             mask="+000 00 000-00-00"
-            placeholder="+998 (--) --- -- --">
+            placeholder="998 (--) --- -- --">
         </div>
         <label class="w-full cursor-pointer">
           <mat-checkbox type="checkbox" class="text-[#fff]" formControlName="isChecked" (change)="onCheckboxChange()">
@@ -33,7 +33,8 @@
           mat-button
           type="submit"
           class="py-[18px] px-[28px] flex items-center justify-center"
-          [disabled]="!questionForm.valid || callBtnLoading()">
+          [disabled]="!questionForm.valid || callBtnLoading()"
+          [ngClass]="{'active': questionForm.valid, 'inactive': !questionForm.valid}">
           @if (callBtnLoading()){
             <mat-icon>
               <mat-spinner diameter="20"></mat-spinner>

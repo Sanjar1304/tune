@@ -1,0 +1,28 @@
+<div class="w-full h-screen py-[32px] 2xl:pl-[32px] xl:pl-[32px] lg:pl-[32px] mobile:px-[16px] mobile:pt-[50px] mobile:pb-[34]
+            flex items-center justify-center lg:flex-row md:flex-col sm:flex-col mobile:flex-col
+            bg-[#fff] gap-0 md:gap-[30px] sm:gap-1 mobile:gap-[50px]">
+  <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-full sm:w-full mobile:w-full
+              h-full 2xl:p-[64px] xl:p-[64px] lg:p-[64px] mobile:p-[10px] bg-[#27C5D0] md:bg-[#27C5D0] mobile:bg-[#fff]
+              rounded-[20px] overflow-hidden relative 2xl:flex xl:flex lg:flex flex-col justify-between">
+    <div class="w-full h-full flex flex-col 2xl:justify-start xl:justify-start lg:justify-start md:justify-center
+                2xl:gap-[24px] xl:gap-[24px] lg:gap-[24px] mobile:gap-[12px]">
+      <div class="flex items-center gap-[16px]">
+        <img class="2xl:h-fit xl:h-fit lg:h-fit 2xl:w-fit xl:w-fit lg:w-fit mobile:h-[36px] mobile:w-[36px]"
+             ngSrc="../../assets/icons/logo.svg" alt="" height="72" width="72" loading="lazy">
+        <img class="block md:block mobile:hidden" ngSrc="../../assets/icons/mybank.svg" alt="" height="34" width="132" loading="lazy">
+        <img class="hidden md:hidden mobile:block" ngSrc="../../assets/icons/auth-logo.svg" alt="logo" height="17" width="68">
+      </div>
+      <div class="flex flex-col z-[2222] 2xl:gap-[1rem] xl:gap-[1rem] lg:gap-[1rem] gap-[8px]">
+        <h2 class="h2-detail text-[#fff] md:text-[#fff] mobile:text-[#000]">Добро пожаловать в MyBank</h2>
+        <h4 class="b2 text-[#fff] md:text-[#fff] mobile:text-[#000]">Покупайте и продавайте свои автомобили удобно и легко с нами</h4>
+      </div>
+    </div>
+    <h3 class="b5 z-[2222] text-[#fff] 2xl:block xl:block lg:block md:hidden sm:hidden mobile:hidden">Вся безопасность полностью реализована и гарантирована «MyBank».</h3>
+    <img class="z-[1] absolute bottom-0 right-0 2xl:block xl:block lg:block md:block sm:hidden mobile:hidden
+                2xl:h-[650px] xl:h-[650px] lg:h-[550px] 2xl:w-[550px] xl:w-[550px] lg:w-[550px] md:h-[200px] md:w-[200px]"
+         ngSrc="../../assets/images/auto-3.png" alt="" height="641" width="584" loading="lazy">
+  </div>
+  <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-full sm:w-full mobile:w-full">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -2,9 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  EventEmitter,
   OnInit,
-  Output,
   inject, signal, computed,
   output
 } from '@angular/core';
@@ -19,7 +17,7 @@ import { LanguageService } from "../../../core/services/utils/language.service";
 import { catchError, EMPTY, Observable, of, switchMap, tap } from "rxjs";
 import { FavouriteApiService } from './favourite.api.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../auth/services/auth.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 
 @Component({
@@ -46,7 +44,7 @@ export class RecommendationCardsComponent implements OnInit {
   private languageService = inject(LanguageService);
   private favouriteApiService = inject(FavouriteApiService)
   private toastrService = inject(ToastrService);
-
+  public authService = inject(AuthService)
 
   bg_color = signal<string>('green');
   page = signal<number>(0);
@@ -84,18 +82,17 @@ export class RecommendationCardsComponent implements OnInit {
     const request$ = isFavorite ? this.favouriteApiService.removeProductFromFavourite(productId) : this.favouriteApiService.addProductToFavourite(productId);
     request$.pipe(
       tap((res) => {
-        console.log(res)
-
-        this.changeIsFavouriteCustom(productId, isFavorite)
+        if (res.success) {
+          this.changeIsFavouriteCustom(productId, isFavorite)
+        }
       })
     ).subscribe()
-
   }
 
 
-
   public openCardContent(id: string) {
-    this.router.navigate(['/catalog', id]);
+    this.router.navigate(['/catalog', id], { replaceUrl: true });
+    console.log(id)
   }
 
   public navigateToCatalogPage() {

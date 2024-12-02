@@ -7,6 +7,7 @@ import { ICarDetailRes } from "../../../../core/constants/ICarDetailRes";
 import { BackendResponseModel } from "../../../../core/models/backend-response.model";
 import { SessionService } from "../../../../core/services/root/sessionService";
 import { UserService } from "../../../../core/services/root/user.service";
+import { ENDPOINTS } from "../../../../core/constants";
 
 @Injectable({
   providedIn: "root"
@@ -29,7 +30,7 @@ export class CatalogCardsService {
       paging: { page: data.paging.page, size: data.paging.size },
     };
 
-    return this.http.post<BackendResponseModel<CarCatalogRes>>(`${this.API_URL}/product/search/basic`, requestBody)
+    return this.http.post<BackendResponseModel<CarCatalogRes>>(ENDPOINTS.PRODUCT.SEARCH_BASIC, requestBody)
       .pipe(
         map(this.sessionService.handleResponse<CarCatalogRes>),
         catchError(this.sessionService.handleError)

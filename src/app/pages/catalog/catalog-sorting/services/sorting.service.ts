@@ -8,6 +8,7 @@ import { SortingFormModel } from "../models/sorting-form.model";
 import { environment } from "../../../../../environments/environment";
 import { CarCatalogRes } from "../../../../core/constants/carCatalogRes";
 import { SortingModel } from "../../../home/sorting-models/models/sorting.model";
+import { ENDPOINTS } from "../../../../core/constants";
 
 // Define Filter type to handle all filter structures in the codebase
 type Filter =
@@ -26,7 +27,7 @@ export class SortingService {
   private sessionService = inject(SessionService);
 
   // Fetch sorting models for car catalog
-  public getModels(): Observable<SortingModel | null> {
+  public getFormTopButtons(): Observable<SortingModel | null> {
     return this.http
       .post<BackendResponseModel<SortingModel>>(
         `${this.API_URL}filter/static/list`,
@@ -38,36 +39,9 @@ export class SortingService {
       );
   }
 
-  // Fetch buttons based on query and filter type
-  public getButtonsName(
-    data: { query: string; filterStatic?: { type: string; value: string } },
-    paging: { page: number; size: number }
-  ): Observable<CarCatalogRes | null> {
-    const requestBody = {
-      query: data.query,
-      facet: "MARK",
-      filters: [] as Filter[], // Use Filter type
-      filtersStatic: data.filterStatic
-        ? [data.filterStatic]
-        : [{ type: "USING_STATE", value: "-1" }],
-      paging: {
-        page: paging.page,
-        size: paging.size
-      }
-    };
-    return this.http
-      .post<BackendResponseModel<CarCatalogRes>>(
-        `${this.API_URL}product/search/basic`,
-        JSON.stringify(requestBody)
-      )
-      .pipe(
-        map(this.sessionService.handleResponse<CarCatalogRes>),
-        catchError(this.sessionService.handleError)
-      );
-  }
 
   // Fetch sorting form configuration
-  public getSortingForm(): Observable<SortingFormModel | null> {
+  public getFormFields(): Observable<SortingFormModel | null> {
     return this.http
       .get<BackendResponseModel<SortingFormModel>>(
         `${this.API_URL}filter/list?categoryId=1`
@@ -78,8 +52,8 @@ export class SortingService {
       );
   }
 
-  // Fetch sorted catalog cards based on filter and query data
-  public sortedCatalogCards(data: {
+
+  public requestSearchBasic(data: {
     query: string;
     paging: { size: number; page: number };
     filters: Filter[];
@@ -87,7 +61,7 @@ export class SortingService {
   }): Observable<CarCatalogRes | null> {
     return this.http
       .post<BackendResponseModel<CarCatalogRes>>(
-        `${this.API_URL}product/search/basic`,
+        ENDPOINTS.PRODUCT.SEARCH_BASIC,
         data
       )
       .pipe(

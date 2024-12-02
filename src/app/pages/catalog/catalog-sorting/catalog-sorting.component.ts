@@ -5,7 +5,7 @@ import {
   DestroyRef,
   OnInit,
   inject,
-  model, ViewChild,
+  model, ViewChild, signal, computed,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatLabel, MatOption, MatSelect } from "@angular/material/select";
@@ -14,7 +14,6 @@ import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormField } from "@angular/material/form-field";
 import { MatRadioModule } from "@angular/material/radio";
-import { Router } from '@angular/router';
 import { SortingFormModel, SortingFormSelection } from './models/sorting-form.model';
 import { SortingService } from './services/sorting.service';
 import { UiSvgIconComponent } from '../../../core/components/ui-svg-icon/ui-svg-icon.component';
@@ -23,8 +22,8 @@ import { MatInput } from "@angular/material/input";
 import { LanguageService } from "../../../core/services/utils/language.service";
 import { TranslocoPipe } from "@jsverse/transloco";
 import { CatalogDataService } from "../services/catalog-data.service";
-import { CarCatalogRes } from "../../../core/constants/carCatalogRes";
 import { SortingModel } from "../../home/sorting-models/models/sorting.model";
+import {MatDivider} from "@angular/material/divider";
 
 
 @Component({
@@ -45,16 +44,16 @@ import { SortingModel } from "../../home/sorting-models/models/sorting.model";
     MatInput,
     TranslocoPipe,
     TitleCasePipe,
-    NgClass
+    NgClass,
+    MatDivider
   ],
   templateUrl: './catalog-sorting.component.html',
   styleUrl: "./catalog-sorting.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogSortingComponent implements OnInit {
-  private router = inject(Router);
+
   private fb = inject(FormBuilder);
-  private cdr = inject(ChangeDetectorRef);
   private destroy$ = inject(DestroyRef);
   private sortingService = inject(SortingService);
   private languageService = inject(LanguageService);
@@ -62,28 +61,18 @@ export class CatalogSortingComponent implements OnInit {
 
   @ViewChild('sortingForm') form!: NgForm;
 
-
-  readonly checked = model(false);
-  readonly indeterminate = model(false);
-  labelPosition = model<'Торг есть' | 'Автосалон' | 'C фото'>('Торг есть');
-  readonly disabled = model(false);
-  public carModels!: SortingModel[];
-  public sortingCategories!: SortingFormModel[];
-  public carModelMenu!: SortingModel[];
-  public carModelsInfo!: CarCatalogRes;
-  public selectedModelsInfo!: CarCatalogRes;
-  public isSelectedPressed: boolean = false;
-  public activeModel!: SortingModel;
-  public pairFilterID: number | undefined = 0
+  carModels = signal<SortingModel[]>([]);
+  sortingCategories = signal<SortingFormModel[]>([]);
+  sortingFormSelections = signal<SortingFormSelection[]>([]);
+  carModelMenu = computed(() => this.carModels().filter((model) => model.type === 'USING_STATE'));
+  activeModel = signal<SortingModel | null>(null);
   pricingFrom!: FormGroup;
-  sortingFormSelections: SortingFormSelection[] = [];
 
   ngOnInit(): void {
     this.languageService.currentLanguage$.subscribe(() => {
-      this.getSortingModelFormSubscription();
+      this.fetchFormFields();
+      this.fetchTopButtons();
       this.validatePricingForm();
-      this.getButtons();
-      this.getSortingFormButtons();
     })
 
     this.catalogDataService.triggerSortingRequest$
@@ -91,7 +80,6 @@ export class CatalogSortingComponent implements OnInit {
       .subscribe((paging) => {
         this.onSubmit(paging.page, paging.size);
       });
-    this.cdr.detectChanges()
   }
 
   public validatePricingForm() {
@@ -101,80 +89,42 @@ export class CatalogSortingComponent implements OnInit {
     })
   }
 
-  public getButtons() {
-    this.sortingService.getModels()
+  public fetchFormFields() {
+    this.sortingService.getFormFields()
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
-          this.carModels = res as unknown as SortingModel[];
-          this.carModelMenu = this.carModels.filter(val => val.type === 'USING_STATE');
-          if (this.carModelMenu.length > 0) {
-            const selectedModel = this.carModelMenu[0];
-            this.selectedActiveButton(selectedModel.type, selectedModel.value)
-          }
-          this.isSelectedPressed = false;
-          this.cdr.detectChanges();
+          const categories = res as unknown as SortingFormModel[];
+          this.sortingCategories.set(categories);
+
+          const selections = categories.map((category) => ({
+            filterId: category.id,
+            from: '',
+            to: '',
+            value: '',
+            componentType: category.componentType,
+            pairFilter: category.pairFilter
+              ? {
+                ...category.pairFilter,
+                filterId: category.pairFilter.id, // Map `id` to `filterId`
+              }
+              : undefined,
+          }));
+
+          this.sortingFormSelections.set(selections as SortingFormSelection[]);
         },
         error: err => console.log(err)
       });
   }
 
-  public getSortingFormButtons(isInitialLoad: boolean = false) {
-    const filterStatic = isInitialLoad ? { type: "USING_STATE", value: "-1" } : undefined;
-    this.sortingService.getButtonsName({ query: '', filterStatic }, { page: 0, size: 0 })
+  public fetchTopButtons() {
+    this.sortingService.getFormTopButtons()
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
-          this.carModelMenu = this.carModels.filter(val => val.type === 'USING_STATE');
-          if (isInitialLoad) {
-            this.carModelsInfo = res as CarCatalogRes;
-          } else {
-            this.selectedModelsInfo = res as CarCatalogRes;
-            this.isSelectedPressed = true;
-          }
-          this.cdr.detectChanges();
-        },
-        error: err => console.log(err)
-      })
-
-  }
-
-  public getSortingModelFormSubscription() {
-    this.sortingService.getSortingForm()
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe({
-        next: res => {
-          this.sortingCategories = res as unknown as SortingFormModel[];
-          this.sortingFormSelections = this.sortingCategories.map((category) => {
-            const selection: SortingFormSelection = {
-              from: "", to: "", value: "",
-              filterId: category.id,
-              componentType: category.componentType,
-              pairFilter: category.pairFilter ? {
-                filterId: category.pairFilter.id, // Ensure pairFilter.filterId is set correctly
-                title: category.pairFilter.title,
-                regexp: category.pairFilter.regexp || '',
-                componentType: category.pairFilter.componentType,
-                placeholder: category.pairFilter.placeholder,
-                pairFilter: category.pairFilter.pairFilter || null,
-                values: category.pairFilter.values || []  // Ensure pairFilter values are correctly set
-              } : undefined
-            };
-
-            this.pairFilterID = selection.pairFilter?.filterId;
-
-            // For 'ARRANGE' component type, initialize `from` and `to`
-            if (category.componentType === 'ARRANGE') {
-              selection.from = '';
-              selection.to = '';
-            } else {
-              selection.value = ''; // Initialize value for other component types
-            }
-
-            return selection;
-          });
-
-          this.cdr.detectChanges();
+          this.carModels.set(res as unknown as SortingModel[]);
+          const firstModel = this.carModelMenu()[0];
+          if (firstModel) this.activeModel.set(firstModel);
         },
         error: err => console.log(err)
       });
@@ -182,34 +132,9 @@ export class CatalogSortingComponent implements OnInit {
 
 
   public onSubmit(page: number = 0, size: number = 10) {
-    const filters = this.sortingFormSelections
-      .filter(selection => selection.value || selection.from || selection.to) // Filter out empty selections
-      .map(selection => {
-        const category = this.sortingCategories.find(cat => cat.id === selection.filterId);
-        if (!category) return null; // Skip if no matching category found
-
-        switch (category.componentType) {
-          case 'SELECT':
-            return this.handleSelect(selection, category);
-
-          case 'MULTI_SELECT':
-            return this.handleMultiSelect(selection, category);
-
-          case 'TEXT':
-            return this.handleText(selection);
-
-          case 'ARRANGE':
-            return this.handleArrange(selection, category);
-
-          default:
-            return null;
-        }
-      })
-      .filter(filter => filter !== null); // Filter out null entries
-
     const requestData = {
       query: '',
-      filters: filters,
+      filters: this.returnFilter(this.sortingFormSelections()),
       facet: null,
       paging: {
         page: page,
@@ -217,7 +142,7 @@ export class CatalogSortingComponent implements OnInit {
       }
     };
 
-    this.sortingService.sortedCatalogCards(requestData)
+    this.sortingService.requestSearchBasic(requestData)
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe({
         next: res => {
@@ -226,11 +151,8 @@ export class CatalogSortingComponent implements OnInit {
             this.catalogDataService.setDataSourceType('SORTING'); // Notify data source type
           }
         },
-        error: (err) => {
-          console.error('Error fetching sorted catalog:', err);
-        }
+        error: (err) => console.error('Error fetching sorted catalog:', err)
       });
-
   }
 
   public clearSortingForm() {
@@ -243,66 +165,67 @@ export class CatalogSortingComponent implements OnInit {
     console.log(this.pricingFrom.value)
   }
 
-  public selectedActiveButton(type: string, value: string) {
-    const selectedModel = this.carModelMenu.find(model => model.type === type && model.value === value);
-    if (selectedModel) {
-      this.activeModel = selectedModel;
-      this.cdr.markForCheck();
+  public remainSelectedModel(menu: SortingModel) {
+    this.activeModel.set(menu);
+  }
+
+  private returnFilter(selections: SortingFormSelection[]): any[] {
+    return selections
+      .filter((selection) => selection.value || selection.from || selection.to)
+      .map((selection) => this.buildFilter(selection))
+      .filter((filter) => filter !== null);
+  }
+
+  private buildFilter(selection: SortingFormSelection) {
+    const category = this.sortingCategories().find((cat) => cat.id === selection.filterId);
+    if (!category) return null;
+    const filter = {
+      filterId: selection.filterId,
+      ...(selection.value ? this.getValueFilter(selection, category) : {}),
+      ...(selection.from || selection.to ? this.getRangeFilter(selection) : {}),
+    };
+
+    return Object.keys(filter).length > 1 ? filter : null; // Ensure the filter has data.
+  }
+
+  private getValueFilter(selection: SortingFormSelection, category: SortingFormModel) {
+    switch (category.componentType) {
+      case 'SELECT':
+        return this.getSelectFilter(selection, category);
+      case 'MULTI_SELECT':
+        return this.getMultiSelectFilter(selection, category);
+      case 'TEXT':
+        return { value: selection.value };
+      default:
+        return null;
     }
   }
 
-
-  public remainSelectedModel(menu: SortingModel) {
-    this.activeModel = menu;
+  private getSelectFilter(selection: SortingFormSelection, category: SortingFormModel) {
+    const selectedOption = category.values.find((val) => val.value === selection.value);
+    return selectedOption ? { value: selectedOption.id } : null;
   }
 
 
-  private handleSelect(selection: any, category: any) {
-    const selectedOption = category.values.find((val: { value: any; }) => val.value === selection.value);
-    return selectedOption ? { filterId: selection.filterId, value: selectedOption.id } : null;
+  private getMultiSelectFilter(selection: SortingFormSelection, category: SortingFormModel) {
+    const multiValues = selection.value
+      .split(',')
+      .map((val) => category.values.find((opt) => opt.value === val.trim())?.id)
+      .filter((id) => id !== null);
+    return multiValues.length ? { multiValues } : null;
   }
 
-  private handleMultiSelect(selection: any, category: any) {
-    const multiSelectedOptions = selection.value?.split(',').map((val: string) => {
-      const option = category.values.find((opt: { value: string; }) => opt.value === val.trim());
-      return option ? option.id : null;
-    }).filter((id: null) => id !== null);
-
-    return multiSelectedOptions?.length ? { filterId: selection.filterId, multiValues: multiSelectedOptions } : null;
-  }
-
-  private handleText(selection: any) {
-    return { filterId: selection.filterId, value: selection.value };
-  }
-
-  private handleArrange(selection: any, category: any) {
-    const arrangeData: any = { filterId: selection.filterId };
-
-    // Add `from` and `to` if present
-    if (selection.from) arrangeData.from = +selection.from;
-    if (selection.to) arrangeData.to = +selection.to;
-
-    // Only add pairFilter if a value is selected
+  private getRangeFilter(selection: SortingFormSelection) {
+    const rangeFilter: any = {};
+    if (selection.from) rangeFilter.from = +selection.from;
+    if (selection.to) rangeFilter.to = +selection.to;
     if (selection.pairFilter && selection.value) {
-      const pairFilter = category.pairFilter;
-      //@ts-ignore
-      const selectedPairOption = pairFilter?.values.find(val => val.id === selection.value);
-
-      if (selectedPairOption) {
-        arrangeData.pairFilter = {
-          filterId: this.pairFilterID,
-          value: selectedPairOption.id.toString() // Ensure value is a string
-        };
+      const selectedPair = selection.pairFilter.values.find((val) => val.id === +selection.value);
+      if (selectedPair) {
+        rangeFilter.pairFilter = { filterId: selection.pairFilter.filterId, value: selectedPair.id.toString() };
       }
     }
-
-    // Only return the arrangeData if there is a valid 'from' or 'to' or 'pairFilter'
-    if (arrangeData.from || arrangeData.to || arrangeData.pairFilter) {
-      return arrangeData;
-    }
-
-    return null; // Return null if no valid data
+    return rangeFilter;
   }
-
 
 }

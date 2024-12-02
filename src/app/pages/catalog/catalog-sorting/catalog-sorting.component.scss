@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
   ::ng-deep {
     .mat-mdc-radio-button .mdc-radio__outer-circle {
@@ -8,10 +10,7 @@
       color: #a1a1a1;
     }
 
-    .mat-mdc-radio-button
-      .mdc-radio__native-control:enabled:not(:checked)
-      + .mdc-radio__background
-      .mdc-radio__outer-circle {
+    .mat-mdc-radio-button .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
       border-color: #a1a1a1;
     }
 
@@ -60,6 +59,10 @@
 
     .mdc-text-field {
       border-radius: 10px;
+      padding: 0 16px;
+    }
+    .next-form-field .mdc-text-field {
+      padding: 0;
     }
 
     .mat-mdc-form-field-infix {
@@ -126,5 +129,19 @@
       .mat-mdc-floating-label {
       top: 23px;
     }
+
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label {
+      color: #A1A1A1;
+    }
+
+    .mat-divider-vertical{
+      height: 70%;
+      width: 0 !important;
+      position: inherit !important;
+    }
+
+    @include mat.divider-overrides((
+      color: #ECECEC,
+    ));
   }
 }

@@ -105,19 +105,19 @@
             </div>
           </div>
         </form>
-        <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-[100%] sm:w-full mobile:w-full
+        <div class="2xl:w-1/2 xl:w-1/2 lg:w-1/2 md:w-full sm:w-full mobile:w-full
                      flex 2xl:flex-col xl:flex-col lg:flex-col md:flex-row sm:flex-row mobile:flex-col
                      2xl:px-[50px] xl:px-[50px] lg:px-[50px] md:px-0 sm:px-0 mobile:px-0
-                     lg:gap-[24px] md:gap-[300px] sm:gap-[100px] mobile:gap-[10px]">
-          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px] pb-[10px]">
+                     lg:gap-[24px] md:justify-between sm:justify-between mobile:justify-between">
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:justify-between pb-[10px]">
             <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title1" | transloco}}</p>
             <h2 class="h2 text-[#262626]">{{monthlyPayment | customCurrency}}</h2>
           </div>
-          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px] pb-[10px]">
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:justify-between pb-[10px]">
             <p class="b3 text-[#626262]">{{"calculateCreditPage.sideCard.cards.title2" | transloco}}</p>
             <h2 class="h2 text-[#262626]">{{totalPayment | customCurrency}}</h2>
           </div>
-          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:gap-[8px]">
+          <div class="flex flex-col lg:gap-[14px] md:gap-[14px] sm:gap-[8px] mobile:justify-between pb-[10px]">
             <p class="b3 text-[#626262]">{{'carDetailPage.calculator.interest' | transloco}} </p>
             <h2 class="h2 text-[#262626]">{{interest}} %</h2>
           </div>

@@ -32,68 +32,79 @@ import {CalculateModel} from "../../../../home/calculate-credit/models/calculate
   templateUrl: './card-detail-calculator.component.html',
   styles: `
     :host {
-      ::ng-deep .mat-mdc-slider {
-        width: 100%;
-        margin: 0;
-      }
 
-      ::ng-deep .mdc-slider__track {
-        color: #27C5D0 !important;
-      }
+      ::ng-deep {
+        .mat-mdc-slider {
+          width: 100%;
+          margin: 0;
+        }
 
-      ::ng-deep .mat-slider-track-fill {
-        background-color: #27C5D0 !important;
-      }
+        .mdc-slider__track {
+          color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__track--active_fill{
-        border-color: #27C5D0 !important;
-      }
+        .mat-slider-track-fill {
+          background-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__track--inactive {
-        background-color: #C8C8C8 !important;
-      }
+        .mdc-slider__track--active_fill{
+          border-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__track--inactive::before {
-        background-color: #C8C8C8 !important;
-      }
+        .mdc-slider__track--inactive {
+          background-color: #C8C8C8 !important;
+        }
 
-      ::ng-deep .mat-slider-thumb {
-        background-color: #27C5D0 !important;
-      }
+        .mdc-slider__track--inactive::before {
+          background-color: #C8C8C8 !important;
+        }
 
-      ::ng-deep .mat-slider-thumb-label {
-        background-color: #27C5D0 !important;
-      }
+        .mat-slider-thumb {
+          background-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__thumb-knob {
-        width: 25px !important;
-        height: 6px !important;
-        border-radius: 8px;
-        border-color: #27C5D0;
-        background-color: #27C5D0;
-      }
+        .mat-slider-thumb-label {
+          background-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__thumb-knob:active {
-        border-color: #27C5D0;
-      }
+        .mdc-slider__thumb-knob {
+          width: 25px !important;
+          height: 6px !important;
+          border-radius: 8px;
+          border-color: #27C5D0;
+          background-color: #27C5D0;
+        }
 
-      ::ng-deep .mdc-slider__thumb-knob:focus {
-        background-color: #27C5D0 !important;
-        border-color: #27C5D0 !important;
-      }
+        .mdc-slider__thumb-knob:active {
+          border-color: #27C5D0;
+        }
 
-      ::ng-deep .mdc-slider__thumb-knob:hover {
-        background-color: #27C5D0 !important;
-        border-color: #27C5D0 !important;
-      }
+        .mdc-slider__thumb-knob:focus {
+          background-color: #27C5D0 !important;
+          border-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mdc-slider__thumb-knob:focus-within {
-         background-color: #27C5D0 !important;
-         border-color: #27C5D0 !important;
-      }
+        .mdc-slider__thumb-knob:hover {
+          background-color: #27C5D0 !important;
+          border-color: #27C5D0 !important;
+        }
 
-      ::ng-deep .mat-mdc-slider-visual-thumb {
-        border-color: #27C5D0;
+        .mdc-slider__thumb-knob:focus-within {
+          background-color: #27C5D0 !important;
+          border-color: #27C5D0 !important;
+        }
+
+        .mat-mdc-slider-visual-thumb {
+          border-color: #27C5D0;
+        }
+
+        @media screen and (min-width: 375px) and (max-width:640px) {
+          .mat-mdc-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+          }
+        }
       }
     }
   `,

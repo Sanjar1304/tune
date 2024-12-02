@@ -1,24 +1,42 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, catchError, map, Observable, of } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, of, shareReplay } from "rxjs";
 
-import { environment } from "../../../../../environments/environment";
 import { Banner, BannerRes } from "../../../../core/constants/bannerRes";
 import { SessionService } from "../../../../core/services/root/sessionService";
 import { BackendResponseModel } from "../../../../core/models/backend-response.model";
+import { ENDPOINTS } from "../../../../core/constants";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class BannerRequestService {
-
-  private API_URL = `${environment.API_BASE}/api/v1`;
   private http = inject(HttpClient);
   private sessionService = inject(SessionService)
-  private _bannerList$ = new BehaviorSubject<Banner[]>([])
+
+  private _bannerCache: Record<string, Banner[]> = {};
+  private _bannerList$ = new BehaviorSubject<Banner[]>([]);
   public bannerList$ = this._bannerList$.asObservable();
+
+
+  public setBannerList(banners: Banner[], language: string): void {
+    this._bannerCache[language] = banners;
+    this._bannerList$.next(banners);
+  }
+
+  public getCachedBannerList(language: string): Banner[] {
+    return this._bannerCache[language] || [];
+  }
+
+  public clearCachedData(): void {
+    this._bannerCache = {};
+  }
+
+  public clearBannerList(): void {
+    this._bannerList$.next([]);
+  }
 
 
   public getBanner(page: number, size: number): Observable<BannerRes | null> {
@@ -26,7 +44,7 @@ export class BannerRequestService {
       page: page,
       size: size
     };
-    return this.http.post<BackendResponseModel<BannerRes>>(`${this.API_URL}/carousel/list`, requestBody)
+    return this.http.post<BackendResponseModel<BannerRes>>(ENDPOINTS.CAROUSEL.LIST, requestBody)
       .pipe(
         map(this.sessionService.handleResponse<BannerRes>),
         catchError(error => {
@@ -36,7 +54,4 @@ export class BannerRequestService {
       );
   }
 
-  setBannerList(bannerList: Banner[]): void {
-    this._bannerList$.next(bannerList)
-  }
 }

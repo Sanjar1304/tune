@@ -1,6 +1,5 @@
-<section class="main-content-height
-                2xl:pt-[40px] xl:pt-[40px] lg:pt-[40px]
-                md:pt-[24px] sm:pt-[16px] mobile:pt-[14px]">
+<section class="2xl:pt-[40px] xl:pt-[40px] lg:pt-[40px]
+                md:pt-[24px] sm:pt-[16px] mobile:pt-[14px] overflow-x-hidden">
   <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
     <app-slider></app-slider>
   </div>
@@ -16,19 +15,28 @@
                2xl:py-[60px] xl:py-[60px] lg:py-[60px] md:py-[60px] sm:py-[30px] mobile:py-[16px]">
     <app-getting-credit></app-getting-credit>
   </div>
-  <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+  <div #questionForm class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
     <app-question-form></app-question-form>
   </div>
-  <div class="w-full bg-[#F3F3F3]
-               lg:rounded-[60px] md:rounded-[50px] sm:rounded-[40px] mobile:rounded-[40px]
-               lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]
-               2xl:py-[60px] xl:py-[60px] lg:py-[60px] md:py-[60px] sm:py-[30px] mobile:py-[16px]">
-    <app-calculate-credit></app-calculate-credit>
-  </div>
-  <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
-    <app-pros-cards></app-pros-cards>
-  </div>
-  <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
-    <app-faqs></app-faqs>
-  </div>
+
+  @defer (on viewport(questionForm)) {
+    <div #credit class="w-full bg-[#F3F3F3]
+    lg:rounded-[60px] md:rounded-[50px] sm:rounded-[40px] mobile:rounded-[40px]
+    lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]
+    2xl:py-[60px] xl:py-[60px] lg:py-[60px] md:py-[60px] sm:py-[30px] mobile:py-[16px]">
+      <app-calculate-credit></app-calculate-credit>
+    </div>
+
+    @defer (on viewport(credit)) {
+      <div #prosCards class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+        <app-pros-cards></app-pros-cards>
+      </div>
+      @defer(on viewport(prosCards)){
+        <div class="lg:px-[60px] md:px-[30px] sm:px-[16px] mobile:px-[16px]">
+          <app-faqs></app-faqs>
+        </div>
+      }
+    }
+  }
 </section>
+

@@ -1,3 +1,6 @@
-<p>
-  image works!
-</p>
+@if (isLoading()) {
+<app-loader [classes]="loaderClasses()" [borderColor]="loaderBorderColor()!" [width]="loaderWidth()!"
+  [height]="loaderHeight()!"> </app-loader>
+}@else {
+<img [ngClass]="imageClasses()" [src]="imageBase64()" [alt]="alt()" [loading]="loading()">
+}
