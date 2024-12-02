@@ -1,25 +1,24 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   OnInit,
   inject,
-  output,
-  signal
+  signal, output, DestroyRef
 } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormField, MatOption, MatSelect} from "@angular/material/select";
 import {NgClass, NgFor, NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { UiSvgIconComponent } from '../../core/components/ui-svg-icon/ui-svg-icon.component';
 import {CustomToasterService} from "../../core/services/utils/toast.service";
-import {MatButton} from "@angular/material/button";
+import {NgxMaskDirective} from "ngx-mask";
 import {MatIcon} from "@angular/material/icon";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {NgxMaskDirective} from "ngx-mask";
-import { Router } from '@angular/router';
 import {TranslocoPipe} from "@jsverse/transloco";
-import { UiSvgIconComponent } from '../../core/components/ui-svg-icon/ui-svg-icon.component';
+import {MatButton} from "@angular/material/button";
+
 
 interface UserType {
   value: string;
