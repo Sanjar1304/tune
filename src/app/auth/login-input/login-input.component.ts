@@ -141,21 +141,18 @@ interface UserType {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginInputComponent implements OnInit{
-
-  loginForm!: FormGroup;
-  callBtnLoading = signal<boolean>(false);
-  notExistingNumber = signal<boolean>(false)
-
-
-  userTypes = signal<UserType[]>([
-    {value: 'FIZ', viewValue: 'физическое лицо'},
-    {value: 'YUR', viewValue: 'юридическое лицо'},
-  ]);
-
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private customToastService = inject(CustomToasterService);
+
+  loginForm!: FormGroup;
+  callBtnLoading = signal<boolean>(false);
+  notExistingNumber = signal<boolean>(false)
+  userTypes = signal<UserType[]>([
+    {value: 'FIZ', viewValue: 'физическое лицо'},
+    {value: 'YUR', viewValue: 'юридическое лицо'},
+  ]);
 
 
   public ngOnInit(): void {

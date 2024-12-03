@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject, signal} from '@angular/core';
 
 import { CarCatalogRes } from '../../../core/constants/carCatalogRes';
 import { SortingModel } from './models/sorting.model';
@@ -8,7 +8,7 @@ import {DecimalPipe, NgClass, NgForOf, NgIf, NgOptimizedImage, TitleCasePipe} fr
 import {TranslocoPipe} from "@jsverse/transloco";
 import {LanguageService} from "../../../core/services/utils/language.service";
 import {CatalogDataService} from "../../catalog/services/catalog-data.service";
-import {Router} from "@angular/router";
+import {NavigationExtras, Router} from "@angular/router";
 
 @Component({
   selector: 'app-sorting-models',
@@ -35,6 +35,13 @@ import {Router} from "@angular/router";
 })
 export class SortingModelsComponent implements OnInit{
 
+  private router = inject(Router);
+  private destroy$ = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  private sortingService = inject(SortingModelService);
+  private languageService = inject(LanguageService);
+  private catalogDataService = inject(CatalogDataService)
+
   public carModels!:SortingModel[];
   public carModelsImage!: { imageLink: string, type: string, value: string }[];
   public carModelsInfo!: CarCatalogRes;
@@ -44,13 +51,8 @@ export class SortingModelsComponent implements OnInit{
 
   public isSelectedPressed: boolean = false;
   public activeModel!: SortingModel;
+  private filterModel = signal<{ type: string, value: string } | null>(null)
 
-  private router = inject(Router);
-  private destroy$ = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
-  private sortingService = inject(SortingModelService);
-  private languageService = inject(LanguageService);
-  private catalogDataService = inject(CatalogDataService)
 
   public ngOnInit() {
 
@@ -104,6 +106,7 @@ export class SortingModelsComponent implements OnInit{
   }
 
   private fetchModelNames(type: string, value: string) {
+    this.filterModel.set({ type, value })
     this.sortingService.getModelsName({ query: '', filterStatic: { type, value } }, { page: 0, size: 10 })
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe(res => {
@@ -118,7 +121,6 @@ export class SortingModelsComponent implements OnInit{
   public remainSelectedModel(menu: SortingModel) {
     this.activeModel = menu;
     this.fetchModelNames(menu.type, menu.value);
-
   }
 
   public getImageValue(type: string, value: string) {
@@ -136,5 +138,11 @@ export class SortingModelsComponent implements OnInit{
 
   public openCatalogPage(){
     this.router.navigate(['/catalog'])
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "filter":JSON.stringify(this.filterModel())
+      }
+    }
+    this.router.navigate(['/catalog', navigationExtras]);
   }
 }

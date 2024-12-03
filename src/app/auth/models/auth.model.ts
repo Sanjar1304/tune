@@ -24,5 +24,3 @@ export interface LoginRequestModel {
   identity: string;
   password: string;
 }
-
-

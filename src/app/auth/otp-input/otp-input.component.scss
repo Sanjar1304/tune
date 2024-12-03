@@ -1,0 +1,87 @@
+:host {
+  .otp-input {
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #262626;
+  }
+
+  .default-color {
+    color: #262626;
+    border: none;
+  }
+
+  .right-number {
+    color: #05BC74;
+    border: 1px solid #27c5d0;
+  }
+
+  .wrong-number {
+    color: #FF3333;
+    border: 1px solid #FF3333;
+  }
+
+  .otp-input-group .otp-input:focus {
+    border-color: #27c5d0;
+    background-color: #e6f7f9;
+  }
+
+  .resend-otp {
+    background-color: #27c5d0;
+    color: white;
+    border: none;
+  }
+
+
+  ::ng-deep {
+
+    .resend-otp.mat-mdc-button {
+      background-color: #27c5d0;
+      color: #fff;
+    }
+
+    .mat-mdc-button {
+      border-radius: 10px;
+    }
+
+    .active.mat-mdc-button {
+      background-color: #27c5d0;
+    }
+
+    .inactive.mat-mdc-button {
+      background-color: #E5E7EA;
+    }
+
+    .active.mat-mdc-button .mdc-button__label {
+      color: #fff;
+      opacity: 1;
+    }
+
+    .inactive.mat-mdc-button .mdc-button__label {
+      color: #B0B8C1;
+      opacity: .5;
+    }
+
+    .mat-mdc-button>.mat-icon {
+      width: fit-content;
+      height: fit-content;
+    }
+
+    @media (min-width: 768px) {
+      .ng-otp-input-wrapper input {
+        height: 5vw; /* Smaller size for larger screens */
+        font-size: 1.2vw;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .ng-otp-input-wrapper input {
+        height: 5vw; /* Further adjust for wider screens */
+        font-size: 1vw;
+      }
+    }
+  }
+}

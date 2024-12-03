@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject, input,
+  OnChanges,
+  OnInit, SimpleChanges
+} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 
 import { CarCatalogRes } from "../../../core/constants/carCatalogRes";
@@ -12,7 +20,7 @@ import { CatalogDataService } from "../services/catalog-data.service";
 @Component({
   selector: 'app-catalog-cards',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, TranslocoPipe, RouterOutlet],
+  imports: [CommonModule, NgOptimizedImage, TranslocoPipe],
   templateUrl: './catalog-cards.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
@@ -45,26 +53,39 @@ import { CatalogDataService } from "../services/catalog-data.service";
     }
   `,
 })
-export class CatalogCardsComponent implements OnInit {
-
-  private destroy$ = inject(DestroyRef);
+export class CatalogCardsComponent implements OnInit, OnChanges {
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
-  private catalogCardsService = inject(CatalogCardsService);
+  private destroy$ = inject(DestroyRef);
   private languageService = inject(LanguageService);
   private catalogDataService = inject(CatalogDataService);
+  private cdr = inject(ChangeDetectorRef);
+  private catalogCardsService = inject(CatalogCardsService);
 
 
+  filteredCars = input<CarCatalogRes>();
   public displayedCards: CarCatalogRes['items'] = [];
   public catalogCardsRes!: CarCatalogRes;
+
   public catalogCardsLength: number = 0;
   public _currentPage: number = 0;
   public pagesLength: number = 0;
   cardsPerPage: number = 10;
   pagesArray: number[] = [];
+
   private dataSourceType: 'DEFAULT' | 'SORTING' = 'DEFAULT';
 
-
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+    if(changes && changes['filteredCars'] && changes['filteredCars'].currentValue){
+      const filteredCars: CarCatalogRes = changes['filteredCars'].currentValue;
+      this.displayedCards = filteredCars['items'];
+      this.catalogCardsRes = filteredCars;
+      this.catalogCardsLength = filteredCars.paging.totalItems;
+      this.pagesLength = filteredCars.paging.totalPages;
+      this.pagesArray = Array.from({ length: this.pagesLength }, (_, i) => i);
+      this.updateDisplayedCards();
+    }
+  }
 
   ngOnInit() {
     this.languageService.currentLanguage$
@@ -73,12 +94,7 @@ export class CatalogCardsComponent implements OnInit {
         this.subscribeToCatalogData();
       });
 
-    this.catalogDataService.dataSourceType$
-      .pipe(takeUntilDestroyed(this.destroy$))
-      .subscribe((type) => {
-        this.dataSourceType = type;
-        this.cdr.markForCheck();
-      });
+    this.handleDataSource()
 
     this.catalogDataService.currentPaging$
       .pipe(takeUntilDestroyed(this.destroy$))
@@ -93,6 +109,16 @@ export class CatalogCardsComponent implements OnInit {
       this.getCatalogCardsSubscription(this._currentPage);
     }
   }
+
+  private handleDataSource() {
+    this.catalogDataService.dataSourceType$
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe((type) => {
+        this.dataSourceType = type;
+        this.cdr.markForCheck();
+      });
+  }
+
 
   private subscribeToCatalogData() {
     this.catalogDataService.catalogData$

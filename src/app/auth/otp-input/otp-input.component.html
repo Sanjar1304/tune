@@ -6,9 +6,22 @@
     <p class=""> {{phoneNumber()}} </p>
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-[26px]">
         <div class="flex flex-col gap-[16px]">
-            <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config"
-                          [ngClass]="{'wrong-number':otpNumberColor(), 'right-number':!otpNumberColor()}">
-            </ng-otp-input>
+          <div class="flex justify-between otp-input-group">
+            <input *ngFor="let value of otpInputs; let i = index; trackBy: trackByIndex"
+              type="text"
+              maxlength="1"
+              class="2xl:w-[70px] 2xl:h-[70px] xl:w-[50px] xl:h-[50px]
+                     lg:w-[50px] lg:h-[50px] md:w-[90px] md:h-[90px]
+                     sm:w-[80px] sm:h-[80px] mobile:w-[50px] mobile:h-[50px] otp-input"
+                   [value]="otpInputs[i]"
+                   (input)="onOtpInput($event, i)"
+                   (keydown)="onKeydown($event, i)"
+                   [ngClass]="{
+                      'wrong-number': otpNumberColor() === false && otpInputs[i] !== '',
+                      'right-number': otpNumberColor() === true,
+                      'default-color': otpInputs[i] === '' || otpNumberColor() === null
+                   }"/>
+          </div>
             @if(timer() > 0) {
               <div class="">Запросить СМС можно снова через: {{ timer() }} сек</div>
             } @else {

@@ -16,15 +16,15 @@
     <div class="flex flex-col gap-[24px]">
       <div class="h-[70px] px-[10px] flex items-center lg:gap-[10px] gap-[24px] overflow-x-scroll scrollbar-none">
         @for(model of carModelsImage; track model){
-        <img class="w-[50px] h-[50px] object-cover brand_icons" [src]="model?.imageLink" alt="car icon image"
-          (click)="getImageValue(model.type, model.value)" loading="lazy">
+          <img class="w-[50px] h-[50px] object-cover brand_icons" [src]="model?.imageLink" alt="car icon image"
+            (click)="getImageValue(model.type, model.value)" loading="lazy">
         }
       </div>
 
       <div class="w-full">
         <div class="grid lg:grid-cols-6 md:grid-cols-4
-                        sm:grid-cols-3 mobile:grid-cols-2
-                        gap-x-[24px] gap-y-[10px]">
+                    sm:grid-cols-3 mobile:grid-cols-2
+                    gap-x-[24px] gap-y-[10px]">
           @if(!isSelectedPressed){
             @if (carModelsInfo) {
               @for(modelName of carModelsInfo.facets; track modelName.id){

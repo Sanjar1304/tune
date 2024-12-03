@@ -15,7 +15,6 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 })
 export class AuthService {
   private API_URL = `${environment.API_BASE}/auth/v1/`;
-
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
   private jwt = inject(JwtHelperService);
@@ -23,6 +22,8 @@ export class AuthService {
 
   private userCheckResponse: string = '';
   private encryptKey: BackendResponseModel<UserVerifyResponseModel> | null = null;
+  private otpSuccessRes: boolean | null = null;
+
 
   private _isAuthenticated = signal(!this.jwt.isTokenExpired(this.storageService.accessToken));
 
@@ -33,13 +34,16 @@ export class AuthService {
   hasIdentity$ = this.identity$.asObservable();
 
 
-  constructor() {
 
+
+  get otpSuccess(): boolean | null{
+    return this.otpSuccessRes
   }
 
   get isAuthenticated() {
     return this._isAuthenticated;
   }
+
   private setIsAuthenticated(value: boolean) {
     this._isAuthenticated.set(value);
   }
@@ -49,7 +53,7 @@ export class AuthService {
   }
 
   public get hashedKey(): string | null {
-    return this.encryptKey?.result.data.encryptKey || null;
+    return this.encryptKey?.result.data.encryptKey || null
   }
 
   public setIsRegCheck(isReg: boolean) {
@@ -79,10 +83,10 @@ export class AuthService {
 
 
   public sendOtpCode(identity: string | null, code: string): Observable<UserVerifyResponseModel | null> {
-
     return this.http.post<BackendResponseModel<UserVerifyResponseModel>>(`${this.API_URL}external/sign/user/verify`, { identity, code }).pipe(
       map(res => {
         this.encryptKey = res;
+        this.otpSuccessRes = res.success;
         this.sessionService.handleResponse<UserVerifyResponseModel>(res);
         return res.result.data
       }),

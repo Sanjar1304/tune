@@ -53,7 +53,7 @@ import { AuthService } from '../../auth/services/auth.service';
     FormsModule
   ],
   templateUrl: './header.component.html',
-  styleUrls:['header.component.scss']
+  styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
