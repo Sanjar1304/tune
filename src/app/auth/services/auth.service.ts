@@ -14,8 +14,8 @@ import { JwtHelperService } from "@auth0/angular-jwt";
   providedIn: 'root'
 })
 export class AuthService {
-  // private API_URL = `${environment.API_BASE}/auth/v1/`;
-  private API_URL = `http://192.168.72.186:9191/auth/v1/`;
+  private API_URL = `${environment.API_BASE}/auth/v1/`;
+
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
   private jwt = inject(JwtHelperService);
@@ -59,10 +59,6 @@ export class AuthService {
   public setIdentity(identity: string){
     this.identity$.next(identity);
   }
-
-  // public getUserCheckResponse(): BackendResponseModel<UserCheckResponseModel> | null {
-  //   return this.userCheckResponse;
-  // }
 
   public logout() {
     this.setIsAuthenticated(false)
