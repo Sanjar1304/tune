@@ -223,7 +223,9 @@
     "calculateCreditBtn": "Proceed to checkout",
     "createAds": "Submit an ad",
     "logout": "Log out",
-    "load_more": "Load more"
+    "load_more": "Load more",
+    "continue": "Continue",
+    "back": "Back"
   },
   "catalogSortingSection": {
     "title": "Buy a car in Tashkent",
@@ -284,6 +286,66 @@
         "btn": "Submit request"
       }
     }
+  },
+  "auth": {
+    "title": "Welcome to MyBank",
+    "subTitle": "Buy and sell your cars conveniently and easily with us",
+    "bottomText": "All security is fully implemented and guaranteed by MyBank.",
+    "login": {
+      "topSlider": {
+        "enter": "Enter",
+        "qr": "QR code"
+      },
+      "topText": "To fully use the site, you need to log in to your profile",
+      "userType": {
+        "title": "User type",
+        "physical": "individual",
+        "legal": "legal entity"
+      },
+      "phone": {
+        "number": "Phone number",
+        "error": "Invalid number format or non-existing number."
+      },
+      "button": {
+        "continue": "Continue",
+        "back": "Return to home page"
+      }
+    },
+    "otp": {
+      "title": "Verification code",
+      "subTitle": "An SMS message with a confirmation code has been sent. Enter the code and click \"Confirm\"",
+      "timerText": {
+        "first": "You can request SMS again via:",
+        "seconds": "sec"
+      },
+      "errors": {
+        "otpWrong": "Incorrect confirmation number entered",
+        "resendOtp": "Ended time interval. Click the resend otp button!"
+      },
+      "buttons":{
+        "confirm": "Confirm",
+        "resend": "Resend",
+        "back": "Back"
+      }
+    },
+    "passwordPage": {
+      "title": "Enter password",
+      "password": "Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirmation password",
+      "placeholder": "Necessarily"
+    }
+  },
+
+  "errorMessages": {
+    "passwordErrors" : {
+      "required": "password is required.",
+      "minLength": "password length.",
+      "maxLength": "password length.",
+      "mismatch": "password does not match"
+    }
   }
+
+
 
 }

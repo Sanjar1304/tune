@@ -225,7 +225,9 @@
     "calculateCreditBtn": "To'lovga o'ting",
     "createAds": "E'lon berish",
     "logout": "Chiqish",
-    "load_more": "Ko'proq yuklash"
+    "load_more": "Ko'proq yuklash",
+    "continue": "Davom etish",
+    "back": "Orqaga"
   },
   "catalogSortingSection": {
     "title": "Toshkentda mashina sotib oling",
@@ -285,6 +287,63 @@
         },
         "btn": "So'rov yuboring"
       }
+    }
+  },
+  "auth": {
+    "title": "MyBank ga xush kelibsiz",
+    "subTitle": "Biz bilan qulay va oson avtomobillaringizni sotib oling va soting",
+    "bottomText": "Barcha xavfsizlik MyBank tomonidan to'liq amalga oshiriladi va kafolatlanadi.",
+    "login": {
+      "topSlider": {
+        "enter": "Kirish",
+        "qr": "QR kod"
+      },
+      "topText": "Saytdan to'liq foydalanish uchun profilingizga kirishingiz kerak.",
+      "userType": {
+        "title": "Foydalanuvchi turi",
+        "physical": "jismoniy shaxs",
+        "legal": "yuridik shaxs"
+      },
+      "phone": {
+        "number": "Telefon raqami",
+        "error": "Raqam formati noto‘g‘ri yoki mavjud bo‘lmagan raqam."
+      },
+      "button": {
+        "continue": "Davom etish",
+        "back": "Asosiy sahifaga qaytish"
+      }
+    },
+    "otp": {
+      "title": "Tasdiqlash kodi",
+      "subTitle": "Tasdiqlash kodi bilan SMS xabar yuborildi. Kodni kiriting va \"Tasdiqlash\" tugmasini bosing.",
+      "timerText": {
+        "first": "Siz SMS orqali qayta so'rashingiz mumkin:",
+        "seconds": "sek"
+      },
+      "errors": {
+        "otpWrong": "Tasdiqlash raqami noto‘g‘ri kiritildi",
+        "resendOtp": "Tugatilgan vaqt oralig'i. Qayta yuborish tugmasini bosing!"
+      },
+      "buttons":{
+        "confirm": "Tasdiqlang",
+        "resend": "Qayta yuborish",
+        "back": "Orqaga"
+      }
+    },
+    "passwordPage": {
+      "title": "Parolingizni kiriting",
+      "password": "Parol",
+      "newPassword": "Yangi parol",
+      "confirmPassword": "Tasdiqlash paroli",
+      "placeholder": "Majburiy"
+    }
+  },
+  "errorMessages": {
+    "passwordErrors" : {
+      "required": "parol talab qilinadi.",
+      "minLength": "parol uzunligi noto'g'ri.",
+      "maxLength": "parol uzunligi noto'g'ri.",
+      "mismatch": "parol mos kelmaydi"
     }
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-[26px] 2xl:px-[130px] xl:px-[130px] lg:px-[50px] md:px-0 sm:px-0 mobile:px-0">
     <div class="flex flex-col gap-[4px]">
-        <h2 class="h2 text-[#262626]">Код подтверждения</h2>
-        <p class="b3 text-[#626262]">отправлено смс-сообщение с кодом подтверждения. Введите код и нажмите «Подтвердить»</p>
+        <h2 class="h2 text-[#262626]">{{'auth.otp.title' | transloco}}</h2>
+        <p class="b3 text-[#626262]">{{'auth.otp.subTitle' | transloco}}</p>
     </div>
     <p class=""> {{phoneNumber()}} </p>
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-[26px]">
@@ -23,9 +23,13 @@
                    }"/>
           </div>
             @if(timer() > 0) {
-              <div class="">Запросить СМС можно снова через: {{ timer() }} сек</div>
+              <div class="py-[5px] text-[#626262]">
+                {{'auth.otp.timerText.first' | transloco}}
+                <span class="text-[#007AFF] pr-[5px]"> {{ timer() }}</span>
+                <span class="text-[#262626]">{{'auth.otp.timerText.seconds' | transloco}}</span>
+              </div>
             } @else {
-              <div class="text-[#FF3333]">Ended time interval. Click the resend opt button !</div>
+              <div class="py-[5px] text-[#FF3333]">{{'auth.otp.errors.resendOtp' | transloco}}</div>
             }
         </div>
         <div class="flex flex-col gap-[16px]">
@@ -33,14 +37,16 @@
               <button mat-button type="submit" class="py-[10px] px-[24px] rounded-[10px] bg-[#27C5D0] text-[#fff]"
                       [disabled]="otpForm.invalid"
                       [ngClass]="{'active': otpForm.valid, 'inactive': !otpForm.valid}">
-                  Подтвердить
+                  {{'auth.otp.buttons.confirm' | transloco}}
               </button>
             } @else {
               <button mat-button class="resend-otp py-[10px] px-[24px] rounded-[10px] bg-[#27C5D0] text-[#fff]" (click)="resendOtp()">
-                  resend otp
+                  {{'auth.otp.buttons.resend' | transloco}}
               </button>
             }
-            <button class=" py-[10px] px-[24px] rounded-[10px] border border-[#27C5D0] flex justify-center gap-[16px]" (click)="navigateToLogin()">Назад</button>
+            <button class=" py-[10px] px-[24px] rounded-[10px]
+                            border border-[#27C5D0] flex justify-center gap-[16px]"
+                    (click)="navigateToLogin()">{{'auth.otp.buttons.back' | transloco}}</button>
         </div>
     </form>
 </div>

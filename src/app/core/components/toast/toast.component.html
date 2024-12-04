@@ -1,5 +1,5 @@
 <div *ngIf="toast" id="custom-toast" [ngClass]="getToastClass(toast.type)" class="custom-toast" [@flyInOut]="'active'">
-  {{ toast.message }}
+  {{ toast.message | transloco}}
   <button (click)="closeToast()">
     <img ngSrc="./assets/icons/exit-icon.svg" alt="" height="24" width="24">
   </button>

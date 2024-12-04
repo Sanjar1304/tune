@@ -2,24 +2,24 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   OnInit,
   Output,
   inject,
-  input,
-  DestroyRef, signal
+  signal, DestroyRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable, distinctUntilChanged } from 'rxjs';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { distinctUntilChanged } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { JSEncrypt } from 'jsencrypt';
-import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
+import {NgClass, NgIf} from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { UiSvgIconComponent } from "../../core/components/ui-svg-icon/ui-svg-icon.component";
 import { UserDataDto } from '../../core/models/user.model';
 import { UserService } from '../../core/services/root/user.service';
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {TranslocoPipe} from "@jsverse/transloco";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-password-input',
@@ -27,35 +27,67 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
   imports: [
     ReactiveFormsModule,
     UiSvgIconComponent,
-    NgIf
+    TranslocoPipe,
+    NgClass,
+    MatButton,
+    RouterLink
   ],
   templateUrl: './password-input.component.html',
-  styles: ``,
+  styleUrl: './password-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PasswordInputComponent implements OnInit {
 
   private fb = inject(FormBuilder);
+  private destroy$ = inject(DestroyRef)
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
+  private activatedRoute = inject(ActivatedRoute);
 
   passwordForm!: FormGroup;
   showPassword = signal(false);
   showConfirmPassword = signal(false);
   isReg = signal(false);
+  phoneNumber = signal<string | null>(null)
   @Output() passwordSubmit = new EventEmitter<void>();
 
+  error_messages = {
+    'password': [
+      {type: 'required', message: 'errorMessages.passwordErrors.required'},
+      {type: 'minlength', message: 'errorMessages.passwordErrors.minLength'},
+      {type: 'maxlength', message: 'errorMessages.passwordErrors.maxLength'},
+      {type: 'mismatch', message: 'errorMessages.passwordErrors.mismatch'}
+    ],
+    'confirmPassword': [
+      {type: 'required', message: 'errorMessages.passwordErrors.required'},
+      {type: 'minlength',  message: 'errorMessages.passwordErrors.minLength'},
+      {type: 'maxlength', message: 'errorMessages.passwordErrors.maxLength'},
+      {type: 'mismatch', message: 'errorMessages.passwordErrors.mismatch'}
+    ]
+  }
+
   constructor() {
-    // Set the initial value of isReg based on authService.isRegCheck$
-    this.authService.isRegCheck$.pipe(distinctUntilChanged()).subscribe(value => {
-      this.isReg.set(value);
-      this.validatePasswordForm(); // Re-validate form based on isReg
+    this.authService.isRegCheck$
+      .pipe(
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroy$)
+      ).subscribe(value => {
+        this.isReg.set(value);
+        this.validatePasswordForm(); // Re-validate form based on isReg
     });
   }
 
   ngOnInit(): void {
     this.validatePasswordForm();
+
+    this.activatedRoute.paramMap
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe((params) => {
+      const number = params.get('phoneNumber');
+      console.log('Retrieved phoneNumber from route:', number);
+      this.phoneNumber.set(number || null)
+    })
   }
 
   validatePasswordForm(): void {
@@ -67,14 +99,24 @@ export class PasswordInputComponent implements OnInit {
       this.passwordForm = this.fb.group({
         password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]]
-      });
+      }, {validators: this.passwordMatchValidator});
     }
+  }
+
+  passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const password = control.get('password')?.value || '';
+    const confirmPassword = control.get('confirmPassword')?.value || '';
+    return password !== confirmPassword ? { passwordMismatch: true } : null;
+  }
+
+  get mismatchError(){
+    return this.error_messages.confirmPassword.find(error => error.type === 'mismatch')?.message || null;
   }
 
   onSubmit(): void {
     if (this.passwordForm.valid) {
       this.passwordSubmit.emit();
-      const password = this.passwordForm.getRawValue().password;
+      const password = this.passwordForm.get('password')?.value;
       const hashedKey = this.authService.hashedKey;
       const identity = this.authService.identity;
       if (hashedKey && identity) {
@@ -82,7 +124,9 @@ export class PasswordInputComponent implements OnInit {
         jsEncrypt.setPublicKey(hashedKey);
         const encryptedPassword = jsEncrypt.encrypt(password);
         if (encryptedPassword) {
-          this.authService.sendEncryptedLoginPassword(identity, encryptedPassword).subscribe({
+          this.authService.sendEncryptedLoginPassword(identity, encryptedPassword)
+            .pipe(takeUntilDestroyed(this.destroy$))
+            .subscribe({
             next: (res: UserDataDto | null) => {
               if (res) {
                 this.userService.setToken(res.access.accessToken);
@@ -111,6 +155,17 @@ export class PasswordInputComponent implements OnInit {
   }
 
   public navigateToOtp(){
-      this.router.navigate(['auth/otp'])
+    const phone = this.phoneNumber();
+    console.log('Phone number in navigateToOtp:', phone);
+    if (phone) {
+      this.router.navigate(['auth/otp', phone]);
+    } else {
+      console.error('Phone number is null. Navigation aborted.');
+    }
   }
+
+  public navigateToResetPassword(){
+    this.router.navigate(['auth/reset-password']);
+  }
+
 }

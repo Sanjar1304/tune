@@ -23,6 +23,7 @@ import {MatButton} from "@angular/material/button";
 import {debounceTime, interval, takeWhile, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CustomToasterService} from "../../core/services/utils/toast.service";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-otp-input',
@@ -40,7 +41,8 @@ import {CustomToasterService} from "../../core/services/utils/toast.service";
     MatIcon,
     MatProgressSpinner,
     MatButton,
-    NgForOf
+    NgForOf,
+    TranslocoPipe
   ],
   templateUrl: './otp-input.component.html',
   styleUrl: './otp-input.component.scss',
@@ -149,14 +151,14 @@ export class OtpInputComponent implements OnInit {
           .subscribe({
             next: res => {
               this.otpNumberColor.set(this.authService.otpSuccess || false);
-              if(this.authService.otpSuccess === false) this.toastService.showToast('wrong number written', 'error')
+              if(this.authService.otpSuccess === false) this.toastService.showToast('auth.otp.errors.otpWrong', 'error')
               this.counter++;
               this.callBtnLoading.set(false);
               if(this.counter <= 3){
                 if(res?.identity){
                   const isReg = res?.isReg || false;
                   this.authService.setIsRegCheck(isReg);
-                  this.router.navigate(['auth/password']);
+                  this.router.navigate(['auth/password', this.phoneNumber()]);
                 }
               } else {
                 this.router.navigate(['auth/login']);

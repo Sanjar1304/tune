@@ -3,6 +3,7 @@ import {animate, keyframes, state, style, transition, trigger} from "@angular/an
 import {UiSvgIconComponent} from "../ui-svg-icon/ui-svg-icon.component";
 import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
 import {CustomToasterService} from "../../services/utils/toast.service";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-toast',
@@ -11,7 +12,8 @@ import {CustomToasterService} from "../../services/utils/toast.service";
     UiSvgIconComponent,
     NgClass,
     NgIf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    TranslocoPipe
   ],
   templateUrl: './toast.component.html',
   styles: [

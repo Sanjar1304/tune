@@ -6,6 +6,7 @@ import { OtpInputComponent } from "./otp-input/otp-input.component";
 import { PasswordInputComponent } from "./password-input/password-input.component";
 import { UiSvgIconComponent } from '../core/components/ui-svg-icon/ui-svg-icon.component';
 import { RouterOutlet} from "@angular/router";
+import {TranslocoPipe} from "@jsverse/transloco";
 
 
 @Component({
@@ -18,10 +19,10 @@ import { RouterOutlet} from "@angular/router";
     OtpInputComponent,
     LoginInputComponent,
     NgOptimizedImage,
+    TranslocoPipe,
   ],
   templateUrl: './auth.component.html',
-  styles: `
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent implements OnInit {

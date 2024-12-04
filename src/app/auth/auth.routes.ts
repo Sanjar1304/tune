@@ -21,9 +21,13 @@ export const AUTH_ROUTES: Routes = [
         loadComponent: () => import('./otp-input/otp-input.component').then(m => m.OtpInputComponent),
       },
       {
-        path: 'password',
+        path: 'password/:phoneNumber',
         loadComponent: () => import('./password-input/password-input.component').then(m => m.PasswordInputComponent),
       },
+      {
+        path: 'reset-password',
+        loadComponent:  () => import('./reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
+      }
     ]
   }
 ];
