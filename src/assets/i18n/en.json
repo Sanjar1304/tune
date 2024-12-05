@@ -333,7 +333,17 @@
       "password": "Password",
       "newPassword": "New Password",
       "confirmPassword": "Confirmation password",
-      "placeholder": "Necessarily"
+      "placeholder": "Necessarily",
+      "forgetPassword": "Forgot your password?"
+    },
+    "resetPassword": {
+      "phone": {
+        "title": "Enter your phone number",
+        "inputLabel": "Phone number",
+        "back": "Back",
+        "continue": "Continue",
+        "placeholder": "Phone number is required"
+      }
     }
   },
 
@@ -343,6 +353,12 @@
       "minLength": "password length.",
       "maxLength": "password length.",
       "mismatch": "password does not match"
+    },
+    "phoneErrors": {
+      "required": "Phone number is required.",
+      "minLength": "Phone number length is less.",
+      "maxLength": "Phone number length is more.",
+      "wrongNumber": "Invalid number format or non-existing number."
     }
   }
 

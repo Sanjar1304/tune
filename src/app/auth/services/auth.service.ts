@@ -24,7 +24,6 @@ export class AuthService {
   private encryptKey: BackendResponseModel<UserVerifyResponseModel> | null = null;
   private otpSuccessRes: boolean | null = null;
 
-
   private _isAuthenticated = signal(!this.jwt.isTokenExpired(this.storageService.accessToken));
 
   private isRegCheckSource = new BehaviorSubject<boolean>(false);
@@ -32,8 +31,6 @@ export class AuthService {
 
   private identity$ = new BehaviorSubject<string>('');
   hasIdentity$ = this.identity$.asObservable();
-
-
 
 
   get otpSuccess(): boolean | null{
@@ -99,6 +96,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}external/sign/code/resend`, { identity })
   }
 
+
   public sendEncryptedLoginPassword(identity: string, password: string): Observable<UserDataDto | null> {
     return this.http.post<BackendResponseModel<UserDataDto>>(`${this.API_URL}external/sign/up-in`, { identity, password }).pipe(
       map(res => {
@@ -112,5 +110,52 @@ export class AuthService {
       }),
       catchError(this.sessionService.handleError)
     )
+  }
+
+
+
+  public sendResetCheck(username: string): Observable<UserCheckResponseModel | null>{
+    return this.http.post<BackendResponseModel<UserCheckResponseModel>>(
+      `${this.API_URL}password/reset/check`, {username}).pipe(
+      map(response => {
+        this.userCheckResponse = response.result.data.identity;
+        this.sessionService.handleResponse<UserCheckResponseModel>(response);
+        return response.result.data
+      }),
+      catchError(this.sessionService.handleError)
+    );
+  }
+
+
+  public sendResetOtp(identity: string | null, code: string): Observable<UserVerifyResponseModel | null>{
+    return this.http.post<BackendResponseModel<UserVerifyResponseModel>>(`${this.API_URL}password/reset/verify`, { identity, code }).pipe(
+      map(res => {
+        this.encryptKey = res;
+        this.otpSuccessRes = res.success;
+        this.sessionService.handleResponse<UserVerifyResponseModel>(res);
+        return res.result.data
+      }),
+      catchError(this.sessionService.handleError)
+    )
+  }
+
+
+  public sendEncryptedResetPassword(identity: string, password: string): Observable<UserDataDto | null> {
+    return this.http.post<BackendResponseModel<UserDataDto>>(`${this.API_URL}password/reset/confirm`, { identity, password }).pipe(
+      map(res => {
+        if (res.success) {
+          this.setIsAuthenticated(true)
+        } else {
+          this.setIsAuthenticated(false)
+        }
+        this.sessionService.handleResponse(res);
+        return res.result.data
+      }),
+      catchError(this.sessionService.handleError)
+    )
+  }
+
+  public resetResendOtp(identity: string){
+    return this.http.post(`${this.API_URL}password/reset/code/resend`, { identity })
   }
 }

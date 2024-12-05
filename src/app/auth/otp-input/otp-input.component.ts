@@ -62,6 +62,7 @@ export class OtpInputComponent implements OnInit {
   otp!: string | null;
   otpInputs: string[] = Array(6).fill('');
   phoneNumber = signal<string | null>(null);
+  reset = signal<string | null>(null)
   callBtnLoading = signal<boolean>(false);
   otpNumberColor = signal<boolean | null>(null);
   timer = signal<number>(60);
@@ -72,15 +73,13 @@ export class OtpInputComponent implements OnInit {
 
   public ngOnInit(): void {
     this.validateOtpForm();
-
-    this.activatedRoute.paramMap.subscribe((params) => {
-      const phoneNumber = params.get('phoneNumber');
-      this.phoneNumber.set(phoneNumber);
-    });
-
-
-    this.validateOtpForm();
     this.startTimer();
+
+    this.activatedRoute.fragment.subscribe((fragment) => {
+      this.reset.set(fragment);
+      console.log("fragment: ", fragment);
+    })
+
     this.activatedRoute.paramMap.subscribe((params) => {
       const phoneNumber = params.get('phoneNumber');
       this.phoneNumber.set(phoneNumber || null);
@@ -146,32 +145,68 @@ export class OtpInputComponent implements OnInit {
     if (this.otpForm.valid) {
       const code = this.otpForm.controls['otp'].value;
       this.callBtnLoading.set(true);
-      this.authService.sendOtpCode(this.identity(), code)
-          .pipe(takeUntilDestroyed(this.destroy$))
-          .subscribe({
-            next: res => {
-              this.otpNumberColor.set(this.authService.otpSuccess || false);
-              if(this.authService.otpSuccess === false) this.toastService.showToast('auth.otp.errors.otpWrong', 'error')
-              this.counter++;
-              this.callBtnLoading.set(false);
-              if(this.counter <= 3){
-                if(res?.identity){
-                  const isReg = res?.isReg || false;
-                  this.authService.setIsRegCheck(isReg);
-                  this.router.navigate(['auth/password', this.phoneNumber()]);
-                }
-              } else {
-                this.router.navigate(['auth/login']);
-              }
-            },
-            error: err => {
-              this.toastService.showToast(`${err}`, 'error')
-              this.callBtnLoading.set(false);
-              this.otpNumberColor.set(false);
-            }
-          })
+      if(!this.reset()){
+        this.sendOtpCode(code)
+      } else {
+        this.sendResetOtpCode(code);
+      }
     }
   }
+
+  sendOtpCode(code:any){
+    this.authService.sendOtpCode(this.identity(), code)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.otpNumberColor.set(this.authService.otpSuccess || false);
+          if(this.authService.otpSuccess === false) this.toastService.showToast('auth.otp.errors.otpWrong', 'error')
+          this.counter++;
+          this.callBtnLoading.set(false);
+          if(this.counter <= 3){
+            if(res?.identity){
+              const isReg = res?.isReg || false;
+              this.authService.setIsRegCheck(isReg);
+              this.router.navigate(['auth/password', this.phoneNumber()]);
+            }
+          } else {
+            this.router.navigate(['auth/login']);
+          }
+        },
+        error: err => {
+          this.toastService.showToast(`${err}`, 'error')
+          this.callBtnLoading.set(false);
+          this.otpNumberColor.set(false);
+        }
+      })
+  }
+
+  sendResetOtpCode(code: any){
+    this.authService.sendResetOtp(this.identity(), code)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.otpNumberColor.set(this.authService.otpSuccess || false);
+          if(this.authService.otpSuccess === false) this.toastService.showToast('auth.otp.errors.otpWrong', 'error')
+          this.counter++;
+          this.callBtnLoading.set(false);
+          if(this.counter <= 3){
+            if(res?.identity){
+              const isReg = res?.isReg || false;
+              this.authService.setIsRegCheck(isReg);
+              this.router.navigate(['auth/password', this.phoneNumber()], { fragment: 'reset'});
+            }
+          } else {
+            this.router.navigate(['auth/login']);
+          }
+        },
+        error: err => {
+          this.toastService.showToast(`${err}`, 'error')
+          this.callBtnLoading.set(false);
+          this.otpNumberColor.set(false);
+        }
+      })
+  }
+
 
   resendOtp(): void {
     if (this.timer() === 0) {
@@ -182,9 +217,15 @@ export class OtpInputComponent implements OnInit {
       this.otpForm.controls['otp'].setValue('');
       this.otpNumberColor.set(null);
 
-      this.authService.resendOtp(this.identity())
-        .pipe(takeUntilDestroyed(this.destroy$))
-        .subscribe()
+      if(!this.reset()){
+        this.authService.resendOtp(this.identity())
+          .pipe(takeUntilDestroyed(this.destroy$))
+          .subscribe()
+      } else {
+        this.authService.resetResendOtp(this.identity())
+          .pipe(takeUntilDestroyed(this.destroy$))
+          .subscribe()
+      }
     }
   }
 

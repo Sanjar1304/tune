@@ -335,7 +335,17 @@
       "password": "Parol",
       "newPassword": "Yangi parol",
       "confirmPassword": "Tasdiqlash paroli",
-      "placeholder": "Majburiy"
+      "placeholder": "Majburiy",
+      "forgetPassword": "Parolingiz esdan chiqdimi?"
+    },
+    "resetPassword": {
+      "phone": {
+        "title": "Telefon raqamingizni kiriting",
+        "inputLabel": "Telefon raqam",
+        "back": "Orqaga",
+        "continue": "Davom etish",
+        "placeholder": "Telefon raqam majburiy"
+      }
     }
   },
   "errorMessages": {
@@ -344,6 +354,12 @@
       "minLength": "parol uzunligi noto'g'ri.",
       "maxLength": "parol uzunligi noto'g'ri.",
       "mismatch": "parol mos kelmaydi"
+    },
+    "phoneErrors": {
+      "required": "Telefon raqami majburiy.",
+      "minLength": "Telefon raqamlari soni kam.",
+      "maxLength": "Telefon raqamlari son ko'p.",
+      "wrongNumber": "Raqam formati noto‘g‘ri yoki mavjud bo‘lmagan raqam."
     }
   }
 }

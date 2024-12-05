@@ -49,8 +49,9 @@ export class PasswordInputComponent implements OnInit {
   showPassword = signal(false);
   showConfirmPassword = signal(false);
   isReg = signal(false);
-  phoneNumber = signal<string | null>(null)
-  @Output() passwordSubmit = new EventEmitter<void>();
+  phoneNumber = signal<string | null>(null);
+  reset = signal<string | null>(null)
+
 
   error_messages = {
     'password': [
@@ -85,8 +86,12 @@ export class PasswordInputComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroy$))
       .subscribe((params) => {
       const number = params.get('phoneNumber');
-      console.log('Retrieved phoneNumber from route:', number);
       this.phoneNumber.set(number || null)
+    })
+
+    this.activatedRoute.fragment.subscribe((fragment) => {
+      this.reset.set(fragment);
+      console.log("fragment: ", fragment);
     })
   }
 
@@ -115,18 +120,26 @@ export class PasswordInputComponent implements OnInit {
 
   onSubmit(): void {
     if (this.passwordForm.valid) {
-      this.passwordSubmit.emit();
-      const password = this.passwordForm.get('password')?.value;
-      const hashedKey = this.authService.hashedKey;
-      const identity = this.authService.identity;
-      if (hashedKey && identity) {
-        const jsEncrypt = new JSEncrypt();
-        jsEncrypt.setPublicKey(hashedKey);
-        const encryptedPassword = jsEncrypt.encrypt(password);
-        if (encryptedPassword) {
-          this.authService.sendEncryptedLoginPassword(identity, encryptedPassword)
-            .pipe(takeUntilDestroyed(this.destroy$))
-            .subscribe({
+      if(!this.reset()){
+        this.sendPassword();
+      } else {
+        this.sendResetPassword();
+      }
+    }
+  }
+
+  sendPassword() {
+    const password = this.passwordForm.get('password')?.value;
+    const hashedKey = this.authService.hashedKey;
+    const identity = this.authService.identity;
+    if (hashedKey && identity) {
+      const jsEncrypt = new JSEncrypt();
+      jsEncrypt.setPublicKey(hashedKey);
+      const encryptedPassword = jsEncrypt.encrypt(password);
+      if (encryptedPassword) {
+        this.authService.sendEncryptedLoginPassword(identity, encryptedPassword)
+          .pipe(takeUntilDestroyed(this.destroy$))
+          .subscribe({
             next: (res: UserDataDto | null) => {
               if (res) {
                 this.userService.setToken(res.access.accessToken);
@@ -137,9 +150,31 @@ export class PasswordInputComponent implements OnInit {
             },
             error: err => console.log(err)
           });
-        } else {
-          console.log('Encryption failed');
-        }
+      } else {
+        console.log('Encryption failed');
+      }
+    }
+  }
+
+  sendResetPassword(){
+    const password = this.passwordForm.get('password')?.value;
+    const hashedKey = this.authService.hashedKey;
+    const identity = this.authService.identity;
+    if (hashedKey && identity) {
+      const jsEncrypt = new JSEncrypt();
+      jsEncrypt.setPublicKey(hashedKey);
+      const encryptedPassword = jsEncrypt.encrypt(password);
+      if (encryptedPassword) {
+        this.authService.sendEncryptedResetPassword(identity, encryptedPassword)
+          .pipe(takeUntilDestroyed(this.destroy$))
+          .subscribe({
+            next: (res: UserDataDto | null) => {
+              if (res) this.router.navigate(['/']);
+            },
+            error: err => console.log(err)
+          });
+      } else {
+        console.log('Encryption failed');
       }
     }
   }
@@ -156,7 +191,6 @@ export class PasswordInputComponent implements OnInit {
 
   public navigateToOtp(){
     const phone = this.phoneNumber();
-    console.log('Phone number in navigateToOtp:', phone);
     if (phone) {
       this.router.navigate(['auth/otp', phone]);
     } else {

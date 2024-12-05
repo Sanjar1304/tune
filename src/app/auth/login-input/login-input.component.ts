@@ -83,7 +83,7 @@ export class LoginInputComponent implements OnInit{
 
       this.authService.userCheck(phone, userType).subscribe({
         next: res => {
-          this.authService.setIdentity(res?.identity as unknown as string)
+          this.authService.setIdentity(res?.identity as unknown as string);
           if (res?.message) {
             this.router.navigate(['auth/otp', res.message]);
             this.notExistingNumber.set(false);

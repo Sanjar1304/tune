@@ -29,10 +29,16 @@ export const authRequestCheckInterceptor: HttpInterceptorFn = (req, next) => {
 
   const isUserCheckRequest = req.url.includes('/auth/v1/external/sign/user/check');
   const issendOtpCode = req.url.includes('/auth/v1/external/sign/user/verify');
-  const resendOtpCode = req.url.includes('auth/v1/external/sign/code/resend')
+  const resendOtpCode = req.url.includes('auth/v1/external/sign/code/resend');
+  const resetPassword = req.url.includes('auth/v1/password/reset/check');
+  const resetOtp = req.url.includes('auth/v1/password/reset/verify');
+  const resetEncryptedPassword = req.url.includes('auth/v1/password/reset/confirm');
+  const resetResendOtp = req.url.includes('auth/v1/password/reset/code/resend');
 
   const isSendEncryptedLoginPassword = req.url.includes('/auth/v1/external/sign/up-in');
-  if (isUserCheckRequest || issendOtpCode || resendOtpCode || isSendEncryptedLoginPassword) {
+  if (isUserCheckRequest || issendOtpCode || resendOtpCode
+      || isSendEncryptedLoginPassword || resetPassword
+      || resetOtp || resetEncryptedPassword || resetResendOtp) {
     const headers = req.headers.set(
       'Authorization',
       'Basic dXNlcl9mb3JfbWFya2V0X2NsaWVudDptYXJLZXRDTGlFblRVU2Vy'
